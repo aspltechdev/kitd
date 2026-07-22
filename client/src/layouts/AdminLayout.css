@@ -1,0 +1,289 @@
+/* ============================================
+   Dashboard Shell - Layout Structure Styles
+   Handles: Grid/Flex layout, responsive 
+   breakpoints, sidebar transitions, overlay
+   ============================================ */
+
+/* CSS Custom Properties for Layout
+   ============================================ */
+:root {
+  --shell-sidebar-width: 260px;
+  --shell-sidebar-collapsed-width: 72px;
+  --shell-topbar-height: 64px;
+  --shell-bottombar-height: 52px;
+  --shell-transition-duration: 280ms;
+  --shell-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --shell-overlay-opacity: 0.5;
+  --shell-z-index-sidebar: 40;
+  --shell-z-index-overlay: 30;
+  --shell-z-index-topbar: 20;
+}
+
+/* Base Shell Container
+   ============================================ */
+.dashboard-shell {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
+  background-color: #f1f5f9;
+}
+
+/* Skip Navigation
+   ============================================ */
+.dashboard-shell__skip-nav {
+  position: fixed;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 12px 24px;
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: top 150ms ease;
+}
+
+.dashboard-shell__skip-nav:focus {
+  top: 16px;
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Overlay (Mobile)
+   ============================================ */
+.dashboard-shell__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, var(--shell-overlay-opacity));
+  z-index: var(--shell-z-index-overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: shell-overlay-enter 300ms ease;
+}
+
+@keyframes shell-overlay-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Sidebar Panel
+   ============================================ */
+.dashboard-shell__sidebar-panel {
+  width: var(--shell-sidebar-width);
+  min-width: var(--shell-sidebar-width);
+  height: 100vh;
+  height: 100dvh;
+  transition: width var(--shell-transition-duration) var(--shell-transition-easing),
+              min-width var(--shell-transition-duration) var(--shell-transition-easing);
+  position: relative;
+  z-index: var(--shell-z-index-sidebar);
+}
+
+.dashboard-shell__sidebar-panel--collapsed {
+  width: var(--shell-sidebar-collapsed-width);
+  min-width: var(--shell-sidebar-collapsed-width);
+}
+
+/* Content Area (Main + Topbar + Footer)
+   ============================================ */
+.dashboard-shell__content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Top Navigation Bar
+   ============================================ */
+.dashboard-shell__top-bar {
+  height: var(--shell-topbar-height);
+  min-height: var(--shell-topbar-height);
+  z-index: var(--shell-z-index-topbar);
+}
+
+/* Main Content (Scrollable)
+   ============================================ */
+.dashboard-shell__main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.dashboard-shell__page-container {
+  padding: 24px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100%;
+}
+
+/* Bottom Footer Bar
+   ============================================ */
+.dashboard-shell__bottom-bar {
+  height: var(--shell-bottombar-height);
+  min-height: var(--shell-bottombar-height);
+}
+
+/* Scrollbar Styling for Main Content
+   ============================================ */
+.dashboard-shell__main-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dashboard-shell__main-content::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.dashboard-shell__main-content::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.dashboard-shell__main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Firefox scrollbar */
+.dashboard-shell__main-content {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Responsive - Tablet & Mobile (< 1024px)
+   ============================================ */
+@media screen and (max-width: 1023px) {
+  .dashboard-shell__sidebar-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--shell-sidebar-width);
+    min-width: var(--shell-sidebar-width);
+    transform: translateX(-100%);
+    transition: transform var(--shell-transition-duration) var(--shell-transition-easing);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    z-index: calc(var(--shell-z-index-sidebar) + 10);
+  }
+
+  .dashboard-shell__sidebar-panel--mobile-open {
+    transform: translateX(0);
+  }
+
+  .dashboard-shell__sidebar-panel--collapsed {
+    width: var(--shell-sidebar-width);
+    min-width: var(--shell-sidebar-width);
+  }
+
+  .dashboard-shell__overlay {
+    display: block;
+  }
+
+  .dashboard-shell__page-container {
+    padding: 20px;
+  }
+}
+
+/* Responsive - Small Mobile (< 640px)
+   ============================================ */
+@media screen and (max-width: 639px) {
+  :root {
+    --shell-topbar-height: 56px;
+    --shell-bottombar-height: 44px;
+  }
+
+  .dashboard-shell__page-container {
+    padding: 16px;
+  }
+}
+
+/* Responsive - Large Screens (> 1600px)
+   ============================================ */
+@media screen and (min-width: 1600px) {
+  .dashboard-shell__page-container {
+    max-width: 1600px;
+    padding: 32px;
+  }
+}
+
+/* Dark Mode Support
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .dashboard-shell {
+    background-color: #0f172a;
+  }
+
+  .dashboard-shell__main-content::-webkit-scrollbar-thumb {
+    background-color: #475569;
+  }
+
+  .dashboard-shell__main-content::-webkit-scrollbar-thumb:hover {
+    background-color: #64748b;
+  }
+
+  .dashboard-shell__main-content {
+    scrollbar-color: #475569 transparent;
+  }
+}
+
+/* Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-shell__sidebar-panel {
+    transition: none;
+  }
+
+  .dashboard-shell__overlay {
+    animation: none;
+  }
+
+  .dashboard-shell__main-content {
+    scroll-behavior: auto;
+  }
+}
+
+/* Print Styles
+   ============================================ */
+@media print {
+  .dashboard-shell {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  .dashboard-shell__sidebar-panel,
+  .dashboard-shell__top-bar,
+  .dashboard-shell__bottom-bar,
+  .dashboard-shell__overlay,
+  .dashboard-shell__skip-nav {
+    display: none !important;
+  }
+
+  .dashboard-shell__content-area {
+    height: auto;
+  }
+
+  .dashboard-shell__main-content {
+    overflow: visible;
+  }
+
+  .dashboard-shell__page-container {
+    max-width: 100%;
+    padding: 0;
+  }
+}
