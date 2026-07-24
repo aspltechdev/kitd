@@ -1,0 +1,171 @@
+/* $Id: $ */
+@font-face {
+ font-family: 'iconversion2';
+  src:  url('../../images/fonts/iconversion2.4f52a4e29eab9991b129eb8a22d7c41a.eot');
+ src:  url('../../images/fonts/iconversion2.4f52a4e29eab9991b129eb8a22d7c41a.eot') format('embedded-opentype'),
+    url('../../images/fonts/iconversion2.788a4966861124c0b55b475c30d2eb6d.ttf') format('truetype'),
+    url('../../images/fonts/iconversion2.19209b2c2a47a5592771f3ca4b9c6398.woff') format('woff'),
+    url('../../images/fonts/iconversion2.c8cdb6c66120626dd24f38da0d811b07.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'zci';
+  src:  url('../../images/fonts/zci.90fe787ab9f59c726d24b186b5469994.eot');
+  src:  url('../../images/fonts/zci.90fe787ab9f59c726d24b186b5469994.eot') format('embedded-opentype'),
+    url('../../images/fonts/zci.7b3fc4d7a12ec478e2a63b26c4932c0d.woff2') format('woff2'),
+    url('../../images/fonts/zci.ae86b256ef96d2fcfcab0485002e96a5.ttf') format('truetype'),
+    url('../../images/fonts/zci.57945fd837ea8372fc8d53cb89d08462.woff') format('woff'),
+    url('../../images/fonts/zci.6aaad94ebbeb5ad3dfd80fd5893bcfd7.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family:'iconversion2';
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="zci-"], [class*=" zci-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'zci' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-chat:before {
+  content: "\e909";
+}
+.icon-delete:before {
+  content: "\e900";
+}
+.icon-print:before {
+  content: "\e901";
+}
+.icon-import:before {
+  content: "\e902";
+}
+.icon-category:before {
+  content: "\e903";
+}
+.icon-edit:before {
+  content: "\e904";
+}
+.icon-profile:before {
+  content: "\e905";
+}
+.icon-new:before {
+  content: "\e906";
+}
+.icon-export:before {
+  content: "\e907";
+}
+.icon-add:before {
+  content: "\e908";
+}
+
+/* New Icons for Contacts */
+.zci-error:before {
+  content: "\e902";
+}
+.zci-info:before {
+  content: "\e903";
+}
+.zci-tick:before {
+  content: "\e904";
+}
+.zci-warning:before {
+  content: "\e905";
+}
+.zci-amazon:before {
+  content: "\e906";
+}
+.zci-blog:before {
+  content: "\e907";
+}
+.zci-delicious .path1:before {
+  content: "\e908";
+  color: rgb(0, 0, 0);
+}
+.zci-delicious .path2:before {
+  content: "\e909";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+  opacity: 0.6;
+}
+.zci-delicious .path3:before {
+  content: "\e90a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+  opacity: 0.2;
+}
+.zci-facebook:before {
+  content: "\e90b";
+}
+.zci-linkedIn:before {
+  content: "\e90c";
+}
+.zci-x:before {
+  content: "\e90d";
+}
+.zci-birthday:before {
+  content: "\e90e";
+}
+.zci-call:before {
+  content: "\e90f";
+}
+.zci-domain:before {
+  content: "\e910";
+}
+.zci-female:before {
+  content: "\e911";
+}
+.zci-gender:before {
+  content: "\e912";
+}
+.zci-home:before {
+  content: "\e913";
+}
+.zci-mail:before {
+  content: "\e914";
+}
+.zci-male:before {
+  content: "\e915";
+}
+.zci-notes:before {
+  content: "\e916";
+}
+.zci-user:before {
+  content: "\e917";
+}
+.zci-work:before {
+  content: "\e918";
+}
+.zci-copy:before {
+  content: "\e919";
+}
+.zci-contacts_logo:before {
+  content: "\e900";
+}
+.zci-folder_move:before {
+  content: "\e901";
+}

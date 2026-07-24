@@ -1,0 +1,12 @@
+//$Id:$
+$.subscribe("zm/CrossProductMessage", function(event, object) { // No I18N
+	if (object.prd == "CO") {
+		if (object.msg == "reset") {
+			zmcontact.loadFirstPage(zmcontact.getCategory(ZContacts._currentCategoryId));
+			zmcontact.refreshContactCounts();
+			ZContacts.meta.user.reset_scheduled = false;
+			zmUtil.succErrMsg("s", ZContacts.I18N.get("IAM.RESET.CONTACTS.IS.FINISHED.SCHEDULING"));// NO I18N
+		}
+	}
+});
+

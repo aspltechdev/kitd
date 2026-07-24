@@ -1,0 +1,308 @@
+// $Id: $
+var ZContacts = {
+	// tmp variable used to cache multipart request info
+	_rsvbObj : {},
+};
+
+ZContacts.getContextPath = function() {
+	if(zmail.forContactsApp) {
+        return ZContacts.meta.serviceInfo.contacts_server_url;
+	}
+	return "/zm/" + (zmail.contactsProxyPath || 'zc'); // No I18N
+};
+
+
+ZContacts.getCurrentAccount = function() {
+	return this.acc;
+};
+
+// ********************
+// $META
+// ********************
+ZContacts.meta = {
+	user : {},
+	syncUrls : {},
+	serviceInfo : {}
+};
+
+// ********************
+// $CONSTANTS
+// ********************
+ZContacts.Constants = {
+	REGEX : {
+		EMAIL_PATTERN : new XRegExp("^[\\p{L}\\p{M}\\p{N}\\_]([\\p{L}\\p{M}\\p{N}\\_\\+\\-\\.\\'\\*&amp;!~]*)@(?=.{4,256}$)(([\\p{L}\\p{N}\\p{M}]+)(([\\-\\_]*[\\p{L}\\p{N}\\p{M}])*)[\\.])+[\\p{L}\\p{M}]{2,22}$","i"), // No I18N
+		USERNAME_PATTERN : new XRegExp("^[\\p{L}\\p{M}\\p{N}\\-\\_\\.\\']+$","i"), // No I18N
+		PHONE_PATTERN : /^[\(\)\+\-0-9x\.\,\*\s#]{1,30}$/,
+		BYEAR_PATTERN : /^\d{4}$/,
+		ZM_SRCH_TAB_PATTERN : /zm_srch[0-9]+$/,
+		BASIC_LATIN_REGEX : new XRegExp("[0-9a-zA-Z_\\-%~#,+.';&$@?/:!\\[\\]()\\s]+", "u"), // No I18N
+		NON_BASIC_LATIN_REGEX : new XRegExp("[^\\x00-\\x7F]+", "u") // No I18N
+	},
+	Params : {
+		FILTER_PREFIX : 'filter_', // No I18N
+		MULTIPOST_SUFFIX : '_all', // No I18N
+		DELETEALL_PREFIX : '_' // No I18N
+	},
+
+	StatusCode : {
+		OK : 200,
+		NOT_FOUND : 404,
+		CONFLICT : 409
+	},
+	
+	ChatStatus : {
+		DELETED : -4,
+		PENDING : -1,
+		REQACC : -3,
+		REJECTED : -2,
+		OFFLINE : 0,
+		ONLINE : 1,
+		INVISIBLE : 2,
+		BUSY : 3,
+		IDLE : 4,
+		NO_CHAT: -10
+	}
+};
+
+ZContacts.ZMailConstants = {
+	VIEW_ID_CONTACTS : "contacts", // No I18N
+	VIEW_ID_ARCHIVED : "archived", // No I18N
+	VIEW_ID_INACTIVE : "inactive", // No I18N
+	PERSONAL_ACCOUNT : "personal", // No I18N
+	ORG_ACCOUNT : "org", // No I18N
+	ORG_GROUP_ACCOUNT : "org_group", // No I18N
+	SYNC_SUMMARY : "sync_summary", // No I18N 
+	CONTACTS_APP_ID : "zm_Contacts", // No I18N
+	WORKSPACE_APP_ID : "zm_createContact", // No I18N
+	CLEAN_WORKSPACE_APP_ID :"zm_cleanDuplicates", // No I18N
+	PRINT_WORKSPACE_APP_ID :"zm_printContacts", // No I18N
+	IMPORT_APP_ID : "zm_ImportContact", // No I18N
+	SEARCH_WORKSPACE_APP_ID : "zm_srch1", // No I18N
+	NEW_SEARCH_WORKSPACE_APP_ID : "zm_srch2", // No I18N
+	NEW_GLOBAL_SEARCH_WORKSPACE_APP_ID : "zm_srch", // No I18N
+	CUSTOM_SEARCH_WORKSPACE_APP_ID : "zm_srch3", // No I18N
+	GLOBAL_SEARCH : "zc_global_srch", // No I18N
+	CONTACTS_TAB : "cn", // No I18N
+	CONTACTS_HAS_TAG : "#contacts", // No I18N
+	SELECT_LIMIT : 200
+};
+
+ZContacts.AccountConstants = {
+	contacts: { is_sortable: true, add_contact: true, is_deletable: true, view_add_to: true, is_mergeable: true, is_exportable: true, print_all: true, is_importable: true, is_archiveable: true, view_add_category_button: true },
+	archived: { is_sortable: false, add_contact: false, is_deletable: true, view_add_to: false, is_mergeable: false, is_exportable: false, print_all: false, is_importable: false, is_unarchiveable: true },
+	inactive: { is_sortable: false, add_contact: false, is_deletable: true, view_add_to: false, is_mergeable: false, is_exportable: false, print_all: false, is_importable: false }
+}
+ZContacts.isFunctionableForCurrAcc = function(...keys) {
+	result = true;
+	for (const key of keys) {
+		result = result && this.acc.is_writable == true && ZContacts.isFunctionable(this.acc.getViewType(), key);
+	}
+	return result;
+};
+ZContacts.isFunctionable = function(type, key) {
+	return ZContacts.AccountConstants[type] != undefined && ZContacts.AccountConstants[type][key] == true;
+};
+
+ZContacts.isExportable = function(account_type) {
+	if (account_type == undefined) {
+		account_type = this.acc.account_type;
+	}
+	if ((account_type == "org" || account_type == "org_group") && ZContacts.org_contacts.is_contacts_exportable) {
+		return true;
+	} else if (account_type == "personal" && ZContacts.personal_contacts.is_contacts_exportable) {
+		return true;
+	} else {
+		if (account_type == "org") {
+			return ZContacts.I18N.get('IAM.CONTACTS.ORGANIZATION');
+		} else if (account_type == "org_group") {
+			return ZContacts.I18N.get('IAM.CONTACTS.ORG.GROUPS');
+		} else {
+			return ZContacts.I18N.get('IAM.CONTACTS.PERSONAL');
+		}
+	}
+}
+
+ZContacts.isDeletable = function() {
+	return ZContacts.getCurrentAccount().is_deletable;
+}
+
+ZContacts.isEditable = function() {
+	return ZContacts.getCurrentAccount().is_editable;
+}
+
+ZContacts.isBulkEditable = function() {
+ 	return ZContacts.getCurrentAccount().is_bulk_editable;
+ }
+
+ZContacts.isMergeable = function() {
+	return ZContacts.getCurrentAccount().is_mergeable;
+}
+
+ZContacts.ImportMapConstants = {
+	PHONE_Map : {"Mobile":"Mobile-MOBILE","Home Phone":"Home-HOME_PHONE","Work Phone":"Work-WORK_PHONE","Fax":"Fax-FAX","Other Phone":"Others-OTHER_PHONE"}, //No I18N
+	URLS_Map : {"Blog URL": "Blog", "Personal Web Address": "Home", "Company Web Address": "Work","LinkedIn URL":"Linkedin","Facebook URL": "Facebook","Twitter URL": "X","X URL": "X","Amazon URL":"Amazon","Flickr URL":"Flickr","Delicious URL":"Delicious","Other URL":"Others"}, //No I18N
+	SearchTypye_Map : {"contains" : "3", "starts with" : "0"} //No I18N
+};
+
+ZContacts.ImportPage = false;
+
+ZContacts.MappingType = {
+	Phone_Type : ["Mobile", "Home", "Work", "Fax", "Others"], //No I18N
+	Urls_Type : ["Home", "Work", "Blog", "Linkedin", "Facebook", "X", "Amazon", "Flickr", "Delicious", "Others"], // NO I18N
+	search_type : ["contains", "starts with"] //No I18N
+}
+
+ZContacts.AuditMapConstants = {
+	Contact_Map : {},
+	Contact_Map_Names : { "contact_nickname" : "Nick Name","contact_firstname" : "First Name", "contact_middlename" : "Middle Name", "contact_lastname" : "Last Name","emails" : "Emails", "contact_gender" : "Gender","contact_biography" : "Notes","contact_birthday" : "Birth Day","contact_birthmonth" : "Birth Month","contact_birthyear" : "Birth Year","contact_designation" : "Designation","contact_home_address" : "Home Address","contact_home_address1" : "Home Address1","contact_home_city" : "Home City","contact_home_country" : "Home Country","contact_home_postalcode" : "Home Postalcode","contact_home_state" : "Home State","contact_jobtitle" : "Job","contact_work_address" : "Work Address","contact_work_address1" : "Work Address1","contact_work_city" : "Work City","contact_work_company" : "Company","contact_work_country" : "Work Country","contact_work_postalcode" : "Work Postalcode","contact_work_state" : "Work State","phone_info" : "Phone Number","web_url_info" : "URL"} //No I18N
+}
+
+// ********************
+// $CDN
+// ********************
+
+ZContacts.getFingerPrintedFile = function(filePath){
+	var serviceInfo = ZContacts.meta.serviceInfo;
+	if(serviceInfo && serviceInfo.fingerprint_json){
+		var cdnBuketName = serviceInfo.cdn_bucket_name || "zohocontactslab"; //No I18N
+		var nf = filePath.substring(1, filePath.length);
+		var cdnFile = serviceInfo.fingerprint_json[nf] || nf;
+		var cdnFilePath = serviceInfo.cdn_domain + cdnBuketName + "/" + cdnFile;
+		return cdnFilePath;
+	}
+	return filePath;
+};
+
+// ********************
+// $UTILS
+// ********************
+ZContacts.Utils = {
+	/**
+	 * Converts "UserEmail" to "userEmail
+	 * 
+	 * @param str
+	 * @returns
+	 */
+		
+	camelize : function(str) {
+		return str.charAt(0).toLowerCase() + str.substring(1);
+	},
+
+	isEmptyArray : function(arr) {
+		return !arr || !arr.length;
+	},
+
+	isEmailId : function(str) {
+		return str && ZContacts.Constants.REGEX.EMAIL_PATTERN.test(str.trim());
+	},
+	
+	isUserName : function(str) {
+		return str && ZContacts.Constants.REGEX.USERNAME_PATTERN.test(str.trim());
+	},
+
+	isValidPhoneNumber : function(str) {
+		return str && ZContacts.Constants.REGEX.PHONE_PATTERN.test(str.trim());
+	},
+
+	isValidBirthYear : function(str) {
+		if (ZContacts.Constants.REGEX.BYEAR_PATTERN.test(str) && (parseInt(str) >= 1875 && parseInt(str) <= new Date().getFullYear())) {
+			return str;
+		} else {
+			return false;
+		}
+	},
+
+	isValidSearchTab : function(str){
+		return str && ZContacts.Constants.REGEX.ZM_SRCH_TAB_PATTERN.test(str.trim());
+	},
+
+	encodeHTML : function(str) {
+		if (str) {
+			str = str.replace(/"/gi, "&quot;").replace(/'/gi, "&#39;").replace(/</gi, "&lt;").replace(/>/gi, "&gt;");
+		}
+		return str;
+	},
+	
+	replaceNbsps : function(string) {
+		var str = string.replace(/\u00a0/g, ' ');
+		return str.replace(/[\u200A-\u200F\uFEFF\u200E\u202F\u2000-\u2009]/g, ' '); //No I18N
+	},
+	
+	isValidBulkEditInput: function(str) {
+		return str && str.trim() != "" && (ZContacts.Constants.REGEX.BASIC_LATIN_REGEX.test(str.trim()) || ZContacts.Constants.REGEX.NON_BASIC_LATIN_REGEX.test(str.trim()));
+	}
+};
+
+
+// ********************
+// $StringBuilder
+// ********************
+ZContacts.StringBuilder = function(_iv) {
+	var arr = _iv ? [ _iv ] : [];
+	this.append = function(v) {
+		arr.push(v);
+		return this;
+	};
+	this.toString = function() {
+		return arr.join("");
+	};
+	this.isEmpty = function() {
+		return this.length() < 1;
+	};
+	this.length = function() {
+		return arr.length;
+	};
+}
+
+// ********************
+// $COOKIE
+// ********************
+ZContacts.Cookie = {
+	add : function(cn, cv, domain, maxage, secure) {
+		document.cookie = cn + "=" + window.escape(cv) + ";path=/" + (!domain ? "" : ";domain=" + domain) + (!maxage ? "" : ";max-age=" + maxage) + (!secure ? "" : ";secure=" + secure); // No I18N
+	},
+	get : function(cn) {
+		if (document.cookie.length > 0) {
+			var beginIdx = document.cookie.indexOf(cn + "=");
+			if (beginIdx !== -1) {
+				beginIdx = beginIdx + cn.length + 1;
+				var endIdx = document.cookie.indexOf(";", beginIdx);
+				if (endIdx === -1) {
+					endIdx = document.cookie.length;
+				}
+				return window.unescape(document.cookie.substring(beginIdx, endIdx));
+			}
+		}
+		return "";
+	},
+	append : function(cn, cv, domain, separator, maxage, secure) {
+		var oldcv = ZContacts.Cookie.get(cn);
+		var newcv = "";
+		if (!oldcv) {
+			newcv = cv;
+		} else {
+			newcv = oldcv + separator + cv;
+		}
+		ZContacts.Cookie.add(cn, newcv, domain, maxage, secure);
+	},
+	remove : function(cn) {
+		document.cookie = cn + "=remove;path=/;max-age=0"; // No I18N
+	},
+	getCSRFValue : function() {
+		return ZContacts.Cookie.get(ZContacts.meta.serviceInfo.csrf_cookie_name);
+	}
+};
+
+// ********************
+// $I18N
+// ********************
+ZContacts.I18N = {
+	data : {},
+	load : function(arr) {
+		$.extend(ZContacts.I18N.data, arr);
+		return this;
+	},
+	get : function(key) {
+		return ZContacts.I18N.data[key] || key;
+	}
+};

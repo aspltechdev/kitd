@@ -1,0 +1,139 @@
+.contact-cta{
+    padding:120px 0;
+    background:linear-gradient(135deg,#8B1E3F,#B58A4B);
+}
+
+.contact-wrapper{
+    max-width:900px;
+    margin:auto;
+    text-align:center;
+    color:#fff;
+}
+
+.contact-wrapper h2{
+    font-size:52px;
+    margin:20px 0;
+    line-height:1.2;
+}
+
+.contact-wrapper p{
+    max-width:720px;
+    margin:0 auto 50px;
+    line-height:1.9;
+    color:#f7f7f7;
+    font-size:18px;
+}
+
+.contact-info{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+    margin-bottom:50px;
+}
+
+.info-card{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(12px);
+    padding:18px 24px;
+    border-radius:15px;
+    min-width:260px;
+}
+
+.info-card svg{
+    color:#fff;
+}
+
+.info-card span{
+    display:block;
+    font-size:14px;
+    color:#f1f1f1;
+    margin-bottom:4px;
+}
+
+.info-card h4{
+    font-size:18px;
+    font-weight:600;
+}
+
+.contact-buttons{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.contact-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 36px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.contact-btn.primary{
+    background:#fff;
+    color:#8B1E3F;
+}
+
+.contact-btn.primary:hover{
+    transform:translateY(-3px);
+}
+
+.contact-btn.secondary{
+    border:2px solid #fff;
+    color:#fff;
+}
+
+.contact-btn.secondary:hover{
+    background:#fff;
+    color:#8B1E3F;
+}
+
+@media(max-width:992px){
+
+.contact-cta{
+    padding:90px 0;
+}
+
+.contact-wrapper h2{
+    font-size:40px;
+}
+
+.contact-wrapper p{
+    font-size:16px;
+}
+
+}
+
+@media(max-width:576px){
+
+.contact-wrapper h2{
+    font-size:30px;
+}
+
+.contact-info{
+    flex-direction:column;
+}
+
+.info-card{
+    width:100%;
+    min-width:unset;
+}
+
+.contact-buttons{
+    flex-direction:column;
+}
+
+.contact-btn{
+    justify-content:center;
+    width:100%;
+}
+
+}

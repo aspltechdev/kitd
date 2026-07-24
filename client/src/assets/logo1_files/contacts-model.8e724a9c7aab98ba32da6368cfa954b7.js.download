@@ -1,0 +1,491 @@
+// $Id: $
+(function() {
+	var ZResource = ZContacts.ZResource;
+
+	ZContacts.Accounts = ZResource.extendClass({
+		resourceName: 'Accounts', // No i18N
+		getAccountId: function() {
+			return this.account_id;
+		},
+		getViewType: function() {
+			return this.type;
+		},
+		getAccountType: function() {
+			return this.account_type;
+		},
+		isWritable: this.isWritable,
+		isContactsExportable: this.isContactsExportable,
+		getCount: function() {
+			return this.count?this.count:0;
+		},
+		getName: function() {
+			return this.name;
+		},
+		getCategories: function() {
+			return this.categories;
+		},
+		getLimit: function() {
+			return this.limit;
+		},
+		getRootFolderId: function() {
+			return this.account_id + "_" + this.type;
+		}
+	});
+
+	ZContacts.Contacts = ZResource.extendClass({
+		resourceName : 'Contacts', // No i18N
+		identifier : 'contact_id', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : [ 'first_name', 'middle_name', 'last_name', 'nick_name', 'gender', 'birth_month', 'birth_day', 'birth_year', 'company', 'job_title', 'designation', 'notes', 'categories', 'is_writable', 'is_org', 'zid', 'photo_url', 'work_details' ], // No i18N
+		getFullName : function() {
+			return (this.first_name || '') + ' ' + (this.middle_name || '') + ' ' + (this.last_name || '');
+		},
+		getPrimaryEmail : function() {
+			var emails = this.get('emails');
+			if (emails) {
+				for (var i = 0; i < emails.length; i++) {
+					var email = emails[i];
+					if (email.get('is_primary')) {
+						return email.get('email_id');
+					}
+				}
+			}
+			return "";
+		},
+		isActive : function() {
+			return this.is_active == true || this.is_active == "true";
+		},
+		isGroup : function() {
+			return this.contact_type == 2 || this.contact_type == "2";
+		},
+		isOwnOrg : function() {
+			return this.own_org == true || this.own_org == "true";
+		},
+		isWritable: function() {
+			return this.is_writable == true && this.isActive();
+		},
+		isEditable : function() {
+			return this.isWritable() && (ZContacts.isEditable() || !this.isOwnOrg());
+		},
+		isDeletable : function() {
+			return this.is_writable == true && (ZContacts.isDeletable() || !this.isOwnOrg());
+		}
+	});
+	
+	ZContacts.AllContacts = ZResource.extendClass({
+		resourceName : 'contacts/all', // No i18N
+		identifier : 'contact_id', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : [ 'first_name', 'middle_name', 'last_name', 'nick_name', 'gender', 'birth_month', 'birth_day', 'birth_year', 'company', 'job_title', 'designation', 'notes', 'categories', 'is_writable', 'is_org', 'zid', 'photo_url' ], // No i18N
+		getFullName : function() {
+			return (this.first_name || '') + ' ' + (this.middle_name || '') + ' ' + (this.last_name || '');
+		},
+		getPrimaryEmail : function() {
+			var emails = this.get('emails');
+			if (emails) {
+				for (var i = 0; i < emails.length; i++) {
+					var email = emails[i];
+					if (email.get('is_primary')) {
+						return email.get('email_id');
+					}
+				}
+			}
+			return "";
+		},
+		isActive: function() {
+			return this.is_active == true || this.is_active == "true";
+		},
+		isOwnOrg: function() {
+			return this.own_org == true || this.own_org == "true";
+		},
+		isEditable: function() {
+			return this.is_writable == true && this.isActive();
+		}
+
+	});
+	
+	ZContacts.ContactsAutoList = ZResource.extendClass({
+		resourceName : 'contacts/autolist', // No i18N
+		identifier : 'contact_id', // No I18N
+		parent : ZContacts.Accounts,
+		attrs : [ 'first_name', 'middle_name', 'last_name', 'nick_name', 'gender', 'birth_month', 'birth_day', 'birth_year', 'company', 'job_title', 'designation', 'notes' ] // No i18N
+	});
+	
+	ZContacts.ContactsDuplicates = ZResource.extendClass({
+		resourceName : 'contacts/duplicates', // No I18N
+		identifier : 'contact_id', // No I18N
+		parent : ZContacts.Accounts,
+		attrs : [ 'first_name', 'middle_name', 'last_name', 'nick_name', 'gender', 'birth_month', 'birth_day', 'birth_year', 'company', 'job_title', 'designation', 'notes' ] // No i18N
+	});
+	
+	ZContacts.ContactsMerge = ZResource.extendClass({
+		resourceName : 'merge', // No I18N
+		identifier : 'contact_id', // No I18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'first_name', 'middle_name', 'last_name', 'nick_name', 'gender', 'birth_month', 'birth_day', 'birth_year', 'company', 'job_title', 'designation', 'notes' ] // No i18N
+	});
+
+	ZContacts.Categories = ZResource.extendClass({
+		resourceName : 'Categories', // No i18N
+		identifier : 'category_id', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : [ 'category_name' ], // No I18N
+	});
+	
+	ZContacts.ContactsCategories = ZResource.extendClass({
+		resourceName : 'categories', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'category_name' ], //No I18N
+	});
+	
+	ZContacts.ContactVisibility = ZResource.extendClass({
+		resourceName: 'visibility', // No I18N
+		identifier: 'type', // No i18N
+		parent: ZContacts.Contacts
+	});
+	
+	ZContacts.ContactsPhotos = ZResource.extendClass({
+		resourceName : 'photo_url', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : ["photo_url"] // No I18N
+	});
+	
+	ZContacts.ExportContacts = ZResource.extendClass({
+		resourceName : 'contacts/export', // No I18N
+		parent : ZContacts.Accounts,
+		exports : true
+	});
+
+	
+	ZContacts.InviteChat = ZResource.extendClass({
+		resourceName : 'invite', // No i18N
+		parent : ZContacts.Contacts
+	});
+
+	ZContacts.Emails = ZResource.extendClass({
+		resourceName : 'Emails', // No i18N
+		identifier : 'email_id', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'email_id', 'is_primary' ] // No i18N
+	});
+
+	ZContacts.PhoneNumbers = ZResource.extendClass({
+		resourceName : 'Phones', // No i18N
+		identifier : 'number', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'number', 'type' ] // No i18N
+	});
+	
+	ZContacts.Urls = ZResource.extendClass({
+		resourceName : 'Urls', // No i18N
+		identifier : 'url', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'url', 'type' ] // No i18N
+	});
+
+	ZContacts.Address = ZResource.extendClass({
+		resourceName : 'address', // No i18N
+		identifier : 'type', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'street_addr', 'street_addr1', 'city', 'state', 'country', 'postal_code', 'type' ], // No i18N
+
+		isEmpty : function() {
+			return !this.get('street_addr') && !this.get('street_addr1') && !this.get('city') && !this.get('state') && !this.get('country') && !this.get('postal_code');
+		}
+	});
+	
+	/*
+	ZContacts.WorkDetails = ZResource.extendClass({
+		resourceName : 'work_details', // No i18N
+		identifier : 'type', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'department', 'reporting_to', 'designation', 'company', 'employee_id' ], // No i18N
+			isEmpty : function() {
+				return !this.get('department') && !this.get('reporting_to') && !this.get('designation') && !this.get('company') && !this.get('employee_id');
+		}
+		});
+	*/
+	
+	ZContacts.Photo = ZResource.extendClass({
+		resourceName : "photo", // No I18N
+		identifier : 'photo', // No I18N
+		parent : ZContacts.Contacts,
+		attrs : [ 'photo' ], // No I18N
+		multipartAttrs : [ 'photo' ] // No I18N
+	});
+	
+	ZContacts.ImportUpload = ZResource.extendClass({
+		resourceName : 'import_upload', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : [ 'importcontact' ], // No I18N
+		multipartAttrs : [ 'importcontact' ], // No I18N
+		path : "contacts/import/upload" // No I18N
+	});
+	
+	ZContacts.ImportValidate = ZResource.extendClass({
+		resourceName : 'import_validate', // No i18N
+		identifier : 'mapping', // No I18N
+		parent : ZContacts.Accounts,
+		attrs : ['file_key'], // No I18N
+		path : "contacts/import/validate" // No I18N
+	});
+	
+	ZContacts.MappingFields = ZResource.extendClass({
+		resourceName : 'mapping', // No i18N
+		parent : ZContacts.ImportMapping,
+		attrs : ['first_name', 'middle_name', 'last_name', 'nick_name', 'categories', 'emails', 'gender', 'birth_date', 'birth_month', 'birth_year', 'notes', 'company', 'job_title', 'designation', 'h_street_addr', 'h_street_addr1', 'h_city', 'h_state', 'h_country', 'h_postal_code', 'w_street_addr', 'w_street_addr1', 'w_city', 'w_state', 'w_country', 'w_postal_code'] // No i18N
+	});
+	
+	ZContacts.Import = ZResource.extendClass({
+		resourceName : 'import', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : [ "file_key", "overwrite_duplicate", "category_id", "file_format", "total_count", "valid_count" ], // No i18N
+		path : "contacts/import" // No I18N
+	});
+	
+	ZContacts.ImportGoogle = ZResource.extendClass({
+		resourceName : 'google', // No i18N
+		identifier : 'google_url', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : ["zid","category_id"], // No I18N
+		path : "contacts/import/google" // No I18N
+	});
+	
+	ZContacts.ImportGoogleSync = ZResource.extendClass({
+		resourceName : 'sync', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : ["zid","category_id"], // No I18N
+		path : "contacts/import/google/sync" // No I18N
+	});
+	
+	ZContacts.SyncNow = ZResource.extendClass({
+		resourceName : 'syncnow', // No i18N
+		parent : ZContacts.Accounts,
+		path : "contacts/import/google/sync/syncnow" // No I18N
+	});
+	
+	ZContacts.RevokeSync = ZResource.extendClass({
+		resourceName : 'revoke', // No i18N
+		parent : ZContacts.Accounts,
+		path : "contacts/import/google/sync/revoke" // No I18N
+	});
+	
+	ZContacts.DisableSync = ZResource.extendClass({
+		resourceName : 'disable', // No i18N
+		parent : ZContacts.Accounts,
+		path : "contacts/import/google/sync/disable" // No I18N
+	});
+	
+	ZContacts.EnableSync = ZResource.extendClass({
+		resourceName : 'enable', // No i18N
+		parent : ZContacts.Accounts,
+		path : "contacts/import/google/sync/enable" // No I18N
+	});
+	
+	ZContacts.SyncDetails = ZResource.extendClass({
+		resourceName : 'details', // No i18N
+		parent : ZContacts.Accounts,
+		path : "contacts/import/google/sync/details" // No I18N
+	});
+	
+	ZContacts.GSyncConsentResponse = ZResource.extendClass({
+         resourceName : 'gsync_consent_response', // No i18N
+         parent : ZContacts.Accounts,
+         attrs : ["file_key", "override_duplicates", "total_count"], // No I18N
+         path : "contacts/import/google/sync/consent" // No I18N
+     });
+     
+     ZContacts.GSyncConsentResponseClose = ZResource.extendClass({
+		resourceName : 'gsync_consent_response_close', // No I18N 
+		parent : ZContacts.Accounts,
+		attrs : ["file_key"], //No I18N
+		path : "contacts/import/google/sync/consent/close" // No I18N 
+	 });
+	
+	ZContacts.ImportYahoo = ZResource.extendClass({
+		resourceName : 'yahoo', // No i18N
+		identifier : 'yahoo_url', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : ["zid","category_id"], // No I18N
+		path : "contacts/import/yahoo" // No I18N
+	});
+	
+	ZContacts.ImportOutlook = ZResource.extendClass({
+		resourceName : 'outlook', // No i18N
+		identifier : 'outlook_url', // No i18N
+		parent : ZContacts.Accounts,
+		attrs : ["zid","category_id"], // No I18N
+		path : "contacts/import/outlook" // No I18N
+	});
+	
+	ZContacts.CopyFrom = ZResource.extendClass({
+		resourceName : 'from', // No I18N
+		parent : ZContacts.Copy, // No I18N
+		attrs : [ 'zid', 'contact_ids'] // No i18N
+	});
+	
+	ZContacts.CopyFromMultiple = ZResource.extendClass({
+		resourceName : 'from_multiple', // No I18N
+		parent : ZContacts.Copy,
+		identifier : 'zid', // No I18N
+		attrs : [ 'zid', 'contact_ids'] // No i18N
+	});
+	
+	ZContacts.CopyTo = ZResource.extendClass({
+		resourceName : 'to', // No I18N
+		parent : ZContacts.Copy, // No I18N
+		attrs : [ 'zid', 'category_id'] // No i18N
+	});
+	
+	ZContacts.Copy = ZResource.extendClass({
+		resourceName : 'copy', //No I18N
+		parent : ZContacts.Accounts, //No I18N
+		attrs : ['from','to'] //No I18N
+	});
+	
+	ZContacts.ContactsAudit = ZResource.extendClass({
+		resourceName : 'audits', // No i18N
+		parent : ZContacts.Contacts,
+		attrs : ["zid","category_id"] // No I18N
+	});
+
+	ZContacts.AccountAudit = ZResource.extendClass({
+		resourceName : 'account/audits', // No i18N
+		parent : ZContacts.Accounts,
+	});
+	
+	ZContacts.TrashClearContacts = ZResource.extendClass({
+		resourceName : 'contacts/trash/clear', // No i18N
+		parent : ZContacts.Accounts
+	});
+	
+	ZContacts.TrashRestoreContacts = ZResource.extendClass({
+		resourceName : 'contacts/trash/restore', // No i18N
+		parent : ZContacts.Accounts
+	});
+	
+	ZContacts.PrintContacts = ZResource.extendClass({
+		resourceName : 'contacts/print', // No I18N
+		identifier : 'contact_id', // No I18N
+		parent : ZContacts.Accounts,	
+		attrs : [ 'first_name', 'middle_name', 'last_name', 'nick_name', 'gender', 'birth_month', 'birth_day', 'birth_year', 'company', 'job_title', 'designation', 'notes' ], // No i18N
+		
+		getFullName : function() {
+			return (this.first_name || '') + ' ' + (this.middle_name || '') + ' ' + (this.last_name || '');
+		},
+		getPrimaryEmail : function() {
+			var emails = this.get('emails');
+			if (emails) {
+				for (var i = 0; i < emails.length; i++) {
+					var email = emails[i];
+					if (email.get('is_primary')) {
+						return email.get('email_id');
+					}
+				}
+			}
+			return "";
+		},
+		isActive: function() {
+			return this.is_active == true || this.is_active == "true";
+		},
+		isGroup: function() {
+			return this.contact_type == 2 || this.contact_type == "2";
+		},
+		isOwnOrg: function() {
+			return this.own_org == true || this.own_org == "true";
+		},
+	});
+	
+	ZContacts.BulkEditConsent = ZResource.extendClass({
+         resourceName : 'bulk', // No i18N
+         parent : ZContacts.Accounts,
+         attrs : ["contact_ids", "add", "edit", "clear"], // No I18N
+         path : "contacts/bulk" // No I18N
+     });
+     
+     ZContacts.BulkEdit = ZResource.extendClass({
+         resourceName : 'bulk_update', // No i18N
+         parent : ZContacts.Accounts,
+         attrs : ["contact_ids", "add", "edit", "clear"], // No I18N
+         path : "contacts/bulk/update" // No I18N
+     });
+     
+     
+	ZContacts.Preferences = ZResource.extendClass({
+		resourceName: 'preferences', // No i18N
+		parent: ZContacts.Accounts,
+		path: "preferences" // No I18N 
+	});
+	
+	ZContacts.PreferencesUpdate = ZResource.extendClass({
+		resourceName: 'preferences', // No i18N
+		parent: ZContacts.Accounts,
+		attrs: ["org"], // add "self" for self preference update // No I18N
+		path: "preferences" // No I18N
+	});
+	
+	ZContacts.ExportContactsPreferencesUpdate = ZResource.extendClass({
+		resourceName: 'org', // No I18N
+		identifier : 'permission', // No i18N
+		parent: ZContacts.Accounts,
+		path : "preferences/export" // No I18N 	 
+	});
+	
+	ZContacts.OrgContactsPreferencesUpdate = ZResource.extendClass({
+		resourceName: 'org', // No I18N
+		identifier : 'permission', // No i18N
+		parent: ZContacts.Accounts,
+		path : "preferences/contacts" // No I18N 	  
+	});
+	
+	ZContacts.OrgContactsEmailIdPreferencesUpdate = ZResource.extendClass({
+		resourceName: 'org', // No I18N
+		identifier : 'permission', // No i18N
+		parent: ZContacts.Accounts,
+		path : "preferences/emailid" // No I18N 
+	});
+
+	ZContacts.OrgPreferencesUpdate = ZResource.extendClass({
+		resourceName: 'org', // No I18N
+		parent: ZContacts.PreferencesUpdate,
+		attrs: ["export_permission", "org_contacts_access", "email_id_visibility"] // No I18N		
+	});
+
+	$.extend(ZContacts.Copy.resourceProps, {
+		subResources : [ZContacts.CopyFrom, ZContacts.CopyFromMultiple, ZContacts.CopyTo ]
+	});
+
+	$.extend(ZContacts.Contacts.resourceProps, {
+		subResources : [ ZContacts.Emails, ZContacts.PhoneNumbers, ZContacts.Urls, ZContacts.Address ]
+	});
+	
+	$.extend(ZContacts.AllContacts.resourceProps, {
+		subResources : [ ZContacts.Emails, ZContacts.PhoneNumbers, ZContacts.Urls, ZContacts.Address ]
+	});
+	
+	$.extend(ZContacts.MappingFields.resourceProps, {
+		subResources : [ ZContacts.PhoneNumbers, ZContacts.Urls, ZContacts.Address ]
+	});
+
+	$.extend(ZContacts.ContactsDuplicates.resourceProps, {
+		subResources : [ ZContacts.Emails, ZContacts.PhoneNumbers, ZContacts.Urls, ZContacts.Address ]
+	});
+
+	$.extend(ZContacts.ContactsMerge.resourceProps, {
+		subResources : [ ZContacts.Emails, ZContacts.PhoneNumbers, ZContacts.Urls, ZContacts.Address ]
+	});
+	
+	$.extend(ZContacts.ImportValidate.resourceProps, {
+		subResources : [ZContacts.MappingFields]
+	});
+	
+	$.extend(ZContacts.PrintContacts.resourceProps, {
+		subResources : [ ZContacts.Emails, ZContacts.PhoneNumbers, ZContacts.Urls, ZContacts.Address ]
+	});
+	
+	$.extend(ZContacts.PreferencesUpdate.resourceProps, {
+		subResources: [ZContacts.OrgPreferencesUpdate] // add subResource like "ZContacts.SelfPreferencesUpdate" and define it for self preference update here.
+	});
+	
+				
+})();

@@ -95,7 +95,7 @@ import newsRoutes from "./routes/newsletter.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import partnerRoutes from "./routes/partner.routes.js";
 import testimonialRoutes from "./routes/testimonial.routes.js";
-
+import volunteerRegistrationRoutes from "./routes/volunteerRegistration.routes.js";
 // Middleware
 import { notFound } from "./middleware/notFound.middleware.js";
 import { errorHandler } from "./middleware/error.middleware.js";
@@ -153,6 +153,12 @@ app.use("/api/memberships", membershipRoutes);
 
 // Contact
 app.use("/api/contacts", contactRoutes);
+
+
+app.use(
+  "/api/volunteer-registrations",
+  volunteerRegistrationRoutes
+);
 
 /* -------------------------- Error Handling -------------------------- */
 

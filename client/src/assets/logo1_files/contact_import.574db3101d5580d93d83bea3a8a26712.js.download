@@ -1,0 +1,1760 @@
+// $Id: $
+
+ZContacts.importContacts =  {
+	zid : undefined, categoryId : undefined, fileKey : undefined, refreshContacts : false
+};
+
+ZContacts.gSyncContacts = {
+	gSyncFileKey : undefined
+};
+
+var resetImportContacts = function() {
+	$.each(ZContacts.importContacts, function(key, value) {
+		ZContacts.importContacts[key] = undefined;
+	});
+};
+
+ZContacts.syncResponse = function(data){
+	var date = new Date(parseInt(data.lastSyncedTime));
+	ZContacts._syncedTime = date.toLocaleDateString() + "," + date.toLocaleTimeString();
+	if (data.result == "failed") {
+		zmUtil.succErrMsg("e", data.error_message);// NO I18N
+		if (data.sync_now == true) {
+			zmsuite.getCenter()[0].getNodes()[2].$el.find('#googleSyncDetails').find('.zcs_import_header_two').html(ZContacts.I18N.get('IAM.GOOGLE.LAST.SYNC.TIME') + ZContacts._syncedTime);
+			return;
+		}
+		if (data.ignore_sync_summary === undefined || !data.ignore_sync_summary) { // when user has no space reserved.
+			ZContacts._sync = true;
+			ZContacts._authenticatedMailId = data.authenticatedMailId;
+			ZContacts._enableStatus = data.enableDisableStatus;
+			syncSummeryWorkspace();	
+		}
+		return;
+	} 
+	else if (data.duplicateGSyncContacts) {
+		ZContacts.gSyncContacts.gSyncFileKey = data.fileKey;
+		ZContacts.gSyncContacts.duplicateGSyncContacts = data.duplicateGSyncContacts == undefined ? false : true; 
+		
+		var contactImport = new ZContacts.contactimport();
+		contactImport.createPageContent(getHtmlForGsyncConsent(data));
+		var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+		$(rightContainer).find('[data-field-type = duplicate_email_ids]').on("click", function() {
+			errorValuesPopup('duplicate_email_ids'); //No I18N
+		});
+		$(rightContainer).find('[data-field-type = finish_import]').on("click", function() {
+			actionOnGSyncConsent(data.total_count);
+		});
+		$(rightContainer).find('[data-field-type=close_import]').on("click", function() {
+			actionOnGSyncConsentClose();
+		});
+		$(rightContainer).parent().siblings().find(".msi-close").on("click", function() {
+			actionOnGSyncConsentClose();
+		});
+	}
+	
+	else {
+		zmUtil.succErrMsg("s", ZContacts.I18N.get("CONTACT.SYNC.SUCCESS")); // NO I18N
+		zmsDialog.remove();
+		$("#zcs_twowaySyncPopup").remove();
+		ZContacts._sync = true;
+		ZContacts._authenticatedMailId = data.authenticatedMailId;
+		var date = new Date(parseInt(data.lastSyncedTime));
+		ZContacts._syncedTime = date.toLocaleDateString() + "," + date.toLocaleTimeString();
+		ZContacts._enableStatus = data.enableDisableStatus;
+		if(data.sync_now == true){
+			zmsuite.getCenter()[0].getNodes()[2].$el.find('#googleSyncDetails').find('.zcs_import_header_two').html(ZContacts.I18N.get('IAM.GOOGLE.LAST.SYNC.TIME') + ZContacts._syncedTime);
+		} else {
+			syncSummeryWorkspace();
+		}
+		try {
+			var acc = zmcontact.getAccountByZidForType(ZContacts.importContacts.zid, ZContacts.ZMailConstants.VIEW_ID_CONTACTS);
+			if (acc.getAccountType() == ZContacts.ZMailConstants.PERSONAL_ACCOUNT || acc.getAccountType() == ZContacts.ZMailConstants.ORG_ACCOUNT) {
+				zmcontact.invokeEvent("contactsApp/refresh", acc.getAccountId()); // NO I18N
+			}
+		} catch(e) {
+			
+		}
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[ZContacts.importContacts.zid];
+		if(ZContacts.importContacts.categoryId && ZContacts.importContacts.categoryId != -1){
+			category = zmcontact.getCategory(ZContacts.importContacts.categoryId);
+		} else {
+			category = zmcontact.getCategory(rootFolderId);
+		}
+		ZContacts.importContacts.refreshContacts = true;
+		zmcontact.refreshContactCounts(ZContacts.importContacts.zid);
+		var isContactRefresh = false;
+		$(".zmAppTab").one("click", function() {
+		    if (isContactRefresh) {
+		        return;
+		    }
+		    zmcontact.loadFirstPage(zmcontact.getCategory(ZContacts._currentCategoryId));
+		    isContactRefresh = true;
+		});
+		$(".msi-close").one("click", function() {
+		    if (isContactRefresh) {
+		        return;
+		    }
+			zmcontact.loadFirstPage(zmcontact.getCategory(ZContacts._currentCategoryId));
+		    isContactRefresh = true;
+		});
+	}
+};
+
+ZContacts.importResponse = function(data) {
+	if(data.result == "failed") {
+		zmUtil.succErrMsg("e", data.error_message);// NO I18N
+		return;
+	} else {
+		var contactImport = new ZContacts.contactimport();
+		var duplicateContacts;
+		if(data.duplicate_email_ids) {
+			duplicateContacts = { duplicate_email_ids : data.duplicate_email_ids };
+		}
+		contactImport.createPageContent(getHtmlForFinishImport(true, data.total_count, data.added_count, data.updated_count, duplicateContacts, data.message), false);
+		var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+		$(rightContainer).find('[data-field-type=result_close_import_page]').on("click", function(event){
+			var isImported = event.target.dataset.id;
+			closeImport(isImported);
+		});
+		$(rightContainer).find('[data-field-type=result_go_to_import]').on("click", function(event){
+			goToImportPage(true);
+		});
+		$(rightContainer).find('[data-field-type = duplicate_email_ids]').on("click", function() {
+			errorValuesPopup('duplicate_email_ids'); //No I18N
+		});
+		try {
+			var acc = zmcontact.getAccountByZidForType(ZContacts.importContacts.zid, ZContacts.ZMailConstants.VIEW_ID_CONTACTS);
+			if (acc.getAccountType() == ZContacts.ZMailConstants.PERSONAL_ACCOUNT || acc.getAccountType() == ZContacts.ZMailConstants.ORG_ACCOUNT) {
+				zmcontact.invokeEvent("contactsApp/refresh", acc.getAccountId()); // NO I18N
+			}
+		} catch(e) {
+			
+		}
+		
+		return;
+	}
+};
+
+
+var getErrorDetailsInHtml = function(key, field, data) {
+	var html = new ZContacts.StringBuilder();
+	html.append('<li style="margin-bottom: -40px;line-height: 3.5em;" class="zcs_im_align"><span>' + zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.INVALID.FIELDS.COUNT'), field) + '</span>');
+	html.append('<span data-val="'+key+','+field+'"  data-field-type="invalid_emails_list" class="SC_lnk zcs_show_popup zmThmClr">' + ZContacts.I18N.get('IAM.CONTACTS.VIEW.DETAILS') + '</span><br></li>');
+	return html;
+};
+
+
+ZContacts.contactimport = function() {
+	var encodeHTML = ZContacts.Utils.encodeHTML;
+	var enableSync = true;
+
+	/* -----------Import Home Page----------- */
+
+	getHtmlForImport = function() {
+		var html = new ZContacts.StringBuilder();
+		var acc = ZContacts.getCurrentAccount();
+		importSyncPopUp = false;
+		if (acc.getViewType() == ZContacts.ZMailConstants.VIEW_ID_CONTACTS) {
+			importSyncPopUp = true;
+		}
+		if (ZContacts.getCurrentAccount().getAccountType() != "personal") {
+			importSyncPopUp = false;
+		}
+		var rootFolderId = zmcontact.getRootFolderId(ZContacts._currentCategoryId);
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+
+		var categoryId = ZContacts._currentCategoryId;
+		var rootFolderId = zmcontact.getRootFolderId(categoryId);
+		var category = zmcontact.getCategory(categoryId);
+		var categoryName;
+		if (zmcontact.isRootFolder(categoryId)) {
+			categoryName = ZContacts.I18N.get('IAM.CONTACTS.ALL.CONTACTS'); // NO I18N
+			categoryId = rootFolderId;
+		} else {
+			categoryName = category.category_name;
+		}
+
+		// categories list
+		html.append('<div id="syncContinue" style="padding-left : 1%;"><h4>' + ZContacts.I18N.get('IAM.CONTACTS.WHERE.IMPORT') + '</h4>'); // NO I18N
+		html.append('<div style="margin-left: 2%;margin-bottom: 5%;"><p>' + ZContacts.I18N.get('IAM.CONTACTS.WHICH.CATEGORY') + '</p>'); // NO I18N
+		html.append('<div class="SC_flt">');
+
+		html.append('<b id="zcs_account"><input class="SC_tiput" data-field-type="import_accounts_list" id=' + acc.getAccountId() + ' name="' + encodeHTML(acc.getName()) + '" placeholder="' + encodeHTML(acc.getName()) + '" readonly=readonly style="width: 200px;cursor: pointer;"></b>'); // NO I18N
+		html.append('<b id="zcs_category"><input class="SC_tiput" data-field-type="import_category_list" id=' + categoryId + ' name="' + encodeHTML(categoryName) + '" placeholder="' + encodeHTML(categoryName) + '" readonly=readonly style="width: 200px;margin-left: 30px;cursor: pointer;"></b>'); // NO I18N
+		html.append('</div></div>');
+		html.append('<span class="zcs_im_border_bottom" style="width: 94%"></span>'); // NO I18N
+		html.append('</div><br>');
+
+		if (ZContacts._sync == true) {
+			html.append(getHtmlForSync());
+		}
+		if (ZContacts.meta.hideThirdPartyImport) {
+			html.append('<div style="padding-top: 1%;padding-left: 1%;"><h4>' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FILE.EMAIL.PROVIDER.NIC') + '</h4></div>'); // NO I18N
+		} else {
+			html.append('<div style="padding-top: 1%;padding-left: 1%;"><h4>' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FILE.EMAIL.PROVIDER') + '</h4></div>'); // NO I18N
+		}
+		//Local File
+		html.append('<div style="display: flex;flex-wrap: wrap;">');
+		html.append('<label class="zcs_import_box" data-field-type="local_file" id="local_file">'); //No I18N
+		html.append('<div class="zcs_import_img_main"><img class="zcs_import_img" src='+ZContacts.getFingerPrintedFile("/images/import/file.png")+'></div>');
+		html.append('<div class="zcs_import_txt_main"><span class="zcs_import_header">' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.LOCAL.DRIVE') + '</span>');
+		html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FROM.FILE.UPDATED')+'<br>'+ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FROM.FILE.MAX.CONTACTS.ALLOWED') +'</span></div>');
+		html.append("<label style='display: inline;'><div><form name='importlocalForm' id='import' enctype='multipart/form-data' method='Post'><input name='importcontact' id='importFile' accept='.ldif,.csv,.vcf' type='file' style='display: none;'/></form></div></label>");
+		html.append('</label>');
+
+		// Google
+		if (!zmail.isCN && !ZContacts.meta.hideThirdPartyImport) {
+			if (importSyncPopUp == false){
+				html.append('<div class="zcs_import_box" data-field-type="google_import" id="google">');
+			} else {
+				if (ZContacts._sync == true) {
+					html.append('<div class="zcs_import_box" data-field-type="google_import" id="google">');
+				} else {
+					html.append('<div class="zcs_import_box" data-field-type="google_sync" id="google">');
+				}
+			}
+			html.append('<div class="zcs_import_img_main"><img class="zcs_import_img" src='+ZContacts.getFingerPrintedFile("/images/import/google.png")+'></div>');
+			html.append('<div class="zcs_import_txt_main"><span class="zcs_import_header">' + ZContacts.I18N.get('IAM.CONTACTS.GMAIL') + '</span>');
+			if (importSyncPopUp == false) {
+				html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FROM.GOOGLE.UPDATED') + '</span>');
+			} else {
+				if (ZContacts._sync == true) {
+					html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FROM.GOOGLE.UPDATED') + '</span>');
+				} else {
+					html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.IMPORT.SUPPORT.TWO.WAY.SYNC') + '</span>');
+				}
+			}
+			html.append('</div></div>');
+		}
+
+		// yahoo (Yahoo import hide skydesk setup)
+		if (!ZContacts.meta.yahoo_disable) {
+			if (!zmail.isFuji) {
+				html.append('<div class="zcs_import_box" id="yahoo" data-field-type="yahoo_import">');
+				html.append('<div class="zcs_import_img_main"><img class="zcs_import_img" src='+ZContacts.getFingerPrintedFile("/images/import/yahoo.png")+'></div>');
+				html.append('<div class="zcs_import_txt_main"><span class="zcs_import_header">' + ZContacts.I18N.get('IAM.CONTACTS.YAHOO') + '</span>');
+				html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.CONTACTS.YAHOO.ACCOUNT') + '</span>');
+				html.append('</div></div>');
+			}
+		}
+
+		// Outlook
+		if (!ZContacts.meta.hideThirdPartyImport) {
+			html.append('<div class="zcs_import_box" id="outlook" data-field-type="outlook_import">');
+			html.append('<div class="zcs_import_img_main"><img class="zcs_import_img" src='+ZContacts.getFingerPrintedFile("/images/import/windows.svg")+'></div>');
+			html.append('<div class="zcs_import_txt_main" style="margin-right: 32px"><span class="zcs_import_header">' + ZContacts.I18N.get('IAM.CONTACTS.OUTLOOK') + '</span>');
+			html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.CONTACTS.OUTLOOK.ACCOUNT.UPDATED') + '</span>');
+			html.append('</div></div>');
+		}
+		html.append('</div>');
+		return html.toString();
+	};
+	
+	getHtmlForSync = function() {
+		var html = new ZContacts.StringBuilder();
+		
+		html.append('<div id="sync"><div style="padding-top: 1%;padding-left: 1%;"><h4>' + ZContacts.I18N.get('IAM.GOOGLE.SYNCED.CONTACTS') + '</h4></div>'); // NO I18N
+		
+		html.append('<div class="zcs_sync_box" data-field-type="sync_details" id="googleSync">');
+		html.append('<div class="zcs_import_img_main"><img class="zcs_import_img" src='+ZContacts.getFingerPrintedFile("/images/import/google.png")+'></div>');
+		html.append('<div class="zcs_import_txt_main"><span class="zcs_import_header">' + ZContacts.I18N.get('IAM.GOOGLE.TWO.WAY.SYNC') + '</span>');
+		html.append('<span class="zcs_import_header_two" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">' + zmcontact.formatMessage(ZContacts.I18N.get('IAM.GOOGLE.SYNCED.ACCOUNT'), ZContacts._authenticatedMailId) +'</span></div>');
+		if(ZContacts._enableStatus == true){
+			html.append('<div class="zcs_toggle_btn" data-field-type="on_off_button" style="float: right;"><input type="checkbox"  style="cursor: pointer;" class="radio_input" onclick="" checked><div class="radio_style"></div></div>');
+		} else {
+			html.append('<div class="zcs_toggle_btn" data-field-type="on_off_button" style="float: right;"><input type="checkbox"  style="cursor: pointer;" class="radio_input" onclick="" unchecked><div class="radio_style"></div></div>');
+		}
+		
+		html.append('</div><br>');
+		
+		
+		html.append('<div class="zcs_sync_details hide" id="googleSyncDetails" >');
+		html.append('<div class="zcs_import_img_main"><img class="zcs_import_img" src='+ZContacts.getFingerPrintedFile("/images/import/google.png")+'></div>');
+		html.append('<div class="zcs_import_txt_main"><span class="zcs_import_header">' + ZContacts.I18N.get('IAM.GOOGLE.TWO.WAY.SYNC') + '</span>');
+		html.append('<span class="zcs_import_header_two">' + ZContacts.I18N.get('IAM.GOOGLE.LAST.SYNC.TIME') + ZContacts._syncedTime +'</span></div>');
+		html.append('<div style="margin-top: 25px;"><span class="zcs_sync_header">'+ ZContacts.I18N.get('IAM.GOOGLE.SYNCED.ACCOUNT.HEADER') +'</span><span style="display: block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 350px;">' + ZContacts._authenticatedMailId + '</span></div>'); //No I18N
+		html.append('<div style="margin-top: 25px;"><span class="zcs_sync_header">'+ ZContacts.I18N.get('IAM.GOOGLE.SYNC.FREQUENCY') +'</span><span style="font-size: 14px;color: #000000;">'+ ZContacts.I18N.get('IAM.GOOGLE.SYNC.DAILY') +'</span></div>'); //No I18N
+		html.append('<div style="margin-top: 25px;"><span class="zcs_sync_header">'+ ZContacts.I18N.get('IAM.GOOGLE.DAILY.SYNC') +'</span>');
+		if(ZContacts._enableStatus == true){
+			html.append('<div class="zcs_toggle_btn" data-field-type="on_off_button"><input type="checkbox" style="cursor: pointer;" class="radio_input" checked><div class="radio_style"></div></div></div>');
+		} else {
+			html.append('<div class="zcs_toggle_btn" data-field-type="on_off_button"><input type="checkbox" style="cursor: pointer;" class="radio_input" unchecked><div class="radio_style"></div></div></div>');
+		}
+		html.append('<div class="SC_PUbtm"><span data-field-type="zcs-sync-now">').append(ZContacts.I18N.get("IAM.GOOGLE.SYNC.NOW")).append('</span>'); // No I18N
+		html.append('<span style="margin-left: 10px;" data-val="Cancel" data-field-type="zcs-revoke-btn" data-val="Cancel">' + ZContacts.I18N.get("IAM.GOOGLE.DEACTIVATE.SYNC") + '</span>');
+		html.append('<span style="margin-left: 10px;" data-field-type="zcs-sync-popup-cancel-btn" data-val="Cancel">' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');
+		html.append('</div></div></div>');
+		
+		html.append('<span class="zcs_im_border_bottom" style="width: 94%"></span><br>'); // NO I18N
+		return html.toString();
+	};
+	
+	getHtmlForGsyncConsent = function(data) {
+		var html = new ZContacts.StringBuilder();
+		html.append('<div> <form id="confirmationForm">');
+		this.data = data;
+		html.append('<div style="margin-top: 1%;"><span class="zcs_im_align redtxt">' + ZContacts.I18N.get("IAM.CONTACTS.CONSENT.SYNC") + '</span><br></br>');
+		if (data.duplicateGSyncContacts) {
+			html.append('<div class="zcs_im_align" style="padding-left: 30px;"><span class="zcs_im_checkbox"><input class="gsync_consent_checkbox" id="override_duplicates" type="checkbox"/></span><span class="zcs_im_overwirte_pending">' + ZContacts.I18N.get("IAM.CONTACTS.CONSENT.SYNC.OVERWRITE.DUPLICATES") + '</span>');
+			html.append('&nbsp;&nbsp;&nbsp;<span data-val="duplicate_email_ids" data-field-type="duplicate_email_ids" class="SC_lnk zcs_show_popup zmThmClr" style="font-size: 14px;">' + ZContacts.I18N.get('IAM.CONTACTS.VIEW.DETAILS') + '</span></div>');
+		}
+		html.append('<div class="zcs_im_align" style="padding-left: 10px;font-size: 14px;padding-top: 15px;"><b>Note:</b>&nbsp;' +'<i>'+ZContacts.I18N.get("IAM.CONTACTS.CONSENT.SYNC.NOTE")+'</i>'+ '</div>');
+		html.append('<span class="zcs_im_border_bottom"></span>');
+		html.append('</div></br>');
+		html.append('<br><div class="zcs_im_save_div"><span class="SC_PUbtm" style="margin-left: 30%">');
+		html.append('<span data-val="Next" data-field-type="finish_import">' + ZContacts.I18N.get("IAM.CONTACTS.SYNC") + '</span>');
+		html.append('<span data-val="Cancel" data-field-type="close_import">' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');// No i18N
+		html.append('</span></div>');
+		html.append('</form></div>');
+		return html.toString();
+	}
+	
+	onOffButton = function(event){
+		event.stopPropagation();
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(!zid) {
+			return;
+		}
+		if($(event.currentTarget).find('.radio_input').prop("checked") == true){ // enable 
+			new ZContacts.URI(ZContacts.EnableSync, zid).PUT().then(function(response) {
+				if(response == true) {
+					return;
+				}
+			}); 
+		} else { // disable
+			new ZContacts.URI(ZContacts.DisableSync, zid).PUT().then(function(response) {
+				if(response) {
+					return;
+				}
+			});
+		}
+	};
+
+	showSyncDetails = function(){
+		var $gSyncElem = $("#googleSync");
+		if($gSyncElem.hasClass('hide')){
+			var check = $("#googleSyncDetails").find('.zcs_toggle_btn').find('.radio_input').prop("checked"); //No I18N
+			$("#googleSyncDetails").addClass('hide');
+			$gSyncElem.removeClass('hide');
+			if ($gSyncElem.find('.zcs_toggle_btn').find('.radio_input').prop("checked") == check) {
+				return;
+			} else {
+				 $gSyncElem.find('.zcs_toggle_btn').find('.radio_input').prop('checked', check); //No I18N
+			}
+		}else{
+			var check = $gSyncElem.find('.zcs_toggle_btn').find('.radio_input').prop("checked"); //No I18N
+			$("#googleSyncDetails").removeClass('hide');
+			$gSyncElem.addClass('hide');
+			if ($("#googleSyncDetails").find('.zcs_toggle_btn').find('.radio_input').prop("checked") == check) {
+				return;
+			} else {
+				$("#googleSyncDetails").find('.zcs_toggle_btn').find('.radio_input').prop('checked', check); //No I18N
+			}
+		}
+	};
+	
+	twoWaySyncPopup = function(data) {
+		var enableSyncDiv = {};
+		enableSyncDiv.title = ZContacts.I18N.get("IAM.IMPORT.CONTACTS.VIA.GOOGLE"); // No I18N
+		enableSyncDiv.mask = true;
+
+		enableSyncDiv.buttons = [ {
+			txt : ZContacts.I18N.get("IAM.CONTACTS.IMPORT"), // No I18N
+			selected : true,
+			callback : function(data) {
+				enableSync = $('input[name=enable_sync]:checked').val();
+				if(enableSync == "true"){
+					importGoogleSync();
+				} else {
+					importGoogle(enableSync);
+				}
+			}
+
+		}, {
+			isCancel : true,
+			txt : ZContacts.I18N.get("IAM.CANCEL"),
+			callback : function() {
+				zmsDialog.remove();
+				$("#zcs_twowaySyncPopup").remove();
+			}	
+
+		} ];
+
+		enableSyncDiv.closeaction = function() {
+			zmsDialog.remove();
+			$("#zcs_twowaySyncPopup").remove();
+		};
+		enableSyncDiv.pos = "center"; // No I18N
+
+		createFolElem = $("<div id='zcs_twowaySyncPopup'></div>");
+		if (!$("#zcs_twowaySyncPopup").length) {
+			var html = "<div class='SC_tdtl'>";
+			html = html + "<div><input type='radio' id='disable_sync' style='height: 14px;cursor: pointer;' name='enable_sync' value='false' checked/><label for='disable_sync'><span style='padding:  5px;'>" + ZContacts.I18N.get("IAM.CONTACTS.IMPORT.FROM.GOOGLE.UPDATED") + "</span></br><span style='margin-left: 25px;font-size: 13px;'>" + ZContacts.I18N.get("IAM.CONTACTS.IMPORT.MESSAGE") + "</span></label></div><br>"; // No I18N
+			html = html + "<div><input type='radio' id='enable_sync' style='height: 14px;cursor: pointer;' name='enable_sync' value='true'/><label for='enable_sync'><span style='padding:  5px;'>" + ZContacts.I18N.get("IAM.IMPORT.SYNC.CONTACTS") + "</span></br><span style='margin-left: 25px;font-size: 13px;'>" + ZContacts.I18N.get("IAM.CONTACTS.SYNC.MESSAGE") + "</span></label></div>"; // No I18N
+			html = html + "<br><div id='termsAndCondition' style='margin-left:2px;'><span><i class='msi-uncheck'></i></span>"+ZContacts.I18N.get("IAM.GOOGLE.SYNC.PRIVACY.POLICY")+"<a style='color: #0073e8; text-decoration: none;' href='"+ZContacts.meta.serviceInfo.google_terms_of_use+"' target='_blank'>"+ZContacts.I18N.get("IAM.CONTACTS.LOGIN.TERMS.USE")+"</a> "+ZContacts.I18N.get("IAM.CONTACTS.AND")+" <a style='color: #0073e8; text-decoration: none;' href='"+ZContacts.meta.serviceInfo.google_privacy_policy+"' target='_blank'>"+ZContacts.I18N.get("IAM.CONTACTS.LOGIN.PPOLICY")+"</a></div>"; // No I18N
+			createFolElem.append(html);
+			$(document.body).append(createFolElem);
+		}
+		zmsDialog.create("zcs_twowaySyncPopup", enableSyncDiv); // No I18N
+		$('#zcs_twowaySyncPopup').parents('.SC_pe').on("click", function(e) {
+			e.stopPropagation();
+		});
+		$('#zcs_twowaySyncPopup').parents('.SC_Pop').on("click", function() {
+			this.remove();
+		});
+		$('#termsAndCondition').find('.msi-uncheck').on("click", function(event){
+			if ($(event.target).hasClass('msi-uncheck')) {
+				$(event.target).removeClass("msi-uncheck").addClass("msi-check");// No I18N
+			} else if ($(event.target).hasClass('msi-check')) {
+				$(event.target).removeClass("msi-check").addClass("msi-uncheck");// No I18N
+			}
+		});
+	};
+
+	importGoogleSync = function(){
+		if($('#termsAndCondition').find('.msi-uncheck').length == 1){
+			zmUtil.succErrMsg("e", ZContacts.I18N.get("IAM.GOOGLE.PRIVACY.POLICY.ENSURE")); // NO I18N
+			return;
+		}
+		zmsDialog.remove();
+		$("#zcs_twowaySyncPopup").remove();
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(zid != ZContacts.getCurrentAccount().getAccountId()) {
+			zmUtil.succErrMsg("e", ZContacts.I18N.get("IAM.CONTACTS.GOOGLE.SYNC.RESTRICT")); // NO I18N
+			return;
+		}
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[zid];
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+		
+		ZContacts.importContacts.zid = zid;
+		var uri = new ZContacts.URI(ZContacts.ImportGoogleSync, zid);
+		var categoryId = $('#zcs_category').find("input").attr('id'); // No I18N
+		var googleSync = ZContacts.ImportGoogleSync.create();
+		if (categoryId && !zmcontact.isRootFolder(categoryId)) {
+			ZContacts.importContacts.categoryId = categoryId;
+			uri.addPostParam("category_id", categoryId); // No I18N
+		}
+		var domain;
+		if(zmail.forContactsApp){
+			domain = window.location.host;
+		} else {
+			domain = window.location.host + ZContacts.getContextPath();
+		}
+		uri.addPostParam("domain", domain).POST(googleSync).then(function(response) { // No I18N
+			if(response) {
+				var googleUrl = response.google.google_url;
+				openSyncNewTab(googleUrl, "google"); // No I18N
+				return;
+			}
+		});
+		
+	};
+	
+	syncSummeryWorkspace = function(){
+		zmsuite.getCenter()[0].getNodes()[2].$el.find('#syncContinue').after(getHtmlForSync());
+		zmsuite.getCenter()[0].getNodes()[2].$el.find('.zcs_import_box')[1].setAttribute('onClick', 'importGoogle()');
+		zmsuite.getCenter()[0].getNodes()[2].$el.find('#google').find('.zcs_import_header_two').html(ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FROM.GOOGLE.UPDATED'));
+		var rightContainer = zmsuite.getCenter()[0].getNodes()[2].$el.find('.SC_import');
+		$(rightContainer).find('[data-field-type=sync_details]').on("click", function() {
+			showSyncDetails();
+		});
+		$(rightContainer).find('[data-field-type=zcs-sync-now]').on("click", function() {
+			syncNow();
+		});
+		$(rightContainer).find('[data-field-type=zcs-revoke-btn]').on("click", function() {
+			revokeSync();
+		});
+		$(rightContainer).find('[data-field-type=zcs-sync-popup-cancel-btn]').on("click", function() {
+			showSyncDetails();
+		});
+	};
+	
+	
+	revokeSync = function(){
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(!zid) {
+			return;
+		}
+		if(confirm(ZContacts.I18N.get('IAM.SYNC.SURE.DEACTIVATE'))){
+			new ZContacts.URI(ZContacts.RevokeSync, zid).DELETE().then(function(response) {
+				if(response == "true") {
+					zmsuite.getCenter()[0].getNodes()[2].$el.find('#sync').remove();
+					ZContacts._sync = false;
+					zmsuite.getCenter()[0].getNodes()[2].$el.find('#google').find('.zcs_import_header_two').html(ZContacts.I18N.get('IAM.IMPORT.SUPPORT.TWO.WAY.SYNC'));
+					zmsuite.getCenter()[0].getNodes()[2].$el.find('.zcs_import_box')[1].setAttribute('onClick','twoWaySyncPopup()');
+					zmUtil.succErrMsg("s", ZContacts.I18N.get("SYNCED.CONTACTS.RETAIN")); // NO I18N
+					return;
+				}
+			});
+		}
+	};
+	
+	syncNow = function(){
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(!zid) {
+			return;
+		}
+		ZContacts.importContacts.zid = zid;
+		var uri = new ZContacts.URI(ZContacts.SyncNow, zid);
+		var googleSync = ZContacts.SyncNow.create();
+		var domain;
+		if(zmail.forContactsApp){
+			domain = window.location.host;
+		} else {
+			domain = window.location.host + ZContacts.getContextPath();
+		}
+		zmsuite.getCenter()[0].$el.find('[data-field-type="zcs-sync-now"]').html(ZContacts.I18N.get('IAM.GOOGLE.SYNCING'));
+		zmcontact.restrictClick(zmsuite.getCenter()[0].$el.find('[data-field-type="zcs-sync-now"]'), true);
+		uri.addPostParam("domain", domain).PUT(googleSync).then(function(response) { // No I18N
+			zmsuite.getCenter()[0].$el.find('[data-field-type="zcs-sync-now"]').removeAttr('disabled'); //No I18N
+			zmsuite.getCenter()[0].$el.find('[data-field-type="zcs-sync-now"]').html(ZContacts.I18N.get('IAM.GOOGLE.SYNC.NOW'));
+			if(response) {
+				ZContacts.syncResponse(response.contacts);
+			}
+		});
+	};
+	
+	
+	importGoogle = function() {
+		zmsDialog.remove();
+		$("#zcs_twowaySyncPopup").remove();
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(!zid) {
+			return;
+		}
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[zid];
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+		if(ZContacts._countObj[rootFolderId].c && ZContacts._countObj[rootFolderId].c >= ZContacts.getCurrentAccount().getLimit()) {
+			zmUtil.succErrMsg("e", zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.ERROR.MAX.CTS.LIMIT.EXCEEDED'), acc.getLimit())); // No I18N
+			return;
+		}
+		ZContacts.importContacts.zid = zid;
+		var uri = new ZContacts.URI(ZContacts.ImportGoogle, zid);
+		var categoryId = $('#zcs_category').find("input").attr('id'); // No I18N
+		var google = ZContacts.ImportGoogle.create();
+		if (categoryId && !zmcontact.isRootFolder(categoryId)) {
+			ZContacts.importContacts.categoryId = categoryId;
+			uri.addPostParam("category_id", categoryId); // No I18N
+		}
+		var domain;
+		if(zmail.forContactsApp){
+			domain = window.location.host;
+		} else {
+			domain = window.location.host + ZContacts.getContextPath();
+		}
+		uri.addPostParam("domain", domain).POST(google).then(function(response) { // No I18N
+			if(response) {
+				var googleUrl = response.google.google_url;
+				openNewTab(googleUrl, "google"); // No I18N
+				return;
+			}
+		});
+	};
+	
+	importYahoo = function() {
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(!zid) {
+			return;
+		}
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[zid];
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+		if(ZContacts._countObj[rootFolderId].c && ZContacts._countObj[rootFolderId].c >= ZContacts.getCurrentAccount().getLimit()) {
+			zmUtil.succErrMsg("e", zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.ERROR.MAX.CTS.LIMIT.EXCEEDED'), acc.getLimit())); // No I18N
+			return;
+		}
+		ZContacts.importContacts.zid = zid;
+		var uri = new ZContacts.URI(ZContacts.ImportYahoo, zid);
+		var categoryId = $('#zcs_category').find("input").attr('id'); // No I18N
+		var yahoo = ZContacts.ImportYahoo.create();
+		if (categoryId && !zmcontact.isRootFolder(categoryId)) {
+			ZContacts.importContacts.categoryId = categoryId;
+			uri.addPostParam("category_id", categoryId); // No I18N
+		}
+		var domain;
+		if(zmail.forContactsApp){
+			domain = window.location.host;
+		} else {
+			domain = window.location.host + ZContacts.getContextPath();
+		}
+		uri.addPostParam("domain", domain).POST(yahoo).then(function(response) { // No I18N
+			if(response) {
+				var yahooUrl = response.yahoo.yahoo_url;
+				openNewTab(yahooUrl, "yahoo"); // No I18N
+				return;
+			}
+		});
+	};
+	
+	importOutlook = function() {
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		if(!zid) {
+			return;
+		}
+		var zid = $('#zcs_account').find("input").attr('id'); // No I18N
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[zid];
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+		if(ZContacts._countObj[rootFolderId].c && ZContacts._countObj[rootFolderId].c >= ZContacts.getCurrentAccount().getLimit()) {
+			zmUtil.succErrMsg("e", zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.ERROR.MAX.CTS.LIMIT.EXCEEDED'), acc.getLimit())); // No I18N
+			return;
+		}
+		ZContacts.importContacts.zid = zid;
+		var uri = new ZContacts.URI(ZContacts.ImportOutlook, zid);
+		var categoryId = $('#zcs_category').find("input").attr('id'); // No I18N
+		var outlook = ZContacts.ImportOutlook.create();
+		if (categoryId && !zmcontact.isRootFolder(categoryId)) {
+			uri.addPostParam("category_id", categoryId); // No I18N
+			ZContacts.importContacts.categoryId = categoryId;
+		}
+		var domain;
+		if (zmail.forContactsApp) {
+			domain = window.location.host;
+		} else {
+			domain = window.location.host + ZContacts.getContextPath();
+		}
+		uri.addPostParam("domain", domain).POST(outlook).then(function(response) { // No I18N
+			if(response) {
+				var outlookUrl = response.outlook.outlook_url;
+				openNewTab(outlookUrl, "outlook"); // No I18N
+				return;
+			}
+		});
+	};
+
+	/*--------Mapping page--------*/
+	getHtmlForMapping = function(response) {
+		var html = new ZContacts.StringBuilder();
+		html.append('<div class ="zcs_mapping_main">');
+		var headers = response.import.headers;
+		this.mapping_response = response;
+		html.append('<div id="mappingPage" class ="zcs_mapping_page">');
+		html.append('<span class="zcs_header_loadingband"></span><br>');
+
+		// Mapping header
+		html.append('<div><span class="zcs_mapping_header_one">' + ZContacts.I18N.get('IAM.CONTACTS.MAPING.HEADER') + '</span><br></br>');
+		html.append('<span class="zcs_mapping_header_two">' + ZContacts.I18N.get('IAM.CONTACTS.FIELD.MAPPING') + ' </span></div>');
+
+		html.append('<div class="zcs_mapping_main_div"><br>');
+
+		// mapping top border
+		html.append('<div class="zcs_mapping_border_header">');
+		html.append('<span class="zcs_mapping_field_header">' + ZContacts.I18N.get('IAM.CONTACTS.FIELDS.HEADER') + '</span>');
+		html.append('<span style="margin-left: 5px;">' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.FIELD') + '</span>'); // No i18N
+		html.append('</div>');
+
+		html.append('<div class="zcs_mapping_scroll_div"><form id="mappingForm">');
+
+		html.append('<div><br>');
+		html.append('<div style="font-size: 15px;">');
+		// First Name
+		html.append('<div><span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.FIRSTNAME') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select" name="first_name">' + getSelectBox(response, 'FIRST_NAME') + '</span></span>');
+		// Middle Name
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.MIDDLENAME') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select" name="middle_name">' + getSelectBox(response, 'MIDDLE_NAME') + '</span></div><br></br><br>');
+
+		// Last Name
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.LASTNAME') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select" name="last_name">' + getSelectBox(response, 'LAST_NAME') + '</span>');
+
+		// Nick Name
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.BASIC.NNAME') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select" name="nick_name">' + getSelectBox(response, 'NICK_NAME') + '</span><br></br><br></br>');
+
+		// Categories
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.CATEGORIES') + '' + " " + ':</span>');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'CATEGORIES') + '</span><br></br><br></br>');
+
+		// Email
+		html.append('<div name="email" style="clear: both" class="zcs_email_div pack_block">');
+		html.append('<div class="zcs_mapping_info_lft""> ' + ZContacts.I18N.get('IAM.CONTACTS.EMAIL') + '' + " " + ':</div>');
+		html.append('<div name="zcs_left_field" style="float: left;padding-left: 3px;">');
+		html.append('<div name="zcs_field" style="width: 100%;min-height: 30px; margin-bottom: 15px;">');
+		html.append('<div class="zcs_siblings" style="display: block;width: 100%;min-width: 597px;">');
+		html.append('<div class="zcs_mapping_info_right SC_select" name="email" style="display: inline-block;">' + getSelectBox(response, 'EMAIL') + '</div>');
+		html.append('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="email"></div>');
+		html.append('</div></div>');
+		html.append('</div></div>');
+		
+		html.append('<div style="clear:both;height: 20px;padding: 1px 9px 0 13px;width: 99%;"></div>');
+
+		// Phone Number
+		html.append('<div name="phone" style="clear: both" class="zcs_phone_div pack_block">');
+		html.append('<div class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.BASIC.PHONE') + '' + " " + ':</div>');
+		html.append('<div name="zcs_left_field" style="float: left;padding-left: 3px;">');
+		var mobileIndex = 0;
+		var phone_map = ZContacts.ImportMapConstants.PHONE_Map;
+		var phones = [];
+		for (var i = 0; i < headers.length; i++) {
+			var header = headers[i].name;
+			var PhoneMap = phone_map[header];
+			if (PhoneMap) {
+				var headerType = PhoneMap.split("-")[0]; // NO I18N
+				var headerName = PhoneMap.split("-")[1]; // NO I18N
+				var contentStr = '';
+				contentStr += '<div name="zcs_field" style="width: 100%;min-height: 30px; margin-bottom: 15px;">';
+				contentStr += '<div class="zcs_siblings" style="display: block;width: 100%;min-width: 597px;">';
+				contentStr += '<div class="zcs_mapping_info_right SC_select" name="phone" style="display: inline-block;">' + getSelectBox(response, headerName) + '</div>';
+				contentStr += '<div class="zcs-left SC_select" style="margin-left: 10px;">' + getTypeSelectBox(headerType, "phone") + '</div>';
+				phones.push(contentStr);
+				mobileIndex++;
+			}
+		}
+		if (phones.length == 0) {
+			html.append('<div name="zcs_field" style="width: 100%;min-height: 30px;margin-bottom: 15px;">');
+			html.append('<div class="zcs_siblings" style="display: block;width: 100%;min-width: 597px;">');
+			html.append('<div class="zcs_mapping_info_right SC_select" name="phone" style="display: inline-block;">' + getSelectBox(response, 'phone') + '</div>');
+			html.append('<div class="zcs-left SC_select" style="margin-left: 10px;">' + getTypeSelectBox(headerType, "phone") + '</div>');
+			html.append('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="phone"></div>');
+			html.append('</div></div>');
+			html.append('</div><br></br>');
+		}
+		if (phones.length) {
+			for (var i = 0; i < phones.length; i++) {
+				var ph_index = phones[i];
+				if (phones.length == 0) {
+					var htm = ph_index.concat('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="phone"></div>');
+				} else if (phones.length === (i + 1) && phones.length < 8) {
+					var htm = ph_index.concat('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="phone"></div>');
+					htm += ('<div class="msi-close zcs_msi_close" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;"  data-field-type="add_or_remove_field" data-id="phone"></div>');
+				} else {
+					var htm = ph_index.concat('<div class="msi-close" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="phone"></div>');
+				}
+				;
+				var end_line = "</div></div>";
+				var phone_div_complet = htm.concat(end_line);
+				html.append(phone_div_complet);
+			}
+			html.append('</div></br></br>');
+		}
+		html.append('</div>');
+		html.append('<div style="clear:both;height: 20px;padding: 1px 9px 0 13px;width: 99%;"></div>');
+		
+		// URLS
+		html.append('<div name="urls" style="clear: both" class="zcs_urls_div pack_block">');
+		html.append('<div class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.URLS') + '' + " " + ':</div>');
+		html.append('<div name="zcs_left_field" style="float: left;padding-left: 3px;">');
+		var urlsIndex = 0;
+		var urls = [];
+		var urlsHeaderType = "";
+		var urls_map = ZContacts.ImportMapConstants.URLS_Map;
+		for (var i = 0; i < headers.length; i++) {
+			var header = headers[i].name;
+			var UrlsMap = urls_map[header];
+			if (UrlsMap) {
+				urlsHeaderType = UrlsMap;
+				var urlsHeaderName = UrlsMap.toUpperCase() + "_WEB"; // NO I18N
+				var contentStr = "";
+				contentStr += '<div name="zcs_field" style="width: 100%;min-height: 30px; margin-bottom: 15px;">';
+				contentStr += '<div class="zcs_siblings" style="display: block;width: 100%;min-width: 597px;">';
+				contentStr += '<div class="zcs_mapping_info_right SC_select" name="urls" style="display: inline-block;">' + getSelectBox(response, urlsHeaderName) + '</div>';
+				contentStr += '<div class="zcs-left SC_select" style="margin-left: 10px;">' + getTypeSelectBox(urlsHeaderType, "urls") + '</div>';
+				urls.push(contentStr);
+				urlsIndex++;
+			}
+		}
+		if (urls.length == 0) {
+			html.append('<div name="zcs_field" style="width: 100%;min-height: 30px; margin-bottom: 15px;">');
+			html.append('<div class="zcs_siblings" style="display: block;width: 100%;min-width: 597px;">');
+			html.append('<div class="zcs_mapping_info_right SC_select" name="urls" style="display: inline-block;">' + getSelectBox(response, 'urls') + '</div>');
+			html.append('<div class="zcs-left SC_select" style="margin-left: 10px;">' + getTypeSelectBox(urlsHeaderType, "urls") + '</div>');
+			html.append('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="urls"></div>');
+			html.append('</div></div>');
+			html.append('</div><br></br>');
+		}
+		if (urls.length) {
+			for (var i = 0; i < urls.length; i++) {
+				var urls_index = urls[i];
+				var htm;
+				if (urls.length == 0) {
+					htm = urls_index.concat('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="urls"></div>');
+				} else if (urls.length === (i + 1) && urls.length < 10) {
+					htm = urls_index.concat('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="urls"></div>');
+					htm += ('<div class="msi-close zcs_msi_close" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="urls"></div>');
+				} else {
+					htm = urls_index.concat('<div class="msi-close" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id="urls"></div>');
+				}
+				var end_line = "</div></div>";
+				var urls_div_complet = htm.concat(end_line);
+				html.append(urls_div_complet);
+			}
+			html.append('</div></br>');
+		};
+		html.append('</div>');
+		html.append('<div style="clear:both;height: 20px;padding: 1px 9px 0 13px;width: 99%;"></div>');
+
+		// Personal Header
+		html.append('<div style="padding-top: 20px;clear: both"><span class="zcs_header">' + ZContacts.I18N.get('IAM.CONTACTS.PERSONAL') + '</span><br></br>');
+		html.append('<div style="font-size: 15px;">');
+
+		// Gender
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.GENDER') + '' + " " + ':</span>');
+		html.append('<span class="zcs_mapping_info_right SC_select" >' + getSelectBox(response, 'GENDER') + '</span>');
+
+		// Company Name
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.COMPANY') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'COMPANY_NAME') + '</span><br></br></br>');
+
+		// Date OF Birth
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CANTACTS.DOB') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right_bday SC_select">' + getSelectBox(response, 'BIRTH_DAY') + '</span>');
+		html.append('<span class="zcs_mapping_info_right_bday SC_select">' + getSelectBox(response, 'BIRTH_MONTH') + '</span>');
+		html.append('<span class="zcs_mapping_info_right_bday SC_select">' + getSelectBox(response, 'BIRTH_YEAR') + '</span>')
+
+		// Designation
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.DESIGNATION') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'DESIGNATION') + '</span><br></br></br>');
+
+		// Notes
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.NOTES') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'NOTES') + '</span>');
+		html.append('</div></div><br></br></br>');
+
+		// Home Address Header
+		html.append('<div style="padding-top: 20px;clear: both"><span class="zcs_header">' + ZContacts.I18N.get('IAM.CONTACTS.OTHERS.HADDRESS') + '</span><br></br>');
+		html.append('<div style="font-size: 15px;">');
+
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'HOME_ADDR') + '</span>');
+
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS1') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'HOME_ADDR1') + '</span><br></br></br>');
+
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.CITY') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'HOME_CITY') + '</span>');
+
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.STATE') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'HOME_STATE') + '</span><br></br></br>');
+
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.COUNTRY') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'HOME_COUNTRY') + '</span>');
+
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.ZIP.POSTAL') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'HOME_ZIPCODE') + '</span><br></br></br>');
+		html.append('</div></div><br></br>');
+
+		// Work Address Header
+		html.append('<div style="clear: both"><span class="zcs_header">' + ZContacts.I18N.get('IAM.CONTACTS.EXPORT.WORK.ADDRESS') + '</span><br></br>');
+		html.append('<div style="font-size: 15px;">');
+
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'WORK_ADDR') + '</span>');
+
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS1') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'WORK_ADDR1') + '</span><br></br></br>');
+
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.CITY') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'WORK_CITY') + '</span>');
+
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.STATE') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'WORK_STATE') + '</span> <br></br></br>');
+
+		html.append('<span class="zcs_mapping_info_lft"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.COUNTRY') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'WORK_COUNTRY') + '</span>');
+
+		html.append('<span class="zcs_mapping_info_lft" style="padding-left: 60px"> ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.ZIP.POSTAL') + '' + " " + ':</span> ');
+		html.append('<span class="zcs_mapping_info_right SC_select">' + getSelectBox(response, 'WORK_ZIPCODE') + '</span> <br></br></br>');
+		html.append('</div></div>');
+
+		html.append('</div>');
+		html.append('</form> </div> </div>');
+
+		// Mapping bottom border
+		html.append('<div style="clear: both" class="zcs_mapping_save_div">');
+		html.append('<div style="position: fixed;bottom: 2px;width: 50%;height: 35px;margin-left: 24.5%;margin-bottom: 30px" class="SC_PUbtm zmModeBG">');
+		html.append('<span data-val="Cancel" data-field-type="go_import_page">' + ZContacts.I18N.get('IAM.CONTACTS.GO.BACK') + '</span>');
+		html.append('<span data-field-type="validate_contacts" class="zcs_mapping_next">' + ZContacts.I18N.get('IAM.CONTACTS.NEXT') + '</span>');
+		html.append('<span data-val="Cancel" data-field-type="close_import_page">' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');
+		html.append('</div></div>');
+		html.append('</div>');
+		return html.toString();
+	};
+	
+	getValidatedDetailsInHtml = function(response) {
+		this.data = response.import;
+		confirm_response = data;
+		// see
+		var html = new ZContacts.StringBuilder();
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[ZContacts.importContacts.zid];
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+		html.append('<div class="zcs_confirm_page_main"><span class="zcs_im_main_div">');
+		if (data.total_count == 0) {
+			html.append('<div><span class="zcs_im_align" style="color:red">' + ZContacts.I18N.get('IAM.OOPS') + '</span><br></br>');
+			html.append('<span class="zcs_im_align">' + ZContacts.I18N.get('IAM.CONTACTS.UPLOADED.EMPTY.FILE') + '</span></div>'); // No I18N
+			html.append('<span class="zcs_im_border_bottom"></span><br></br>');
+			button_check = true;
+		} else {
+			categoryId = rootFolderId;
+			html.append('<div> <form id="confirmationForm">');
+			// Merge Contacts
+			if(data.duplicate_count){ 
+				html.append('<div style="margin-top: 1%;"><span class="zcs_im_align redtxt">' + ZContacts.I18N.get('IAM.CONTACTS.CONFLICTS') + '</span><br></br>');
+				html.append('<span class="zcs_im_align">' + zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.DUPLICATE.CONTACTS.DETAILS'), encodeHTML(acc.getName()))  + '</span>');
+				html.append('<span data-val="duplicate_email_ids" data-field-type="duplicate_email_ids" class="SC_lnk zcs_show_popup zmThmClr">' + ZContacts.I18N.get('IAM.CONTACTS.VIEW.DETAILS') + '</span></br>');
+				html.append('<br><div class="zcs_im_align"><span class="zcs_im_checkbox"><input id="overwritebox" type="checkbox"/></span><span class="zcs_im_overwirte_pending">' + ZContacts.I18N.get('IAM.CONTACTS.IMPORT.OVERWRITE.DUPLICATE') + '</span></div>');
+				html.append('<span class="zcs_im_border_bottom"></span>');
+				html.append('</div></br>');
+			}
+
+			// Details Insufficient
+			var invalidCount = data.total_count - data.valid_count - (data.duplicate_count ? data.duplicate_count : 0);
+			var doContinueNext = (data.total_count - invalidCount) > 0;
+			var invalidCategoryCount = data.invalid_category_count > 0;
+			if (invalidCount && data.invalid_fields || invalidCategoryCount) {
+				html.append('<div style="margin-top: 2%;">');
+				html.append('<span style="margin-left: 6%;font-size: 17px;padding: 10px;text-transform: uppercase;" class="SC_thm">'+ZContacts.I18N.get("IAM.NOTE")+' :</span>'); // No I18N
+				var note = !doContinueNext ? ZContacts.I18N.get('IAM.CONTACTS.NO.VALID.CONTACTS.FILE') : zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.SKIP.INVALID.IMPORT'), invalidCount, data.total_count);
+				if(invalidCount == 0 && invalidCategoryCount ){
+					var note = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.SKIP.INVALID.CATEGORY.IMPORT"), data.invalid_category_count); //No I18N
+				}
+				html.append('<span style="color: #545454;font-size: 17px;">' + note + '</span></br>');
+				html.append('<ul>');
+				if(data.invalid_fields.mandatory_missing_count){
+					html.append('<li style="margin-bottom: -40px;margin-top: -20px;line-height: 3.5em" class="zcs_im_align"><span>' +zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.SKIPPED.CONTACTS.COUNT'), data.invalid_fields.mandatory_missing_count)+ '</span><br></li>');
+				}
+				$.each(data.invalid_fields, function(key, value) {
+					if(key!="mandatory_missing_count") {
+						var field = ZContacts.I18N.get('IAM.CONTACTS.CHARACTERS'); // No I18N
+						if(key=="first_name") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.FIRSTNAME'); // No I18N
+						} else if(key=="middle_name") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.MIDDLENAME'); // No I18N
+						} else if(key=="last_name") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.LASTNAME'); // No I18N
+						} else if(key=="nick_name") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.BASIC.NNAME'); // No I18N
+						} else if(key=="category_name"){ 
+							field = ZContacts.I18N.get('IAM.CONTACTS.CATEGORIES'); // No I18N
+						} else if(key=="email_id") {
+							field = ZContacts.I18N.get('IAM.EMAIL.IDS'); // No I18N
+						} else if(key=="phones") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.BASIC.PHONE'); // No I18N
+						} else if(key=="urls") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.URLS'); // No I18N
+						} else if(key=="gender") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.GENDER'); // No I18N
+						} else if(key=="birth_day") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.BASIC.BDAY'); // No I18N
+						} else if(key=="birth_month") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.BIRTH.MONTH'); // No I18N
+						} else if(key=="birth_year") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.BIRTH.YEAR'); // No I18N
+						} else if(key=="notes") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.NOTES'); // No I18N
+						} else if(key=="street_addr") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS'); // No I18N
+						} else if(key=="street_addr1") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS1'); // No I18N
+						} else if(key=="city") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.WORK.CITY'); // No I18N
+						} else if(key=="postal_code") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.WORK.ZIP.POSTAL'); // No I18N
+						} else if(key=="state") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.WORK.STATE'); // No I18N
+						} else if(key=="country") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.WORK.COUNTRY'); // No I18N
+						} else if(key=="company") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.COMPANY'); // No I18N
+						} else if(key=="job_title") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.JOBTITLE'); // No I18N
+						} else if(key=="designation") {
+							field = ZContacts.I18N.get('IAM.CONTACTS.DESIGNATION'); // No I18N
+						}
+						html.append(getErrorDetailsInHtml(key, field));
+					}
+				});
+				html.append("</ul>"); // No I18N
+				
+				html.append('<span class="zcs_im_border_bottom"></span>'); // No I18N
+				html.append('</div></br>'); // No I18N
+				html.append('</div>');
+			}
+		}
+		
+		// control buttons
+		html.append('<br><div class="zcs_im_save_div"><span class="SC_PUbtm" style="margin-left: 30%">');
+		if(data.total_count == 0) {
+			html.append('<span data-field-type="go_import_page">' + ZContacts.I18N.get('IAM.CONTACTS.GO.BACK') + '</span>');
+			
+			// close import workspace
+			html.append('<span data-val="Cancel" data-field-type="close_import_page">' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');// No i18N
+		} else {
+			if(doContinueNext) { // if atlease a contact available to import, showing these options
+				if(ZContacts.importContacts.fileFormat == "csv") {
+					html.append('<span data-field-type="prev_mapping_page">' + ZContacts.I18N.get('IAM.CONTACTS.PREV') + '</span>');
+				}
+				html.append('<span data-val="Next" data-field-type="nxt_mapping_page">' + ZContacts.I18N.get('IAM.CONTACTS.NEXT') + '</span>');
+			} else { // if no valid contacts available to import, then showing these options
+				html.append('<span data-val="import" data-field-type="go_import_page">' + ZContacts.I18N.get('IAM.CONTACTS.GO.BACK') + '</span>');
+			}
+			html.append('<span data-val="Cancel" data-field-type="close_import_page">' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');// No i18N
+			
+		}
+		html.append('</span></div>');
+
+		html.append('</form></div>');
+		html.append('</span></div>');
+		return html.toString();
+	};
+	
+	processFile = function() {
+		var zid = $('#zcs_account').find("input").attr('id');
+		var rootFolderId = ZContacts.AccountsVsRootFolderMap[zid];
+		var acc = ZContacts.AccountsVsRootFolderMap[rootFolderId];
+		if(ZContacts._countObj[rootFolderId].c && ZContacts._countObj[rootFolderId].c >= ZContacts.getCurrentAccount().getLimit()) {
+			zmUtil.succErrMsg("e", zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.ERROR.MAX.CTS.LIMIT.EXCEEDED'), acc.getLimit())); // No I18N
+			return;
+		}
+		var importForm = ZContacts.ImportUpload.create({
+			__form : "#import" // No I18N
+		});
+		ZContacts.importContacts.zid = zid;
+		var categoryId = $('#zcs_category').find("input").attr('id');
+		if(zmcontact.isRootFolder(categoryId)) {
+			categoryId = -1;
+		}
+		ZContacts.importContacts.categoryId = categoryId;
+		var importFile = $("#importFile")[0].files[0];
+		var fileName = importFile.name.trim();
+		ZContacts.importContacts.fileFormat = fileName.substring(fileName.lastIndexOf(".")+1, fileName.length).toLowerCase().trim(); // NO I18N
+		if (ZContacts.importContacts.fileFormat != "csv" && ZContacts.importContacts.fileFormat != "vcf" && ZContacts.importContacts.fileFormat != "ldif") {
+			zmUtil.succErrMsg("e", ZContacts.I18N.get("IAM.CONTACTS.INVALID.FILE.FORMAT"));// NO I18N
+			$('.SC_sld').remove();
+			$("#importFile").prop("disabled", false);
+			$("#iimportFile").replaceWith($("#importFile").val('').clone(true));
+			return;
+		}
+		if (importFile.size > 3072000) {
+			zmUtil.succErrMsg("e", zmcontact.formatMessage(ZContacts.I18N.get('IAM.UPLOAD.NOTE2'), 3072));// No I18N
+			$("#importFile").replaceWith($("#importFile").val('').clone(true));
+			return;
+		};
+		$('.zcs_new_loading').removeClass('hide');
+		
+//		uri : /api/v1/accounts/zid/contacts/import/upload
+		
+		new ZContacts.URI(ZContacts.ImportUpload, zid).POST(importForm).then(function(response) {
+			if (response.status_code == 200) {
+				if(response.import.total_count == 0) {
+					zmUtil.succErrMsg('e', ZContacts.getMessageFromResponse(response)); // No I18N
+					return;
+				}
+				ZContacts.importContacts.fileKey = response.import.file_key;
+				var contactImport = new ZContacts.contactimport();
+				if (response.import.headers) {
+					$('.zcs_new_loading').removeClass('hide');
+					contactImport.createPageContent(getHtmlForMapping(response), false);
+				} else {
+					if(response.import.invalid_count || response.import.duplicate_count) {
+						$('.zcs_new_loading').removeClass('hide'); // No I18N
+						contactImport.createPageContent(getValidatedDetailsInHtml(response), false);
+					} else {
+						importContacts(response.import);
+					}
+				}
+				var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+				$(rightContainer).find('[data-field-type=go_import_page]').on("click", function(event){
+					goToImportPage(false);
+				});
+				$(rightContainer).find('[data-field-type=validate_contacts]').on("click", function(event){
+					validateContacts(mappingForm)
+				});
+				$(rightContainer).find('[data-field-type=close_import_page]').on("click", function(event){
+					closeImport(false)
+				});
+				
+				$(rightContainer).find('[data-field-type=add_or_remove_field]').on("click", function(event){
+					addOrRemoveField(this, event.target.dataset.id);
+				});
+				
+				$(rightContainer).find('[data-field-type=duplicate_email_ids]').on("click", function(event){
+					errorValuesPopup('duplicate_email_ids'); //No I18N
+				});
+
+				$(rightContainer).find('[data-field-type=invalid_emails_list]').on("click", function(event){
+					var key_list = event.target.dataset.val.split(',');
+					var key = key_list[0].toString();
+					var value = key_list[1].toString();
+					errorValuesPopup(key,value); //No I18N
+				});
+
+				$(rightContainer).find('[data-field-type=nxt_mapping_page]').on("click", function(event){
+					importContacts(data);
+				});
+				
+				zmsDialog.remove();
+			} else {
+				zmUtil.succErrMsg("e", ZContacts.getMessageFromResponse(response));// NO I18N
+				$('.zcs_new_loading').addClass('hide');
+				$('.SC_sld').remove();
+				$("#importFile").prop("disabled", false);
+				$("#importFile").replaceWith($("#importFile").val('').clone(true));
+				return;
+			}
+			fileFormat = "";
+		}, function(response) {
+			zmUtil.succErrMsg("e", ZContacts.getMessageFromResponse(response));// NO I18N
+			$('.zcs_new_loading').addClass('hide');
+			$('.SC_sld').remove();
+			$("#importFile").prop("disabled", false);
+			$("#importFile").replaceWith($("#importFile").val('').clone(true));
+			return;
+		});
+	},
+	
+	importContacts = function(data) {
+		var doOverWrite = $("#overwritebox").is(':checked');
+		var doImport = ((data.total_count - (data.duplicate_count ? data.duplicate_count : 0)) > 0) || doOverWrite;
+		var contactImport = new ZContacts.contactimport();
+		if(doImport) {
+			zmUtil.succErrMsg("s", ZContacts.I18N.get("IAM.CONTACTS.IMPORTING"));// NO I18N
+			var zid = ZContacts.importContacts.zid;
+			var categoryId = ZContacts.importContacts.categoryId;
+			var mappingConfirmation = ZContacts.Import.create();
+			mappingConfirmation.set("overwrite_duplicate", $("#overwritebox").is(':checked')); // NO I18N
+			mappingConfirmation.set("category_id", categoryId); // NO I18N
+			mappingConfirmation.set("file_key", ZContacts.importContacts.fileKey); // NO I18N
+			mappingConfirmation.set("file_format", ZContacts.importContacts.fileFormat); // NO I18N
+			mappingConfirmation.set("total_count", data.total_count); // NO I18N
+			mappingConfirmation.set("valid_count", data.valid_count); // NO I18N
+			mappingConfirmation.set("invalid_category_count", data.invalid_category_count); // NO I18N
+			var centerNode = zmsuite.getCenter()[0].getNodes()[2].$el;
+			var loadingDiv = function(){};
+			if (centerNode.find('.SC_import').get(0)) {
+				loadingDiv = zmComponent.loadingBand({
+					container : centerNode.find('.SC_import').get(0), // No i18N
+					type : "listing" // No i18N
+				});
+			}
+			
+			// "/api/v1/accounts/zid/contacts/import"
+			
+			new ZContacts.URI(ZContacts.Import, zid).POST(mappingConfirmation).then(function(response) {
+				loadingDiv();
+				if(response.import) {
+					zmcontact.refreshContactCounts();
+					contactImport.createPageContent(getHtmlForFinishImport(true, response.import.total_count, response.import.added_count, response.import.updated_count), false);
+					var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+					$(rightContainer).find('[data-field-type=result_close_import_page]').on("click", function(event){
+						var isImported = event.target.dataset.id;
+						closeImport(isImported);
+					});
+					$(rightContainer).find('[data-field-type=result_go_to_import]').on("click", function(event){
+						goToImportPage(true);
+					});
+					$(rightContainer).find('[data-field-type=duplicate_email_ids]').on("click", function(event){
+						errorValuesPopup('duplicate_email_ids'); //No I18N
+					});
+					return;
+				} else {
+					zmUtil.succErrMsg("e", ZContacts.getMessageFromResponse(response));// NO I18N
+					return;
+				}
+			});
+		} else {
+			contactImport.createPageContent(getHtmlForFinishImport(false, data.total_count, 0, 0), false);
+			var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+			$(rightContainer).find('[data-field-type=result_close_import_page]').on("click", function(event){
+				var isImported = event.target.dataset.id;
+				closeImport(isImported);
+			});
+			$(rightContainer).find('[data-field-type=result_go_to_import]').on("click", function(event){
+				goToImportPage(true);
+			});
+			return;
+		}
+		
+	};
+
+	// Import Finshing Page
+	getHtmlForFinishImport = function(isImported, totalContactsCount, addedContactsCount, updateContactsCount, duplicateContacts, msg) {
+		var html = new ZContacts.StringBuilder();
+		html.append('<div style="padding: 20px;">'); // NO I18N
+		var acc = zmcontact.getAccountByZidForType(ZContacts.importContacts.zid, ZContacts.ZMailConstants.VIEW_ID_CONTACTS);
+		if (isImported) {
+			if (!msg) {
+				if (ZContacts.importContacts.categoryId != -1) {
+					var category = zmcontact.getCategory(ZContacts.importContacts.categoryId);
+					if (category) {
+						msg = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.IMPORTED.TO.CATEGORY.IN.OTHER.SPACE.SUCCESSFULLY"), encodeHTML(category.category_name), encodeHTML(acc.getName()));// NO I18N
+					} else {
+						msg = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.IMPORTED.IN.OTHER.SPACE.SUCCESSFULLY"), encodeHTML(acc.getName())); // NO I18N
+					}
+				} else {
+					msg = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.IMPORTED.IN.OTHER.SPACE.SUCCESSFULLY"), encodeHTML(acc.getName())); // NO I18N
+				}
+			}
+			zmUtil.succErrMsg("s", msg);// NO I18N
+			try {
+				if (acc.getAccountType() == ZContacts.ZMailConstants.PERSONAL_ACCOUNT || acc.getAccountType() == ZContacts.ZMailConstants.ORG_ACCOUNT) {
+					zmcontact.invokeEvent("contactsApp/refresh", acc.getAccountId()); // NO I18N
+				}
+			} catch(e) {
+				
+			}
+		}
+		
+		var totalContacts;
+		if(totalContactsCount > 1 ) {
+			totalContacts = zmcontact.formatMessage(ZContacts.I18N.get("IAM.MULTIPLE.CONATCT"), totalContactsCount); // NO I18N
+		} else {
+			totalContacts = zmcontact.formatMessage(ZContacts.I18N.get("IAM.SINGLE.CONTACT"), totalContactsCount); // NO I18N
+		}
+		var addedContacts;
+		if(addedContactsCount > 1 ) {
+			addedContacts = zmcontact.formatMessage(ZContacts.I18N.get("IAM.MULTIPLE.CONATCT"), addedContactsCount) +" "+ ZContacts.I18N.get("IAM.CONTACTS.ARE"); // NO I18N
+		} else {
+			addedContacts = zmcontact.formatMessage(ZContacts.I18N.get("IAM.SINGLE.CONTACT"), addedContactsCount) +" "+ ZContacts.I18N.get("IAM.CONTACTS.IS"); // NO I18N
+		}
+		var updatedContacts;
+		if(updateContactsCount > 1 ) {
+			updatedContacts = zmcontact.formatMessage(ZContacts.I18N.get("IAM.MULTIPLE.CONATCT"), updateContactsCount) +" "+ ZContacts.I18N.get("IAM.CONTACTS.ARE"); // NO I18N
+		} else {
+			updatedContacts = zmcontact.formatMessage(ZContacts.I18N.get("IAM.SINGLE.CONTACT"), updateContactsCount) +" "+ ZContacts.I18N.get("IAM.CONTACTS.IS"); // NO I18N
+		}
+		var statistics  = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.IMPORT.STATISTICS.RESULT"), totalContacts, addedContacts, updatedContacts);
+		html.append('<div><span class="SC_thm" style="font-size: 18px;">'+ZContacts.I18N.get("IAM.CONTACTS.RESULT")+'</span><br><br>');
+		html.append('<span class="zcs_im_align">' + statistics + '</span><br>');
+		html.append('</div><br>');
+		if(duplicateContacts){
+			this.data = duplicateContacts;
+			html.append('<div><span class="SC_ltl redtxt" style="text-transform: none; font-size: 18px;">' + ZContacts.I18N.get('IAM.CONTACTS.CONFLICTS') + '</span><br></br>');
+			html.append('<span class="zcs_im_align">' + zmcontact.formatMessage(ZContacts.I18N.get('IAM.CONTACTS.DUPLICATE.CONTACTS.DETAILS'), encodeHTML(acc.getName()))  + '</span>');
+			html.append('<span data-val="duplicate_email_ids" data-field-type="duplicate_email_ids" class="SC_lnk zcs_show_popup zmThmClr">' + ZContacts.I18N.get('IAM.CONTACTS.VIEW.DETAILS') + '</span></br>');
+			html.append('</div></br>');
+		}
+		// submit button
+		html.append('<div class="SC_PUbtm" style="margin-left: 5%;">');
+		html.append('<span data-val="Cancel" data-field-type="result_close_import_page" data-id='+isImported+'>' + ZContacts.I18N.get('IAM.CONTACTS.DONE') + '</span>');
+		html.append('<span data-field-type="result_go_to_import">'+ZContacts.I18N.get('IAM.CONTACTS.IMPORT.MORE')+'</span>');
+		html.append('</div>');
+		html.append('</form></div></div>');
+		return html.toString();
+	};
+	
+	errorValuesPopup = function(key, fieldName) {
+		var errorInfo = this.data;
+		var errorDetails = {};
+		errorDetails.title = key == "duplicate_email_ids" ? ZContacts.I18N.get("IAM.CONTACTS.DUPLICATE.E_ADDRESS") : zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.INVALID.FIELD"), fieldName); // No I18N
+		errorDetails.name = key;
+		errorDetails.mask = true;
+		errorDetails.buttons = [ {
+			isCancel : true,
+			txt : ZContacts.I18N.get("IAM.CONTACTS.DONE"), // No I18N
+			callback : function() {
+				zmsDialog.remove();
+				$("#zcs_errorDetailsPopup").remove(); // No I18N
+			}
+		} ];
+
+		errorDetails.closeaction = function() {
+			zmsDialog.remove();
+			$("#zcs_errorDetailsPopup").remove(); // No I18N
+		};
+		errorDetails.pos = "center"; // No I18N
+		createFolElem = $("<div id='zcs_errorDetailsPopup' style='max-height: 500px;'></div>"); // No I18N
+		if (!$("#zcs_errorDetailsPopup").length) { // No I18N
+			var email_list = "<div class='zcs_Emaildetails_main'>"; // No I18N
+			var fields = errorInfo[key];
+			if(errorInfo[key]) {
+				fields = errorInfo[key];
+			} else if (errorInfo.invalid_fields[key]) {
+				fields = errorInfo.invalid_fields[key];
+			}
+			
+			if(fields){
+				for (var i = 0; i < fields.length; i++) {
+					email_list = email_list + "<div><span>" + (i+1) + ".</span><span style='margin-left: 5px;'>" + ZContacts.Utils.encodeHTML(fields[i]) + "</span></div></br>"; // No I18N
+				}
+				email_list = email_list + "</div>"; // No I18N
+			}
+			createFolElem.append(email_list);
+			$(document.body).append(createFolElem);
+		}
+		zmsDialog.create("zcs_errorDetailsPopup", errorDetails); // No I18N
+	};
+	
+	actionOnGSyncConsent = function(total_count) {
+		zmUtil.succErrMsg("s", ZContacts.I18N.get("IAM.CONTACTS.IMPORTING"));// NO I18N
+		var zid = ZContacts.importContacts.zid;
+		var mappingConfirmation = ZContacts.GSyncConsentResponse.create();
+		mappingConfirmation.set("file_key", ZContacts.gSyncContacts.gSyncFileKey); // NO I18N
+		mappingConfirmation.set("override_duplicates", $("#override_duplicates")[0] == undefined ? false : $("#override_duplicates").is(':checked') ? true : false);  // NO I18N
+		mappingConfirmation.set("total_count", total_count); // NO I18N
+		var centerNode = zmsuite.getCenter()[0].getNodes()[2].$el;
+		var loadingDiv = function() { };
+		if (centerNode.find('.SC_import').get(0)) {
+			loadingDiv = zmComponent.loadingBand({
+				container: centerNode.find('.SC_import').get(0), // No i18N
+				type: "listing" // No i18N
+			});
+		}
+		new ZContacts.URI(ZContacts.GSyncConsentResponse, zid).POST(mappingConfirmation).then(function(response) {
+			loadingDiv();
+			if (response.contacts) {
+				var contactImport = new ZContacts.contactimport();
+				contactImport.createPageContent(getHtmlForFinishImport(true, response.contacts.total_count, response.contacts.added_count, response.contacts.updated_count), false);
+				var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+				$(rightContainer).find('[data-field-type=result_close_import_page]').on("click", function(event) {
+					var isImported = event.target.dataset.id;
+					closeImport(isImported);
+				});
+				$(rightContainer).find('[data-field-type=result_go_to_import]').on("click", function(event) {
+					goToImportPage(true);
+				});
+			}
+			try {
+				var acc = zmcontact.getAccountByZid(ZContacts.importContacts.zid);
+				if (acc.getType() == ZContacts.ZMailConstants.PERSONAL_ACCOUNT || acc.getType() == ZContacts.ZMailConstants.ORG_ACCOUNT) {
+					zmcontact.invokeEvent("contactsApp/refresh", acc.getAccountId()); // NO I18N
+				}
+			} catch (e) {
+
+			}
+			var rootFolderId = ZContacts.AccountsVsRootFolderMap[ZContacts.importContacts.zid];
+			if (ZContacts.importContacts.categoryId && ZContacts.importContacts.categoryId != -1) {
+				category = zmcontact.getCategory(ZContacts.importContacts.categoryId);
+			} else {
+				category = zmcontact.getCategory(rootFolderId);
+			}
+			ZContacts.importContacts.refreshContacts = true;
+			zmcontact.refreshContactCounts(ZContacts.importContacts.zid);
+		})
+
+	};
+	
+	actionOnGSyncConsentClose = function() {
+		var zid = ZContacts.importContacts.zid;
+		var mappingConfirmation = ZContacts.GSyncConsentResponseClose.create();
+		mappingConfirmation.set("file_key", ZContacts.gSyncContacts.gSyncFileKey); // NO I18N
+		new ZContacts.URI(ZContacts.GSyncConsentResponseClose, zid).POST(mappingConfirmation).then(function(response) {
+			closeImport();
+		})
+	};
+	
+	getTypeSelectBox = function(data, type_model) {
+		var type_array = "";
+		if(type_model == "phone"){
+			type_array = ZContacts.MappingType.Phone_Type;
+		} else if (type_model == "urls"){
+			type_array  = ZContacts.MappingType.Urls_Type;
+		}
+		var selectTypeBox = '<select class="zcs-list-type zcs_'+type_model+'_type" name="type">';
+		selectTypeBox += '<option value="none">' + "None" + '</option>';
+		for (var i = 0; i < type_array.length; i++) {
+			var newdata = ZContacts.I18N.get("IAM.CONTACTS."+type_model.toUpperCase()+".TYPE."+type_array[i].toUpperCase());
+			selectTypeBox += '<option value="' + type_array[i] + '" '; // No I18N
+			if (data && data == type_array[i]) {
+				selectTypeBox += 'selected = "true"';
+			}
+			selectTypeBox += '>' + newdata + '</option>';
+		}
+		selectTypeBox += '</select>';
+		return selectTypeBox;
+	};
+
+	getSelectBox = function(response, data) {
+		var headers = response.import.headers;
+		var headers_map = response.import.headersMap;
+		var valueIndex = headers_map[data];
+		var selectBox = '<select id="' + data + '_field" class="zcs_mapping_select_box select">';
+		selectBox += '<option value="-1">' + "None" + '</option>';
+		for (var i = 0; i < headers.length; i++) {
+			selectBox += '<option value="' + i + '" '; // No I18N
+			if (valueIndex != -1 && valueIndex === i) {
+				selectBox += 'selected = "true"';
+			}
+			selectBox += '>' + encodeHTML(headers[i].name) + " " + '(' + i + ')' + '</option>';
+		}
+		selectBox += '</select>';
+		return selectBox;
+	};
+
+	this.createPageContent = function(content) {
+		ZContacts.contactimport.$containerElem.html($(content));
+	}
+
+	this.createAppendPageContent = function(content) {
+		ZContacts.contactimport.$containerElem.append($(content));
+	}
+
+	this.mappingValues = function(data) {
+		var mapping = ZContacts.MappingFields.create();
+		/* Names */
+		mapping.set('first_name', $(data).find("#FIRST_NAME_field option:selected").val());// NO I18N
+		mapping.set('middle_name', $(data).find("#MIDDLE_NAME_field option:selected").val()); // NO I18N
+		mapping.set('last_name', $(data).find("#LAST_NAME_field option:selected").val());// NO I18N
+		mapping.set('nick_name', $(data).find("#NICK_NAME_field option:selected").val());// NO I18N
+
+		/* Category */
+		mapping.set('categories', $(data).find("#CATEGORIES_field option:selected").val());
+
+		/* Email */
+		var $emailLength = $(data).find('.zcs_email_div').find('div[name=zcs_field]').find('.zcs_siblings').find('select');
+		var storeEmailArray = [];
+		for (var i = 0; i < $emailLength.length; i++) {
+			var emailIndex = $($emailLength[i]).val();
+			storeEmailArray.push(emailIndex);
+		}
+		mapping.set('emails', storeEmailArray);// NO I18N
+
+		/* phone */
+		var $phoneRows = $(data).find('.zcs_phone_div').find("div[name=zcs_field]"); //No I18N
+		for (var i = 0; i < $phoneRows.length; i++) {
+			var phone = $($phoneRows[i]).find('.zcs_siblings').find('[name="phone"]').find('select').val();
+			var types = $($phoneRows[i]).find('.zcs_siblings').find('[name="type"]').val();
+			var phoneModel = ZContacts.PhoneNumbers.create({
+				number : phone,
+				type : types
+			});
+			mapping.addSubResource(phoneModel);
+		}
+		
+		/* Urls */
+		var $urlRows = $(data).find('.zcs_urls_div').find("div[name=zcs_field]"); //No I18N
+		for (var i = 0; i < $urlRows.length; i++) {
+			var url = $($urlRows[i]).find('.zcs_siblings').find('[name="urls"]').find('select').val();
+			var types = $($urlRows[i]).find('.zcs_siblings').find('[name="type"]').val();
+			var urlModel = ZContacts.Urls.create({
+				url : url,
+				type : types
+			});
+			mapping.addSubResource(urlModel);
+		}
+
+		/* Gender */
+		mapping.set('gender', $(data).find("#GENDER_field option:selected").val());// NO I18N
+		/* Birthday */
+		mapping.set('birth_date', $(data).find("#BIRTH_DAY_field option:selected").val());// NO I18N
+		mapping.set('birth_month', $(data).find("#BIRTH_MONTH_field option:selected").val());// NO I18N
+		mapping.set('birth_year', $(data).find("#BIRTH_YEAR_field option:selected").val());// NO I18N
+		/* Notes */
+		mapping.set('notes', $(data).find("#NOTES_field option:selected").val());// NO I18N
+		/* company */
+		mapping.set('company', $(data).find("#COMPANY_NAME_field option:selected").val());// NO I18N
+		/* jobtitle */
+		mapping.set('job_title', $(data).find("#JOB_TITLE_field option:selected").val());// NO I18N
+		/* designation */
+		mapping.set('designation', $(data).find("#DESIGNATION_field option:selected").val());// NO I18N
+
+		/* Address */
+
+		// Home Address
+		var homeAddress = ZContacts.Address.create({
+			street_addr : $(data).find("#HOME_ADDR_field option:selected").val(),
+			street_addr1 : $(data).find("#HOME_ADDR1_field option:selected").val(),
+			city : $(data).find("#HOME_CITY_field option:selected").val(),
+			state : $(data).find("#HOME_STATE_field option:selected").val(),
+			country : $(data).find("#HOME_COUNTRY_field option:selected").val(),
+			postal_code : $(data).find("#HOME_ZIPCODE_field option:selected").val(),
+			type : "home", // No i18N
+		});
+		mapping.addSubResource(homeAddress);
+
+		// Work Address
+		var workAddress = ZContacts.Address.create({
+			street_addr : $(data).find("#WORK_ADDR_field option:selected").val(),
+			street_addr1 : $(data).find("#WORK_ADDR1_field option:selected").val(),
+			city : $(data).find("#WORK_CITY_field option:selected").val(),
+			state : $(data).find("#WORK_STATE_field option:selected").val(),
+			country : $(data).find("#WORK_COUNTRY_field option:selected").val(),
+			postal_code : $(data).find("#WORK_ZIPCODE_field option:selected").val(),
+			type : "work", // No i18N
+		});
+		mapping.addSubResource(workAddress);
+
+		return mapping;
+	};
+
+
+	ZContacts.contactimport.EmailDetailsPopup = function(key, key2) {
+		var errorDetails = {};
+		// see
+		if(key == "duplicate_email") {
+			errorDetails.title = ZContacts.I18N.get("IAM.CONTACTS.DUPLICATE.E_ADDRESS"); // No I18N
+			errorDetails.name = key;
+		} else if(resp == "invalid_email") {
+			errorDetails.title = ZContacts.I18N.get("IAM.CONTACTS.INVALID.E_ADDRESS"); // No I18N
+			errorDetails.name = resp;
+		} else if(resp  == "record_duplicate"){
+			errorDetails.title =  ZContacts.I18N.get("IAM.CONTACTS.RECORD.DUPLICATE.E_ADDRESS"); // No I18N
+			errorDetails.name = resp;
+		}
+		errorDetails.mask = true;
+		errorDetails.buttons = [ {
+			isCancel : true,
+			txt : ZContacts.I18N.get("IAM.CONTACTS.DONE"),
+			callback : function() {
+				zmsDialog.remove();
+				$("#zcs_errorDetailsPopup").remove();
+			}
+		} ];
+
+		errorDetails.closeaction = function() {
+			zmsDialog.remove();
+			$("#zcs_errorDetailsPopup").remove();
+		};
+		errorDetails.pos = "center"; // No I18N
+		createFolElem = $("<div id='zcs_errorDetailsPopup' style='max-height: 500px;'></div>");
+		if (!$("#zcs_errorDetailsPopup").length) {
+			var email_list = "<div class='zcs_Emaildetails_main'>";
+			if(key == "duplicate_email" && data.duplicate_email_ids){
+				for (var i = 0; i < data.duplicate_email_ids.length; i++) {
+					email_list = email_list + "<div><span>" + (i+1) + ".</span><span style='margin-left: 5px;'>" + data.duplicate_email_ids[i] + "</span></div></br>";
+				}
+				email_list = email_list + "</div>"
+			} 
+			
+			createFolElem.append(email_list);
+			$(document.body).append(createFolElem);
+		}
+		zmsDialog.create("zcs_errorDetailsPopup", errorDetails); // No I18N
+	};
+
+	goToImportPage = function(doRefreshCounts) {
+		this.data = undefined;
+		if(doRefreshCounts) {
+			zmcontact.refreshContactCounts(ZContacts.importContacts.zid);
+		}
+		resetImportContacts();
+		var contactImport = new ZContacts.contactimport();
+		contactImport.createPageContent(getHtmlForImport());
+		var rightContainer = zmsuite.getCenter()[0].getNodes()[2].$el.find('.SC_import');
+		$(rightContainer).find('[data-field-type=import_accounts_list]').on("click", function(eve){
+			zmcontact.getScrollList($(this), 'account', true); //No I18N
+		});
+		$(rightContainer).find('[data-field-type=import_category_list]').on("click", function(eve){
+			zmcontact.getScrollList($(this), 'category', true); //No I18N
+		});
+		$(rightContainer).find('[data-field-type=local_file]').change(function(ev){
+			processFile();
+		});
+		$(rightContainer).find('[data-field-type=google_import]').on("click", function(ev){
+			importGoogle();
+		});
+		$(rightContainer).find('[data-field-type=google_sync]').on("click", function(ev){
+			twoWaySyncPopup();
+		});
+		$(rightContainer).find('[data-field-type=yahoo_import]').on("click", function(ev){
+			importYahoo()
+		});
+		$(rightContainer).find('[data-field-type=outlook_import]').on("click", function(ev){
+			importOutlook();
+		});
+		return;
+	};
+
+	validateContacts = function(map) {
+		zmUtil.succErrMsg("s", ZContacts.I18N.get("IAM.CONTACTS.VALIDATING"));// NO I18N
+		var contactImport = new ZContacts.contactimport();
+		var mappingFieds = contactImport.mappingValues(map);
+		if (mappingFieds.first_name == '-1' && mappingFieds.emails[0] == "-1" && mappingFieds.company == "-1") {
+			zmUtil.succErrMsg("e", ZContacts.I18N.get("IAM.CONTACTS.FIRST.NAME.REQUIRED"));// NO I18N
+			$("#first_name_field").focus();
+			return;
+		}
+
+		var centerNode = zmsuite.getCenter()[0].getNodes()[2].$el;
+		var mapping_loading = zmComponent.loadingBand({
+			container : centerNode.find('.zcs_header_loadingband').get(0), // No i18N
+			type : "listing", // No i18N
+			notToSetInnerHTML : true
+		});
+		
+		var importMapping = ZContacts.ImportValidate.create();
+		
+		importMapping.file_key = ZContacts.importContacts.fileKey;
+		importMapping.addSubResource(mappingFieds);
+		
+		// api/v1/accounts/zid/contacts/import/validate
+
+		new ZContacts.URI(ZContacts.ImportValidate, ZContacts.importContacts.zid).POST(importMapping).then(function(response) {
+			mapping_loading();
+			if (response.status_code == 200) { // NO I18N
+				var contactImport = new ZContacts.contactimport();
+				$("#mappingPage").hide();
+				if(response.import.invalid_count || response.import.duplicate_count || response.import.invalid_category_count) {
+					contactImport.createAppendPageContent(getValidatedDetailsInHtml(response), false);
+				} else {
+					importContacts(response.import);
+				}
+				zmsuite.getCenter()[0].$el.find('[data-field-type=prev_mapping_page]').on("click", function(event){
+					goMappingPage();
+				});
+				zmsuite.getCenter()[0].$el.find('[data-field-type=nxt_mapping_page]').on("click", function(event){
+					importContacts(data);
+				});
+				zmsuite.getCenter()[0].$el.find('[data-field-type=close_import_page]').on("click", function(event){
+					closeImport(false);
+				});
+				zmsuite.getCenter()[0].$el.find('[data-field-type=go_import_page]').on("click", function(event){
+					goToImportPage(false);
+				});
+				zmsuite.getCenter()[0].$el.find('[data-field-type=duplicate_email_ids]').on("click", function(event){
+					errorValuesPopup('duplicate_email_ids'); //No I18N
+				});
+				zmsuite.getCenter()[0].$el.find('[data-field-type=invalid_emails_list]').on("click", function(event){
+					var key_list = event.target.dataset.val.split(',');
+					var key = key_list[0].toString();
+					var value = key_list[1].toString();
+					errorValuesPopup(key,value); //No I18N
+				});
+			
+			} else {
+				zmUtil.succErrMsg("e", ZContacts.getMessageFromResponse(response)); // No I18N
+			}
+		}, function(response) {
+			zmUtil.succErrMsg("e", ZContacts.getMessageFromResponse(response)); // No I18N
+		});
+	};
+
+	closeImport = function(result) {
+		this.data = undefined;
+		zmsuite.closeWorkspace(ZContacts.ZMailConstants.IMPORT_APP_ID);
+		// TODO : if deleting upload file is possible, need to implement it here.
+		if(result) {
+			zmcontact.refreshContactCounts(ZContacts.importContacts.zid);
+			var rootFolderId = ZContacts.AccountsVsRootFolderMap[ZContacts.importContacts.zid];
+			if(ZContacts.importContacts.categoryId && ZContacts.importContacts.categoryId != -1){
+				category = zmcontact.getCategory(ZContacts.importContacts.categoryId);
+			} else {
+				category = zmcontact.getCategory(rootFolderId);
+			}
+			zmcontact.loadFirstPage(category);
+			new ZContacts.URI(ZContacts.Categories, ZContacts.importContacts.zid).GETS().then(function(json) {
+				var rootFolderId = ZContacts.AccountsVsRootFolderMap[ZContacts.importContacts.zid];
+				var layer = zmcontact.getCategoriesListLayer(rootFolderId);
+				for (var i = 0; i < json.length; i++) {
+					if(!layer.childObject[rootFolderId].CH[json[i].category_id]) {
+						if(!ZContacts._parentObj[rootFolderId]) {
+							ZContacts._parentObj[rootFolderId] = [];
+						}
+						ZContacts._parentObj[rootFolderId].push(json[i]);
+						var rowInfo = {};
+						rowInfo[json[i].category_id] = {
+								category_id : json[i].category_id,
+								category_name : json[i].category_name,
+								E : 0,
+								HC : false,
+								SE : 2
+						}
+						var categoryMapObj = {
+								id : "category_id", // No i18N
+								name : "category_name", // No i18N
+								count : "count", // No i18N
+								hasChild : "HC", // No I18N
+								expChild : "E", // No I18N
+								sequence : "SE", // No I18N
+								parentId : "p", // No I18N
+								notBold : "notBold" // No I18N
+							};
+						
+						layer.insertNodeBefore(rowInfo, categoryMapObj, rootFolderId+"_add", rootFolderId); // No I18N
+					}
+				}
+				resetImportContacts();
+			}, function() {
+				resetImportContacts();
+			});
+		}
+		return
+	};
+	
+	openNewTab = function(url, name) {
+		var width = parseInt(('80' * screen.width) / 100);
+		var height = parseInt(('80' * screen.height) / 100);
+		var left = (screen.width - width) / 2;
+		var top = (screen.height - height) / 2;
+		url+=(url.indexOf('?') == -1 ? "?" : "&");
+		var contextDomain;
+		if(zmail.forContactsApp){
+			contextDomain = zmail.urls.contactsURL;
+		} else {
+			contextDomain = window.location.host + ZContacts.getContextPath();
+		}
+		url+=("domain="+ contextDomain); // No I18N
+		window.open(url, name, "height=" + height + ", width=" + width + ", top=" + top + ", left=" + left + ",status=1,toolbar=0,scrollbars=1,resizable=1", true);
+		return false;
+	};
+	
+	openSyncNewTab = function(url, name) {
+		var width = parseInt(('80' * screen.width) / 100);
+		var height = parseInt(('80' * screen.height) / 100);
+		var left = (screen.width - width) / 2;
+		var top = (screen.height - height) / 2;
+		url+=(url.indexOf('?') == -1 ? "?" : "&");
+		window.open(url, name, "height=" + height + ", width=" + width + ", top=" + top + ", left=" + left + ",status=1,toolbar=0,scrollbars=1,resizable=1", true);
+		return false;
+	};
+	
+	// confirmatoin page previous
+	goMappingPage = function() {
+		$(".zcs_confirm_page_main").remove();
+		$(".zcs_mapping_page").show();
+	};
+	
+	
+	addOrRemoveField = function(elem, field) {
+		response = this.mapping_response;
+		var $appendRow = $(elem).parents("div[name="+field+"]").find("div[name=zcs_left_field]")
+		var isType = false;
+		var size = 0;
+		if(field=="email") {
+			size = 5;
+			isType = false;
+		} else if(field == "phone") {
+			size = 8;
+			isType = true;
+		} else if (field == "urls") {
+			size = 10;
+			isType = true;
+		}
+		if($(elem).hasClass("msi-plus")) {
+			var html = new ZContacts.StringBuilder();
+			var currentSize = $appendRow.find('.zcs_siblings').length;
+			if(currentSize <= size) {
+				html.append('<div name="zcs_field" style="width: 100%;min-height: 30px;margin-bottom: 15px;">'); //zcs_mapping_fld_grp
+				html.append('<div class="zcs_siblings" style="display: block;width: 100%;min-width: 597px;">');
+				html.append('<div name=' + field + ' class="zcs_mapping_info_right SC_select">' + getSelectBox(response, field) + '</div>');
+				if(isType) {
+					html.append('<div class="zcs-left SC_select" style="margin-left: 10px;">'+ getTypeSelectBox(field , field) +'</div>');
+				}
+				if(currentSize < size) {
+					var currentChild = $(elem).parents("div[name=zcs_field]"); //No I18N
+					if(!currentChild.find('.msi-close').length) {
+						$(elem).removeClass("msi-plus").addClass("msi-close");
+					} else {
+						$(elem).remove();
+					}
+					if(!(currentSize == size-1)) {
+						html.append('<div class="msi-plus" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id='+field+'></div>');
+					}
+				}
+				html.append('<div class="msi-close zcs_msi_close" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id='+field+'></div>');
+				html.append('</div></div>');
+				$appendRow.append(html.toString());
+			}
+			var rightContainer = zmsuite.getCenter()[0].$el.find('.SC_import');
+			$(rightContainer).find('[data-field-type=add_or_remove_field]').off('click').on("click", function(event){
+					addOrRemoveField(this, event.target.dataset.id);
+			});
+
+		} else if ($(elem).hasClass("msi-close")) {
+			var $siblingElem = $(elem).parents('.zcs_siblings');
+			var $delElm = $siblingElem.parents("div[name=zcs_field]"); //No I18N
+			$delElm.remove();
+			var children = $appendRow.find(".zcs_siblings");
+				var lastChild = children.last();
+				if(!$(lastChild).find(".msi-plus").length) {
+					$(lastChild).find(".msi-close").removeClass('msi-close zcs_msi_close').addClass('msi-plus');
+					if(children.length != 1) {
+						$(lastChild).append('<div class="msi-close zcs_msi_close" style="display: inline-block;float: left;margin-top: 10px;margin-left: 10px;" data-field-type="add_or_remove_field" data-id='+field+'></div>');
+					}
+				}
+				if(children.length == 1) {
+					$(lastChild).find(".msi-close").removeClass('msi-close zcs_msi_close');
+				}
+		}
+	};
+
+};

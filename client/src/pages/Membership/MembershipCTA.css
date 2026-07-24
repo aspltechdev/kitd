@@ -1,0 +1,95 @@
+.membership-cta{
+    position:relative;
+    padding:120px 0;
+    background:url("/images/membership-banner.jpg") center/cover no-repeat;
+    overflow:hidden;
+}
+
+.membership-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(20,20,20,.65);
+}
+
+.membership-content{
+    position:relative;
+    z-index:2;
+    max-width:760px;
+    margin:auto;
+    text-align:center;
+    color:#fff;
+}
+
+.membership-content h2{
+    font-size:52px;
+    line-height:1.2;
+    margin:20px 0;
+}
+
+.membership-content p{
+    font-size:18px;
+    line-height:1.9;
+    color:#f5f5f5;
+    margin-bottom:40px;
+}
+
+.membership-buttons{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.membership-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 34px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.membership-btn.primary{
+    background:#8B1E3F;
+    color:#fff;
+}
+
+.membership-btn.primary:hover{
+    background:#a82a4f;
+}
+
+.membership-btn.secondary{
+    border:2px solid #fff;
+    color:#fff;
+}
+
+.membership-btn.secondary:hover{
+    background:#fff;
+    color:#111;
+}
+
+@media(max-width:768px){
+
+.membership-cta{
+    padding:80px 20px;
+}
+
+.membership-content h2{
+    font-size:36px;
+}
+
+.membership-content p{
+    font-size:16px;
+}
+
+.membership-buttons{
+    flex-direction:column;
+}
+
+.membership-btn{
+    justify-content:center;
+}
+
+}

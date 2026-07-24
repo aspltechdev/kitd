@@ -1,0 +1,761 @@
+// $Id: $
+
+/*-
+ * ``` 
+ * var editor = new ZContacts.ContactEditor(true, contactModel); 
+ * editor.render(editorContainerElement); 
+ * ```
+ * 
+ * @param quickCreate - Boolean 
+ * @param contact - Contact Model object
+ * @param options - { actions: { save: ~function~, cancel: ~function~ } } 
+ * 
+ */
+ZContacts.ContactEditor = function(quickCreate, contacts, options) {
+	this.contact = contacts;
+	var I18N = ZContacts.I18N;
+	this.quickCreate = quickCreate;
+	this.options = options;
+	this.maxEmailsCount = 5;
+	this.maxExtraFieldCount = 8;
+
+	this.setOptions = function(options) {
+		this.options = options;
+	};
+
+	this.getHTML = function() {
+		var html = new ZContacts.StringBuilder();
+		html.append('<div><div>');
+		
+		var imgDisplay = "flex"; // No I18N
+		
+		if (this.quickCreate) {
+			imgDisplay = "none"; // No I18N
+		}
+		
+		var photoFormName = "zcs-add-photo";
+		if (this.contact != null) {
+			photoFormName = "zcs-update-photo";
+		}
+		
+		html.append('<div class="SC_PUcen" id="zcs-photo" style="width: auto;padding-top: 1.875rem !important;padding-left: 1.875rem !important;display:'+imgDisplay+';">'); // No I18N
+		html.append('<form class="zcs-left" name="'+photoFormName+'" id="zcs-photo-form">');
+		html.append('<input type="file" id="zcs-photo-input" name="photo" accept="image/*" style="display: none">'); // No I18N
+		var photoUrl = this.contact == null ? ZContacts.meta.serviceInfo.contacts_server_url+"/images/user.gif" : this.contact.photo_url; // No I18N
+		html.append('<img id="zcs_default_img" style="position: relative;" src=').append(photoUrl).append(' width="98" height="98">'); // No I18N
+		html.append('</form>'); // No I18N
+		html.append('<span><i class="msi-edit"></i></span>')
+		html.append('</div>'); // No I18N
+		
+		
+		html.append('<form class="SC_PUcen zcs-form2 zcs-editor" autocomplete="off"><div>');
+
+		/* Name */
+		html.append('<div style="clear:both;" class="zcs-field-group"><label id="zcs_name_label">').append(I18N.get("IAM.CONTACTS.NAME")).append('</label>');
+		html.append('<div class="zcs-field-row zcs-editor-name-cntnr">');
+		var isNameEditAllowed = this.contact ? (ZContacts.getCurrentAccount().is_name_editable || !this.contact.own_org) : true;
+		var readOnlyClass = isNameEditAllowed ? "" : "zcs_readonly";
+		var readOnlyAttribute = isNameEditAllowed ? "" : "readonly";
+		html.append('<input type="text" name="first_name" class="SC_tiput zcs-mr5 '+readOnlyClass+'" data-field-type="first_name" placeholder="').append(I18N.get("IAM.CONTACTS.FIRSTNAME")).append('" '+readOnlyAttribute+'>'); // No I18N
+		html.append('<input type="text" name="middle_name" data-field-type="middle_name" class="SC_tiput zcs-editor-qkcreate-hide zcs-ml5 zcs-mr10 '+readOnlyClass+'" placeholder="').append(I18N.get("IAM.CONTACTS.MIDDLENAME")).append('" '+readOnlyAttribute+'>'); // No I18N
+		html.append('<input type="text" name="last_name" data-field-type="last_name" class="SC_tiput zcs-mt10 zcs-mr5 '+readOnlyClass+'" placeholder="').append(I18N.get("IAM.CONTACTS.LASTNAME")).append('" '+readOnlyAttribute+'>'); // No I18N
+		html.append('<input type="text" name="nick_name" data-field-type="nick_name" class="SC_tiput zcs-editor-qkcreate-hide zcs-ml5 zcs-mt10 zcs-mr5 '+readOnlyClass+'" placeholder="').append(I18N.get("IAM.CONTACTS.BASIC.NNAME")).append('" '+readOnlyAttribute+'>'); // No I18N
+		html.append('</div></div>');
+
+		var isEmailEditAllowed = this.contact ? (ZContacts.getCurrentAccount().is_emailid_editable || !this.contact.own_org) : true;
+		readOnlyClass = isEmailEditAllowed ? "" : "zcs_readonly";
+		readOnlyAttribute = isEmailEditAllowed ? "" : "readonly";
+		/* Email Address */
+		html.append('<div style="clear:both;" class="zcs-field-group"><label>').append(I18N.get("IAM.EMAIL.IDS")).append("</label>");
+		html.append('<div class="zcs-mfield" data-field-type="emails"  data-max-fields-count="5">');
+		html.append('<div class="zcs-mfield-row"><input type="text" data-field-type="email_id" name="email_id" class="SC_tiput '+readOnlyClass+'" style="width: 49%" '+readOnlyAttribute+'>')
+		html.append('<i class="msi-fav SC_fav zcs-fav zcs-ml5"></i>');
+		if (isEmailEditAllowed) {
+			html.append('<i class="msi-close zcs-close-mrow zcs-ml10"></i>');
+		}
+		html.append('</div></div></div>');
+		
+		/* Phone Numbers */
+		html.append('<div class="zcs-field-group"><label>').append(I18N.get("IAM.CONTACTS.BASIC.PHONE")).append('</label>')
+		html.append('<div class="zcs-mfield" data-field-type="phones"  data-max-fields-count="8">');
+		html.append('<div class="zcs-mfield-row"><input type="text" name="number" data-field-type="number" class="SC_tiput" style="width: 49%">');
+		html.append('<div class="SC_select" style="width: 150px; margin-left: 10px; height: 34px;  margin-top: -4px;">');
+		html.append('<select class= select zcs-phtype" name="type">');
+		html.append('<option value="mobile">').append(I18N.get("IAM.CONTACTS.BASIC.MOBILE")).append('</option>');
+		html.append('<option value="home">').append(I18N.get("IAM.CONTACTS.BASIC.HOME")).append('</option>');
+		html.append('<option value="work">').append(I18N.get("IAM.CONTACTS.BASIC.WORK")).append('</option>');
+		html.append('<option value="fax">').append(I18N.get("IAM.CONTACTS.BASIC.FAX")).append('</option>');
+		html.append('<option value="others">').append(I18N.get("IAM.CONTACTS.OTHERS")).append('</option>');
+		html.append('</select>');
+		html.append('</div>');
+		html.append('<i class="msi-close zcs-close-mrow zcs-ml10"></i>')
+		html.append('</div></div></div>');
+
+		// More Info
+		html.append('<div class="zcs-editor-qkcreate-hide">'); // More Info starts
+		
+		/* Job Information 
+								
+		var isJobInfoEditable = this.contact ? (ZContacts.getCurrentAccount().is_job_info_editable || !this.contact.own_org) : true;
+		readOnlyClass = isJobInfoEditable ? "" : "zcs_readonly";
+		readOnlyAttribute = isJobInfoEditable ? "" : "readonly";
+		html.append('<div class="zcs-field-group" data-field-type="job-info"><label>').append(I18N.get("IAM.CONTACTS.JOB.INFO")).append('</label>');
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="employee_id" name="employee_id" placeholder="').append(I18N.get("IAM.CONTACTS.EMPLOYEE.ID")).append('" class="SC_tiput '+readOnlyClass+'" style="'+readOnlyAttribute+'">');// No I18N
+		html.append('</div>');
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="designation" name="designation" placeholder="').append(I18N.get("IAM.CONTACTS.DESIGNATION")).append('" class="SC_tiput '+readOnlyClass+'" style="'+readOnlyAttribute+'">');// No I18N
+		html.append('</div>');
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="reporting_to" name="reporting_to" placeholder="').append(I18N.get("IAM.CONTACTS.REPORTING.TO")).append('" class="SC_tiput '+readOnlyClass+'" style="'+readOnlyAttribute+'">');// No I18N
+		html.append('</div>');
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="department" name="department" placeholder="').append(I18N.get("IAM.CONTACTS.DEPARTMENT")).append('" class="SC_tiput '+readOnlyClass+'" style="'+readOnlyAttribute+'">');// No I18N
+		html.append('</div>');
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="company" name="company" placeholder="').append(I18N.get("IAM.CONTACTS.COMPANY")).append('" class="SC_tiput '+readOnlyClass+'" style="'+readOnlyAttribute+'">');// No I18N
+		html.append('</div>');
+		html.append('</div>');
+		
+		*/
+		
+		/* URLS */
+		html.append('<div class="zcs-field-group"><label>').append(I18N.get("IAM.CONTACTS.URLS")).append('</label>')
+		html.append('<div class="zcs-mfield" data-field-type="urls"  data-max-fields-count="8">');
+		html.append('<div class="zcs-mfield-row"><input type="text" name="url" data-field-type="url" class="SC_tiput" style="width: 49%">');
+		html.append('<div class="SC_select" style="width: 150px; margin-left: 10px; height: 34px;  margin-top: -4px;">');
+		html.append('<select class= select zcs-phtype" name="type">');
+		html.append('<option value="home">').append(I18N.get("IAM.CONTACTS.EXPORT.PERSONALWEB.ADDRESS")).append('</option>');
+		html.append('<option value="work">').append(I18N.get("IAM.CONTACTS.EXPORT.COMPANYWEB.ADDRESS")).append('</option>');
+		html.append('<option value="blog">').append(I18N.get("IAM.CONTACTS.BLOG.URL")).append('</option>');
+		html.append('<option value="linkedin">').append(I18N.get("IAM.CONTACTS.LINKEDIN.URL")).append('</option>');
+		html.append('<option value="facebook">').append(I18N.get("IAM.CONTACTS.FACEBOOK.URL")).append('</option>');
+		html.append('<option value="X">').append(I18N.get("IAM.CONTACTS.TWITTER.URL")).append('</option>');
+		html.append('<option value="amazon">').append(I18N.get("IAM.CONTACTS.AMAZON.URL")).append('</option>');
+		html.append('<option value="flickr">').append(I18N.get("IAM.CONTACTS.FLICKR.URL")).append('</option>');
+		html.append('<option value="delicious">').append(I18N.get("IAM.CONTACTS.DELICIOUS.URL")).append('</option>');
+		html.append('<option value="others">').append(I18N.get("IAM.CONTACTS.OTHERS")).append('</option>');
+		html.append('</select>');
+		html.append('</div>');
+		html.append('<i class="msi-close zcs-close-mrow zcs-ml10"></i>')
+		html.append('</div></div></div>');
+
+		/* Personal */
+		html.append('<div class="zcs-field-group zcs-mt10"><label>').append(I18N.get("IAM.CONTACTS.PERSONAL")).append('</label>');
+		html.append('<div class="zcs-field-row">');
+		html.append('<label class="zcs-m0" style="display: inline-block;"><input type="radio" name="gender" value="M" class="zcs-mr5" style="cursor: pointer">').append(I18N.get("IAM.CONTACTS.GENDER.MALE")).append('</label>')
+		html.append('<label class="zcs-m0" style="display: inline-block;"><input type="radio" name="gender" value="F" class="zcs-ml30 zcs-mr5" style="cursor: pointer">').append(I18N.get("IAM.CONTACTS.GENDER.FEMALE")).append('</label></div>');
+
+		/* Birth Date */
+		html.append('<div class="zcs-field-row"><div class="SC_select"  style="width: 75px;">')
+		html.append('<select class="select zcs-phtype" name="birth_day" >');
+		html.append('<option value="DD">').append(I18N.get("IAM.CONTACTS.DAY")).append('</option>');
+		for (var i = 1; i <= 31; i++) {
+			var c = i < 10 ? '0' + i : i;
+			html.append('<option value=' + c + '>' + c + '</option>');
+		}
+		html.append('</select></div>');
+		// Month
+		html.append('<div class="SC_select" style="width: 125px; margin-left: 5px;" >');
+		html.append('<select class="select zcs-phtype" name="birth_month" >');
+		html.append('<option value="MM">').append(I18N.get("IAM.CONTACTS.MONTH")).append('</option>'); // No i18N
+		for (var i = 1; i <= 12; i++) {
+			var c = i < 10 ? '0' + i : i;
+			html.append('<option value=' + c + '>').append(I18N.get("IAM.CONTACTS.MONTH." + c)).append('</option>');
+		}
+		html.append('</select></div>');
+		html.append('<div style="display:inline-block;"><input class="SC_tiput" type="text" style="margin-left: 5px;width: 75px;" name="birth_year"/></div></div>');
+		/* Birth Date ends */
+		html.append('<div class="zcs-single-field-row"><textarea name="notes" class="SC_tiput" rows="4" autocomplete="off" placeholder="').append(I18N.get("IAM.CONTACTS.NOTES")).append('"></textarea></div>')
+		html.append('</div>'); // /personal
+		
+		/* Home Adderss */
+		html.append('<div class="zcs-field-group" data-field-type="address/home"><label>').append(I18N.get("IAM.CONTACTS.OTHERS.HADDRESS")).append('</label>');
+
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="hme_street_addr" name="street_addr" placeholder="').append(I18N.get("IAM.CONTACTS.ST.ADDRESS")).append('" class="SC_tiput">');// No I18N
+		html.append('</div>');
+
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="hme_street_addr1" name="street_addr1" placeholder="').append(I18N.get("IAM.CONTACTS.ST.ADDRESS1")).append('" class="SC_tiput">');// No I18N
+		html.append('</div>');
+
+		html.append('<div class="zcs-field-row"><input type="text" data-field-type="hme_city" name="city" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.CITY")).append('" class="SC_tiput" style="width: 49.2%">');// No I18N
+		html.append('<input type="text" data-field-type="hme_state" name="state" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.STATE")).append('" class="SC_tiput zcs-ml12" style="width: 49%">');// No I18N
+		html.append('</div>');
+
+		html.append('<div class="zcs-field-row"><input type="text" data-field-type="hme_country" name="country" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.COUNTRY")).append('" class="SC_tiput" style="width: 49.2%">');// No I18N
+		html.append('<input type="text" data-field-type="hme_postal_code" name="postal_code" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.ZIP.POSTAL")).append('" class="SC_tiput zcs-ml12" style="width: 49%">');// No I18N
+		html.append('</div>');
+		html.append('</div>');
+
+		/* Work Adderss */
+		html.append('<div style="clear: both" class="zcs-field-group" data-field-type="address/work"><label>').append(I18N.get("IAM.CONTACTS.EXPORT.WORK.ADDRESS")).append('</label>');
+		
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="company" name="company" placeholder="').append(I18N.get("IAM.CONTACTS.COMPANY")).append('" class="SC_tiput">');// No I18N
+		html.append('</div>');
+		 
+		html.append('<div style="clear: both" class="zcs-single-field-row"><input type="text" data-field-type="designation" name="designation" placeholder="').append(I18N.get("IAM.CONTACTS.DESIGNATION")).append('" class="SC_tiput">');// No I18N
+		html.append('</div>');
+
+		html.append('<div style="clear: both" class="zcs-single-field-row"><input type="text" data-field-type="wrk_street_addr" name="street_addr" placeholder="').append(I18N.get("IAM.CONTACTS.ST.ADDRESS")).append('" class="SC_tiput">');// No I18N
+		html.append('</div>');
+
+		html.append('<div class="zcs-single-field-row"><input type="text" data-field-type="wrk_street_addr1" name="street_addr1" placeholder="').append(I18N.get("IAM.CONTACTS.ST.ADDRESS1")).append('" class="SC_tiput">');// No I18N
+		html.append('</div>');
+
+		html.append('<div style="clear: both" class="zcs-field-row"><input type="text" data-field-type="wrk_city" name="city" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.CITY")).append('" class="SC_tiput" style="width: 49.2%">'); // No I18N
+		html.append('<input type="text" data-field-type="wrk_state" name="state" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.STATE")).append('" class="SC_tiput zcs-ml12" style="width: 49%">');// No I18N
+		html.append('</div>');
+
+		html.append('<div style="clear: both" class="zcs-field-row"><input type="text" data-field-type="wrk_country" name="country" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.COUNTRY")).append('" class="SC_tiput" style="width: 49.2%">');// No I18N
+		html.append('<input type="text" data-field-type="wrk_postal_code" name="postal_code" placeholder="').append(I18N.get("IAM.CONTACTS.WORK.ZIP.POSTAL")).append('" class="SC_tiput zcs-ml12" style="width: 49%">');// No I18N
+		html.append('</div>');
+		html.append('</div>');
+
+		html.append('</div>'); // More Info close
+
+		/* More Information */
+		html.append('<div class="SC_lnk zcs-add-moreinfo zcs-editor-qkcreate-show zmThmClr">').append(I18N.get("IAM.CONTACTS.ADDMORE")).append('</div>'); // No I18N
+		html.append('<div style="height: 10px;"></div>');
+		html.append('</div></form></div>');
+		
+		/* Buttons */
+		html.append('<div class="zcs-editor-qkcreate-hide SC_PUbtm zc_add_contact_button">');
+		if(this.options.actions.merge && zmTab.currentTab == ZContacts.ZMailConstants.CLEAN_WORKSPACE_APP_ID){
+			html.append('<span id="zcs-merge-btn" data-field-type="zcs-merge-btn" >').append(I18N.get("IAM.MERGE")).append('</span>'); // No I18N
+			html.append('<span style="margin-left: 10px;" data-field-type="zcs-delete-btn" id="zcs-delete-btn" data-val="Cancel">').append(I18N.get('IAM.DELETE')).append('</span>');
+			html.append('<span style="margin-left: 10px;" data-field-type="zcs-skip-btn" id="zcs-skip-btn" data-val="Cancel">').append(I18N.get('IAM.SKIP')).append('</span>');
+		} else if(this.options.actions.merge){
+			html.append('<span id="zcs-merge-btn" data-field-type="zcs-merge-btn" >').append(I18N.get("IAM.MERGE")).append('</span>'); // No I18N
+		}else {
+			html.append('<span id="zcs-save-btn" data-field-type="zcs-save-btn">').append(I18N.get("IAM.SAVE")).append('</span>'); // No I18N
+		}
+		html.append('<span data-val="Cancel" data-field-type="zcs-cancel-btn" id="zcs-cancel-btn" style="margin-left: 10px;" data-val="Cancel">' + I18N.get("IAM.CANCEL") + '</span>');
+		html.append('</div></div>');
+		return html.toString();
+	};
+
+	this.bindEvents = function() {
+		// Hide `Close` icon if there is no additional fields
+		$('.zcs-mfield').each(function() {
+			var $mfields = $(this);
+			if ($mfields.find('.zcs-mfield-row').length == 1) {
+				$mfields.find('.zcs-close-mrow').hide();
+			}
+		});
+		// check primary mail_id
+		this.$e.find('[data-field-type="emails"] .zcs-fav').click(function() {
+			var $this = $(this);
+			$this.parent('.zcs-mfield-row').siblings().find('.SC_fav').removeClass('SC_fav'); // No I18N
+			$this.addClass('SC_fav');
+		});
+
+		this.$e.find('.zcs-mfield .SC_tiput').keyup(function(ev) {
+			var $row = $(this).parent('.zcs-mfield-row'); // No I18N
+			var $siblings = $row.siblings();
+			var maxFields = parseInt($(this).parents('.zcs-mfield').attr('data-max-fields-count'));
+			if (zmTab.currentTab != ZContacts.ZMailConstants.CLEAN_WORKSPACE_APP_ID || quickCreate == true) {
+				if (maxFields <= ($siblings.length + 1)) {
+					return;
+				}
+			}
+			var $input = $(this);
+			if ($input.val().trim().length < 1) {
+				return;
+			}
+
+			if ($siblings.length > 0 && !$row.is(':last-child')) {
+				return;
+			}
+
+			if ($siblings.length == 0) {
+				$row.find('.zcs-close-mrow').show();
+			}
+
+			// Insert next row
+			var $newRow = $row.clone(true);
+			$newRow.find('.SC_tiput').val('');
+			$newRow.find('.zcs-fav').removeClass('SC_fav')
+			$newRow.insertAfter($row);
+		});
+
+		// removed mail row
+		this.$e.find('.zcs-mfield .zcs-close-mrow').click(function(ev) {
+			var $row = $(this).parent('.zcs-mfield-row'); // No I18N
+			var $siblings = $row.siblings();
+			var findIcon = $row.find('.SC_fav');
+			if (findIcon.length != 0) {
+				$($siblings[0]).find('.zcs-fav').addClass('SC_fav'); // No i18N
+			}
+			if ($siblings.length == 1) {
+				$siblings.find('.zcs-close-mrow').hide();
+				$siblings.find('.zcs-fav').addClass('SC_fav'); // No i18N
+			}
+			$row.remove();
+		});
+
+		// More Info
+		var _this = this;
+		if (this.quickCreate) {
+			this.$e.find('.zcs-add-moreinfo').click(function() {
+				zmcontact.createContactInTab(_this);
+				zmsDialog.remove();
+				zmsuite.getCenter()[0].$el.find('#zcs-photo').css("display", "flex"); // No I18N
+			});
+		}
+		
+
+		// Save, Cancel, Merge, Skip, Delete button action
+		this.$e.find('span[data-field-type=zcs-save-btn]').click(function() {
+			if (_this.options && _this.options.actions && _this.options.actions.save) {
+				_this.options.actions.save.apply(_this);
+			}
+		});
+
+		this.$e.find('span[data-field-type=zcs-cancel-btn]').click(function() {
+			if (_this.options && _this.options.actions && _this.options.actions.cancel) {
+				_this.options.actions.cancel.apply(_this);
+			}
+		});
+
+		this.$e.find('span[data-field-type=zcs-skip-btn]').click(function(event) {
+			if (_this.options && _this.options.actions && _this.options.actions.skip) {
+				_this.options.actions.skip.apply(_this);
+				event.stopPropagation();
+			}
+		});
+
+		this.$e.find('span[data-field-type=zcs-delete-btn]').click(function(event) {
+			if (_this.options && _this.options.actions && _this.options.actions.deleteContact) {
+				_this.options.actions.deleteContact.apply(_this);
+				event.stopPropagation();
+			}
+
+		});
+
+		this.$e.find('span[data-field-type=zcs-merge-btn]').click(function(event) {
+			if (_this.options && _this.options.actions && _this.options.actions.merge) {
+				_this.options.actions.merge.apply(_this);
+			}
+		});
+	};
+
+	this.bindEditEvents = function() {
+		var _this = this.$e;
+		this.$e.find('.zcs-add-moreinfo').click(function() {
+			_this.removeClass('zcs-editor-qkcreate');
+			_this.find('.SC_PUbtm').addClass('zmModeBG');
+			_this.find('.SC_PUbtm').addClass('zcs_edit_modify');
+			if (!_this.hasClass('zcs-editor-qkcreate') && zmail.forContactsApp) {
+			   _this.find('#zcs_name_label').removeAttr("id"); // No I18N
+			}
+		});
+	};
+	
+	this.handleQuickCreate = function() {
+		if (this.quickCreate) {
+			this.$e.addClass('zcs-editor-qkcreate');
+		} else {
+			this.$e.removeClass('zcs-editor-qkcreate');
+			this.$e.find('.SC_PUbtm').addClass('zcs_edit_modify');
+		}
+	};
+
+	this.render = function($containerEle, override, action) {
+		this.$e = $(this.getHTML());
+		if (override) {
+			$containerEle.html(this.$e);
+		} else {
+			$containerEle.append(this.$e);
+		}
+		
+		this.bindEvents();
+		if (action == "merge"){
+			this.$e.css("min-width", "600px"); // No I18N
+			this.$e.find('.SC_PUbtm').addClass('zmModeBG');
+			this.$e.find('.SC_PUbtm').addClass('zcs_edit_modify');
+		}else{
+			this.$e.addClass('zcs-editor-qkcreate');
+		}
+		
+		if(this.quickCreate){
+			this.$e.parent().css("max-height","465px"); // No I18N
+		} else {
+			this.$e.css("max-width", "700px"); // No I18N
+			this.$e.find('.zcs-add-moreinfo').text(I18N.get("IAM.CONTACTS.EDITMORE"));
+			this.$e.parent().find('.SC_PUbtm').show();
+		}
+		this.setValue();
+		if (this.$e.hasClass('zcs-editor-qkcreate')) {
+			this.bindEditEvents();
+		}
+	};
+
+	this.rerender = function($containerEle, quickCreate) {
+		this.quickCreate = quickCreate;
+		this.handleQuickCreate();
+		this.bindEvents();
+		$containerEle.append(this.$e);
+	};
+
+	this.toContactsModel = function(contact) {
+		// first name
+		if(this.$e.find('[name="first_name"]').val().trim()) {
+			contact.set('first_name', this.$e.find('[name="first_name"]').val()); // No i18N
+		}
+
+		// company
+		if(this.$e.find('[name="company"]').val().trim()) {
+			contact.set('company', this.$e.find('[name="company"]').val().trim()); // No I18N
+		}
+
+		// Emails
+		var $mailRows = this.$e.find('[data-field-type="emails"] .zcs-mfield-row');
+		var isPrimaryExists = false;
+		var emailSize = 0;
+		var addEmail = 0;
+		for (var i = 0; i < $mailRows.length; i++) {
+			var $mRow = $($mailRows[i]);
+			var $input = $mRow.find('[name="email_id"]');
+			var mailid = $input.val().trim();
+			var primary = $mRow.find('.zcs-fav').hasClass('SC_fav'); // No i18N
+
+			if (!mailid) { // Ignore empty value
+				continue;
+			}
+			emailSize++;
+			if ($input.attr("readonly") != "readonly" && emailSize > this.maxEmailsCount) {
+				$input.focus();
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ERROR.EMAIL.LIMIT.REACHED")); // No i18N
+				return;
+			}
+			if (!ZContacts.Utils.isEmailId(mailid)) {
+				$input.focus();
+				zmUtil.succErrMsg('e', I18N.get("IAM.ERROR.VALID.EMAIL")); // No i18N
+				return;
+			}
+			if(primary && !isPrimaryExists){
+				isPrimaryExists = true;
+			}
+			var emailModel = ZContacts.Emails.create({
+				email_id : mailid,
+				is_primary : primary
+			});
+
+			contact.addSubResource(emailModel);
+			addEmail++;
+		}
+
+		if(!isPrimaryExists && addEmail != 0){
+			zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.PRIMARY.EMAIL.EMPTY")); // No i18N
+			contact.clearSubResources();
+			return;
+		}
+
+		// Validate contact
+		var fname = contact.first_name ? contact.first_name.trim() : undefined;
+		var company = contact.company ? contact.company.trim() : undefined;
+		var hasEmail = !contact.get('emails') || !contact.get('emails').length;
+
+		if (!fname && hasEmail && !company) {
+			this.$e.find('[name="first_name"]').focus();
+			zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.FIRST.NAME.REQUIRED")); // No i18N
+			return null;
+		}
+
+		// Names
+		if(this.$e.find('[name="middle_name"]').val().trim()) {
+			contact.set('middle_name', this.$e.find('[name="middle_name"]').val().trim()); // No i18N
+		}
+		if(this.$e.find('[name="last_name"]').val().trim()) {
+			contact.set('last_name', this.$e.find('[name="last_name"]').val().trim()); // No i18N
+		}
+		if(this.$e.find('[name="nick_name"]').val().trim()) {
+			contact.set('nick_name', this.$e.find('[name="nick_name"]').val().trim()); // No i18N
+		}
+
+		// Phone
+		var $phoneRows = this.$e.find('[data-field-type="phones"] .zcs-mfield-row');
+		var phoneSize = 0;
+		for (var i = 0; i < $phoneRows.length; i++) {
+			var $pRow = $($phoneRows[i]);
+			var $input = $pRow.find('[name="number"]');
+			var number = $input.val().trim();
+			var phNo = number;
+			if (!phNo) {
+				continue;
+			}
+			if(phNo.length > "30"){
+				$input.focus();
+				zmUtil.succErrMsg('e', zmcontact.formatMessage(I18N.get("IAM.CONTACTS.EXCEED.MAX.LENGTH"), I18N.get("IAM.CONTACTS.PRINT.SAMPLE.PHONE") , 30)); // No i18N
+				return;
+			}
+
+			if (!ZContacts.Utils.isValidPhoneNumber(phNo)) {
+				$input.focus();
+				zmUtil.succErrMsg('e', zmcontact.formatMessage(I18N.get("IAM.ERROR.INVALID.PHONE.NUMBERS"), phNo)); // No i18N
+				return;
+			}
+			phoneSize++;
+			if (phoneSize > 8) {
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ERROR.PHONE.LIMIT.REACHED")); // No i18N
+				return;
+			}
+
+			var phoneModel = ZContacts.PhoneNumbers.create({
+				number : phNo,
+				type : $pRow.find('[name="type"]').val()
+			});
+			contact.addSubResource(phoneModel);
+		}
+		
+		// URLS
+		var $urlRows = this.$e.find('[data-field-type="urls"] .zcs-mfield-row');
+		var urlSize = 0;
+		for (var i = 0; i < $urlRows.length; i++) {
+			var $urlRow = $($urlRows[i]);
+			var $input = $urlRow.find('[name="url"]');
+			var urls = $input.val().trim();
+			if (!urls) {
+				continue;
+			}
+			urlSize++;
+			if (urlSize > 8) {
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ERROR.URLS.LIMIT.REACHED")); // No i18N
+				return;
+			}
+			var urlModel = ZContacts.Urls.create({
+				url : urls,
+				type : $urlRow.find('[name="type"]').val()
+			});
+			contact.addSubResource(urlModel);
+		}
+		// Gender
+		if(this.$e.find('[name="gender"]:checked').val()) {
+			contact.set('gender', this.$e.find('[name="gender"]:checked').val()); // No I18N
+		}
+
+		// bday
+		var birthMonth = this.$e.find('[name="birth_month"] option:selected').val();
+		var birthDate = this.$e.find('[name="birth_day"] option:selected').val();
+		var birthYear = this.$e.find('[name="birth_year"]').val().trim();
+		if (birthYear && !ZContacts.Utils.isValidBirthYear(birthYear)) {
+			zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.INVALID.BIRTH.YEAR")); // No I18N
+			this.$e.find('[name="birth_year"]').focus();
+			return;
+		}
+		if (birthYear) {
+			if (birthDate == "DD" || birthMonth == "MM") {
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ENTER.VALID.BDATE")); // No I18N
+				return;
+			}
+			contact.set('birth_year', birthYear); // No I18N
+		}
+		if (birthDate != "DD" || birthMonth != "MM") {
+			if (birthDate == "DD" || birthMonth == "MM") {
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ENTER.VALID.BDATE")); // No I18N
+				return;
+			}
+			if (!birthMonth.localeCompare("02") && ((!birthDate.localeCompare("29") && ! ((0 == birthYear % 4) && 0 != birthYear % 100 || 0 == birthYear % 400)) || parseInt(birthDate) > 29)) {
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ENTER.VALID.BDATE")); // No I18N
+				return;
+			}
+			const currentYear = new Date();
+			const currentMonth = currentYear.getMonth() + 1;
+			if (currentYear.getFullYear() == parseInt(birthYear)) {
+				if (parseInt(birthMonth) > currentMonth || (parseInt(birthMonth) == currentMonth && parseInt(birthDate) > currentYear.getDate())) {
+						zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ENTER.VALID.BDATE")); // No I18N
+						return;
+				}
+			}
+			if ((!birthMonth.localeCompare("04") || !birthMonth.localeCompare("06") || !birthMonth.localeCompare("09") || !birthMonth.localeCompare("11")) && parseInt(birthDate) >= 31) {
+				zmUtil.succErrMsg('e', I18N.get("IAM.CONTACTS.ENTER.VALID.BDATE")); // No I18N
+				return;
+			}
+			contact.set('birth_month', birthMonth); // No I18N
+			contact.set('birth_day', birthDate); // No I18N
+		}
+		
+		// designation
+		if(this.$e.find('[name="designation"]').val().trim()) {
+			contact.set('designation', this.$e.find('[name="designation"]').val().trim()); // No I18N
+		}
+
+		// Notes
+		if(this.$e.find('[name="notes"]').val().trim()) {
+			contact.set('notes', this.$e.find('[name="notes"]').val().trim()); // No I18N
+		}
+		
+
+		// Home Address
+		var $home_address = this.$e.find('[data-field-type="address/home"]');
+		var homeAddress = ZContacts.Address.create({});
+		if($home_address.find('[name="street_addr"]').val().trim()) {
+			homeAddress.street_addr = $home_address.find('[name="street_addr"]').val().trim();
+		}
+		if($home_address.find('[name="street_addr1"]').val().trim()) {
+			homeAddress.street_addr1 = $home_address.find('[name="street_addr1"]').val().trim();
+		}
+		if($home_address.find('[name="city"]').val().trim()) {
+			homeAddress.city = $home_address.find('[name="city"]').val().trim();
+		}
+		if($home_address.find('[name="state"]').val().trim()) {
+			homeAddress.state = $home_address.find('[name="state"]').val().trim();
+		}
+		if($home_address.find('[name="country"]').val().trim()) {
+			homeAddress.country = $home_address.find('[name="country"]').val().trim();
+		}
+		if($home_address.find('[name="postal_code"]').val().trim()) {
+			homeAddress.postal_code = $home_address.find('[name="postal_code"]').val().trim();
+		}
+		homeAddress.type = "home"; // No i18N
+		contact.addSubResource(homeAddress);
+
+		// Work Address
+		var $work_address = this.$e.find('[data-field-type="address/work"]');
+		var workAddress = ZContacts.Address.create({});
+		if($work_address.find('[name="street_addr"]').val().trim()) {
+			workAddress.street_addr = $work_address.find('[name="street_addr"]').val().trim();
+		}
+		if($work_address.find('[name="street_addr1"]').val().trim()) {
+			workAddress.street_addr1 = $work_address.find('[name="street_addr1"]').val().trim();
+		}
+		if($work_address.find('[name="city"]').val().trim()) {
+			workAddress.city = $work_address.find('[name="city"]').val().trim();
+		}
+		if($work_address.find('[name="state"]').val().trim()) {
+			workAddress.state = $work_address.find('[name="state"]').val().trim();
+		}
+		if($work_address.find('[name="country"]').val().trim()) {
+			workAddress.country = $work_address.find('[name="country"]').val().trim();
+		}
+		if($work_address.find('[name="postal_code"]').val().trim()) {
+			workAddress.postal_code = $work_address.find('[name="postal_code"]').val().trim();
+		}
+		workAddress.type = "work"; // No i18N
+		contact.addSubResource(workAddress);
+		
+		return contact;
+	};
+
+	this.setValue = function() {
+		if (this.contact) {
+			this.setValueInContainer(this.$e, this.contact);
+		}
+	},
+
+	this.setValueInContainer = function($container, obj) {
+		for ( var k in obj) {
+			if (!obj.hasOwnProperty(k) || k == "categories") {
+				continue;
+			}
+			var value = obj.get(k);
+			if (!value) {
+				continue;
+			}
+
+			if (!$.isArray(value)) {
+				var $input = $container.find('[name="' + k + '"]');
+				this.setValueToInput($input, value);
+			} else if (k === 'address') { // No i18N
+				for (var i = 0; i < value.length; i++) {
+					var addr = value[i];
+					var $addressContainer = $container.find('[data-field-type="address/' + addr.get('type') + '"]');
+					this.setValueInContainer($addressContainer, addr);
+				}
+			} else { // Multi valued
+				var $multiContainer = $container.find('[data-field-type="' + k + '"]');
+				var vi = 0;
+				for (var i = 0; i < value.length; i++) {
+					var vObj = value[i];
+					if (vObj.is_primary && k === 'emails') {
+						var v1 = vObj.get('email_id');
+						var $input = $multiContainer.find('[name="email_id"]').eq(vi);
+						vi++;
+						this.setValueToInput($input, v1);
+						this.createTextBox($input)
+					}
+				}
+				if(k != 'emails'){
+					vi = 0;
+				}
+				for (var i = 0; i < value.length; i++) {
+					var vObj = value[i];
+					for (var k1 in vObj) {
+						if (!vObj.hasOwnProperty(k1) || vObj.is_primary || k1 === 'is_primary') {
+							if (i >= this.maxEmailsCount - 1 && i == value.length - 1) {
+								$multiContainer.find('[name="' + k1 + '"]').eq(vi).parent().find(".msi-close").click();
+							}
+							continue;
+						}
+						var v1 = vObj.get(k1);
+						var $input = $multiContainer.find('[name="' + k1 + '"]').eq(vi);
+						if(k == 'emails'){
+							vi++;
+						}
+						if ($input.length > 0) {
+							this.setValueToInput($input, v1);
+							if (k == "emails") {
+								if (i < value.length - 1 || i < this.maxEmailsCount - 1) {
+									if ($input.attr("readonly") != "readonly") {
+										this.createTextBox($input);
+									}
+									
+								}
+							} else {
+								if (i < value.length - 1 || i < this.maxExtraFieldCount - 1) {
+									this.createTextBox($input)
+								}
+							}
+						}
+						if (k1 === 'is_primary' && k === 'emails' && v1) {
+							$multiContainer.find('.zcs-fav').eq(vi).click();
+						}
+					}
+					if(k != 'emails'){
+						vi++;
+					}
+				}
+				if (k == 'emails') {
+					var emailTextBox = $('input[data-field-type="email_id"]');
+					var lastEmailTextBox = $('input[data-field-type="email_id"]')[emailTextBox.length - 1];
+					if (lastEmailTextBox.value == '' && $(lastEmailTextBox).attr("readonly") == "readonly") {
+						$(lastEmailTextBox).parent().remove();
+					}
+				}
+			}
+		}
+	},
+
+	this.setValueToInput = function($input, value) {
+		if ($input.length > 1) {
+			if ($input.is(':radio')) { // Radio Button
+				for (var i = 0; i < $input.length; i++) {
+					var elem = $input.get(i);
+					if (elem.value === value) {
+						elem.checked = true;
+					}
+				}
+			}
+		} else {
+			$input.val(value);
+		}
+	},
+	
+	this.createTextBox = function($input) {
+		var $row = $input.parent('.zcs-mfield-row'); // No I18N
+		var $siblings = $row.siblings();
+		if ($input.val().trim().length < 1) {
+			return;
+		}
+
+		if (($siblings.length > 0 && !$row.is(':last-child'))) { // No I18N
+			return;
+		}
+
+		if ($siblings.length == 0) {
+			$row.find('.zcs-close-mrow').show(); // No I18N
+		}
+
+		// Insert next row
+		var $newRow = $row.clone(true);
+		$newRow.find('.SC_tiput').val(''); // No I18N
+		$newRow.find('.zcs-fav').removeClass('SC_fav') // No I18N
+		$newRow.insertAfter($row);
+	}
+	
+}

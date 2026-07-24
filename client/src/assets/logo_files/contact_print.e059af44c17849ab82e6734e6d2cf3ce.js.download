@@ -1,0 +1,545 @@
+// $Id: $
+
+ZContacts.contactprint = function(options) {
+
+	this.options = options;
+	this.checkValue = [];
+	this.headerValue = [];
+
+	getHtmlForPrintCard = function() {
+		var html = new ZContacts.StringBuilder();
+		html.append('<span class = "zcs_loadingband"></span><div class="zcs_print_main_div">');
+
+		html.append('<div class="zcs_print_header">');
+		html.append('<h3>' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.CARD.TEXTONE') + '</h3>'); // No I18N
+		html.append('<p class="zcs_print_header_content">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.CARD.TEXTTWO') + '</p></div>');
+
+		html.append('<div class="zcs_print_options">');
+		html.append('<div class="contact_card"><span class="card_design"></span><div class="contact_basicinfo"><span class="basic_info_list_dp"><span class="dp_bg"></span><span class="dp_show"></span></span><div class="contact_name">' + ZContacts.I18N.get('IAM.CONTACTS.NAME') + '</div><div class="contact_info">' + ZContacts.I18N.get('IAM.CONTACTS.DESIGNATION') + ' - ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.CNAME') + ' </div></div>');
+		html.append('<div class="sample_contact_address"><i class="msi-check" data-field-type="zcs-address-check-box" id="zcs-address-check-box" value="address"></i><div class="address_icon"></div><div class="address_head"><span>Work</span><div class="arrow-down"></div></div><div class="address_value">' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS1') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.CITY') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.STATE') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.COUNTRY') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.ZIP.POSTAL') + '</div></div>');
+		html.append('<div class="sample_contact_email"><i class="msi-check" data-field-type="zcs-email-check-box"  id="zcs-email-check-box" value="email"></i><div class="email_icon"></div><div class="email_head">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.SAMPLE.EMAIL') + '</div></div>');
+		html.append('<div class="sample_contact_mobile"><i class="msi-check" data-field-type="zcs-phone-check-box"  id="zcs-phone-check-box" value="phone"></i><div class="mobile_icon"></div><div class="mobile_head">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.SAMPLE.PHONE') + '</div></div>	</div>');
+
+		html.append('</div>');
+
+		html.append('<div class="zcs_contact_main_div">');
+		html.append('<div class="zcs_contact_card_preview">');
+		html.append('<h3 style="width:75%; float:left;" class="zcs_contact_card_preview_content">' + ZContacts.I18N.get('IAM.PRINT.PREVIEW') + '</h3>');
+		html.append('</div>');
+
+		html.append('<div id="final_business_card_print_div" class="zcs_contact_card_div" style="width:100%;padding-left:22px;">');
+		html.append('</div>');
+		html.append('</div>');
+
+		html.append('</div>');
+		html.append('<div class="zcs_print_button_div">');
+		html.append('<div class="SC_PUbtm zcs_print_buttons zmModeBG">');
+		html.append('<span data-field-type="zcs-print-btn" id="zcs_print_btn">' + ZContacts.I18N.get('IAM.PRINT') + '</span>');
+		html.append('<span data-field-type="zcs-cancel-btn" data-val="Cancel"  >' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');
+		html.append('</div></div>');
+
+		return html.toString();
+	};
+
+	getHtmlForPrintTable = function() {
+		var html = new ZContacts.StringBuilder();
+		html.append('<span class = "zcs_loadingband"></span><div class="zcs_print_main_div" style="">');
+
+		html.append('<div class="zcs_print_header">');
+		html.append('<h3>' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.TABLE.TEXTONE') + '</h3>'); // No I18N
+		html.append('<p class="zcs_print_header_content">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.TABLE.TEXTTWO') + '</p></div>');
+
+		html.append('<div class="zcs_print_options" style="height:130px;"><br>');
+		html.append('<div class="contact_list_header"><div class="contact_list_float" style="width:330px;">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.BASIC') + '</div>');
+		html.append('<div class="contact_list_float" style="width:180px;"><i class="msi-check" onclick="ZContacts.contactprint.select(event)" value="phone_table"></i>' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.PHONE') + '</div><div class="contact_list_float" style="width:310px;"><i class="msi-check" onclick="ZContacts.contactprint.select(event)" value="work_table"></i>' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.WORKADRESS') + '</div><div class="contact_list_float" style="width:310px"><i class="msi-check" onclick="ZContacts.contactprint.select(event)" value="home_table"></i>' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.HOMEADRESS') + '</div></div>');
+
+		html.append('<div class="contact_list"><div class="basic_info_list"><span class="basic_info_list_dp"><span class="dp_bg"></span><span class="dp_show"></span></span><span class="basic_info_list_details"><span class="basic_info_list_name">' + ZContacts.I18N.get('IAM.CONTACTS.NAME') + '</span><span class="email_list">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.SAMPLE.EMAIL') + '</span></span></div>');
+		html.append('<div class="phnum_list">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.SAMPLE.PHONE') + '</div>');
+		html.append('<div class="officeaddress_list">' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS1') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.CITY') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.STATE') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.COUNTRY') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.ZIP.POSTAL') + '</div></span>');
+		html.append('<div class="homeaddress_list">' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.ST.ADDRESS1') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.CITY') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.STATE') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.COUNTRY') + ', ' + ZContacts.I18N.get('IAM.CONTACTS.WORK.ZIP.POSTAL') + '</div>');
+		html.append('</div>');
+
+		html.append('</div>');
+
+		html.append('<div class="zcs_contact_main_div">');
+		html.append('<div class="zcs_contact_card_preview">');
+		html.append('<h3 style="width:75%; float:left;" class="zcs_contact_card_preview_content">' + ZContacts.I18N.get('IAM.PRINT.PREVIEW') + '</h3>');
+		html.append('</div>');
+		html.append('<br><div class="zcs_contact_card_div" style="width:100%; padding-left:23px; padding-top:50px;">');
+		html.append('<div class="contact_list_header"><div class="contact_list_float" style="width:330px;">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.BASIC') + '</div>');
+		html.append('<div class="contact_list_float" id="phone_header" style="width:180px;">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.PHONE') + '</div><div class="contact_list_float" id="work_header" style="width:310px;">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.WORKADRESS') + '</div><div class="contact_list_float" id="home_header" style="width:310px;">' + ZContacts.I18N.get('IAM.CONTACTS.PRINT.HOMEADRESS') + '</div></div>');
+		html.append('<div id="final_table_view_print_div"></div></div>');
+		html.append('</div>');
+
+		html.append('</div>');
+		html.append('<div class="zcs_print_button_div">');
+		html.append('<div class="SC_PUbtm zcs_print_buttons zmModeBG">');
+		html.append('<span data-field-type="zcs-print-btn" id="zcs_print_btn">' + ZContacts.I18N.get('IAM.PRINT') + '</span>');
+		html.append('<span data-field-type="zcs-cancel-btn" data-val="Cancel"  >' + ZContacts.I18N.get('IAM.CANCEL') + '</span>');
+		html.append('</div></div>');
+
+		return html.toString();
+	};
+
+	ZContacts.contactprint.select = function(event, action) {
+		var render;
+		var contactPrint = new ZContacts.contactprint();
+		if (action == "work" || action == "home") {
+			ZContacts._event = event;
+			ZContacts._action = action;
+			if (ZContacts._action == "work") {
+				checkValues['#address0'] = true; // No I18N
+				checkValues['#address1'] = false; // No I18N
+			} else {
+				checkValues['#address1'] = true; // No I18N
+				checkValues['#address0'] = false; // No I18N
+			}
+		}
+		if ($(event.target).hasClass('msi-uncheck')) {
+			$(event.target).removeClass("msi-uncheck").addClass("msi-check");// No I18N
+			var value = event.target.getAttribute('value');
+			render = true;
+		} else if ($(event.target).hasClass('msi-check')) {
+			$(event.target).removeClass("msi-check").addClass("msi-uncheck");// No I18N
+			var value = event.target.getAttribute('value');
+			render = false;
+		} else {
+			$($(zmsuite.getCenter()[0].$el.find('.address_head')[0]).children()[0]).text(action[0].toUpperCase() + action.substring(1, action.length));
+			if (zmsuite.getCenter()[0].$el.find('.sample_contact_address').find('.msi-check').length) {
+				if (zmsuite.getCenter()[0].$el.find('#final_table_view_print_div').is(':visible')) {
+					contactPrint.rerenderTable(action);
+				} else {
+					contactPrint.rerenderCard(action, checkValues);
+				}
+			}
+		}
+		if (value == "phone_table") {
+			checkValues['.phnum_list'] = render;
+			headerValue['#phone_header'] = render; // No I18N
+		}
+		if (value == "work_table") {
+			checkValues['.officeaddress_list'] = render;
+			headerValue['#work_header'] = render; // No I18N
+		}
+		if (value == "home_table") {
+			checkValues['.homeaddress_list'] = render;
+			headerValue['#home_header'] = render; // No I18N
+		}
+		if (value == "phone") {
+			checkValues['.contact_mobile'] = render;
+		}
+		if (value == "email") {
+			checkValues['.contact_email'] = render;
+		}
+		if (value == "address") {
+			checkValues['.contact_address'] = render;
+			if (render == true && ZContacts._action == undefined) {
+				checkValues['#address0'] = true; // No I18N
+				checkValues['#address1'] = false; // No I18N
+			} else if (render == true && ZContacts._action != undefined) {
+				if (ZContacts._action == "work") {
+					checkValues['#address0'] = true; // No I18N
+					checkValues['#address1'] = false; // No I18N
+				} else {
+					checkValues['#address1'] = true; // No I18N
+					checkValues['#address0'] = false; // No I18N
+				}
+			}
+		}
+		if (render == true) {
+			if (zmsuite.getCenter()[0].$el.find('#final_table_view_print_div').is(':visible')) {
+				contactPrint.rerenderTable(value, checkValues);
+				contactPrint.rerenderTableHeader(value, headerValue);
+			} else {
+				contactPrint.rerenderCard(value, checkValues);
+			}
+		} else {
+			if (zmsuite.getCenter()[0].$el.find('#final_table_view_print_div').is(':visible')) {
+				contactPrint.rerenderTableHide(value, checkValues);
+				contactPrint.rerenderTableHideHeader(value, headerValue);
+			} else {
+				contactPrint.rerenderCardHide(value, checkValues);
+			}
+		}
+	};
+	
+	ZContacts.contactprint.printValues = function(printObject){
+		var vals = Object.keys(printObject).map(function(key) {
+		    return printObject[key];
+		});
+		return vals;
+	};
+
+	this.createPageContent = function(content) {
+		ZContacts.contactprint.$containerElem.html($(content));
+	};
+
+	this.render = function() {
+		this.$e = ZContacts.contactprint.$containerElem;
+	};
+
+	this.rerenderCard = function(input, contactPrint) {
+		var div = zmsuite.getCenter()[0].$el.find('#final_business_card_print_div');
+		var objectValues = ZContacts.contactprint.printValues(contactPrint);
+		for (var i = 0; i < objectValues.length; i++) {
+			if (objectValues[i] == true) {
+				if (ZContacts._action != undefined) {
+					div.find('.contact_card').find(Object.keys(contactPrint)[i]).show();
+				} else {
+					div.find(Object.keys(contactPrint)[i]).show();
+				}
+			} else {
+				div.find('.contact_card').find(Object.keys(contactPrint)[i]).hide();
+			}
+		}
+	};
+	
+	
+
+	this.rerenderCardHide = function(input, contactPrint) {
+		var div = zmsuite.getCenter()[0].$el.find('#final_business_card_print_div');
+		var objectValues = ZContacts.contactprint.printValues(contactPrint);
+		for (var i = 0; i < objectValues.length; i++) {
+			if (objectValues[i] == false) {
+				div.find(Object.keys(contactPrint)[i]).hide();
+			}
+		}
+	};
+	
+	this.rerenderTableHide = function(input, contactPrint) {
+		var div = zmsuite.getCenter()[0].$el.find('#final_table_view_print_div');
+		if (zmsuite.getCenter()[0].getNodes()[2].$el.find('.contact_list_header').find('.msi-uncheck').length == 1) {
+			div.find('.contact_list').addClass('contact_list_1050');
+		} else {
+			div.find('.contact_list').addClass('contact_list_710');
+		}
+		var objectValues = ZContacts.contactprint.printValues(contactPrint);
+		for (var i = 0; i < objectValues.length; i++) {
+			if (objectValues[i] == false) {
+				div.find(Object.keys(contactPrint)[i]).hide();
+			}
+		}
+	};
+	
+	this.rerenderTableHideHeader = function(input, contactPrint) {
+		if (contactPrint != null) {
+			var div = zmsuite.getCenter()[0].$el;
+			var objectValues = ZContacts.contactprint.printValues(contactPrint);
+			for (var i = 0; i < objectValues.length; i++) {
+				if (objectValues[i] == true) {
+					div.find(Object.keys(contactPrint)[i]).show();
+				} else {
+					div.find(Object.keys(contactPrint)[i]).hide();
+				}
+			}
+		}
+	};
+	
+	this.rerenderTable = function(input, contactPrint) {
+		var div = zmsuite.getCenter()[0].$el.find('#final_table_view_print_div');
+		if (zmsuite.getCenter()[0].getNodes()[2].$el.find('.contact_list_header').find('.msi-check').length == 2) {
+			div.find('.contact_list').removeClass('contact_list_710');
+		} else if (zmsuite.getCenter()[0].getNodes()[2].$el.find('.contact_list_header').find('.msi-check').length == 3) {
+			div.find('.contact_list').removeClass('contact_list_1050');
+		}
+		var objectValues = ZContacts.contactprint.printValues(contactPrint);
+		for (var i = 0; i < objectValues.length; i++) {
+			if (objectValues[i] == true) {
+				div.find(Object.keys(contactPrint)[i]).show();
+			}
+		}
+	};
+	
+	this.rerenderTableHeader = function(input, contactPrint) {
+		if (contactPrint != null) {
+			var div = zmsuite.getCenter()[0].$el;
+			var objectValues = ZContacts.contactprint.printValues(contactPrint);
+			for (var i = 0; i < objectValues.length; i++) {
+				if (objectValues[i] == true) {
+					div.find(Object.keys(contactPrint)[i]).show();
+				} else {
+					div.find(Object.keys(contactPrint)[i]).hide();
+				}
+			}
+		}
+	};
+
+	this.bindEvents = function() {
+		var _this = this;
+		this.$e.find('span[data-field-type=zcs-print-btn]').click(function() {
+			if (_this.options && _this.options.actions && _this.options.actions.print) {
+				_this.options.actions.print.apply(_this);
+			}
+		});
+
+		this.$e.find('span[data-field-type=zcs-cancel-btn]').click(function() {
+			if (_this.options && _this.options.actions && _this.options.actions.cancel) {
+				_this.options.actions.cancel.apply(_this);
+			}
+		});
+	};
+
+	ZContacts.contactprint.tableView = function(contactsNode, workspace) {
+		var uri = null;
+		var toLoadCount;
+		var contactprint = new ZContacts.contactprint();
+		contactprint.render();
+		zmsuite.getCenter()[0].$el.find('.dp_bg').css('background-image', 'url(' +ZContacts.getFingerPrintedFile("/images/user.svg")+')'); // No I18N
+		zmsuite.getCenter()[0].$el.find('.dp_show').css('background-image', 'url(' +ZContacts.getFingerPrintedFile("/images/user.svg")+')'); // No I18N
+		contactprint.$e.find('#final_business_card_print_div').hide();
+		var noOfContactsSelected = contactsNode.$el.find(".zmL.SC_cont.SC_check").length;
+		var body = contactprint.$e.find('#final_table_view_print_div');
+		
+		if (ZContacts.contactprint.printValues(printResponse).length) {
+			if (printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id].contact_id == undefined) {
+				totalLength = printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id].length;
+			} else {
+				totalLength = ZContacts.contactprint.printValues(printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id]).length - 1;
+			}
+		}
+		loadingDiv = zmComponent.loadingBand({
+			container : zmsuite.getCenter()[0].getNodes()[2].$el.find('.zcs_contact_main_div').get(0), // No i18N
+			type : "pagination" // No i18N
+		});
+
+		if (noOfContactsSelected) {
+			accountId = ZContacts.getCurrentAccount().getAccountId();
+			var contactIdsArr = zmcontact.getSelectedContactIds(workspace[0].getNodes()[2].$el);
+			uri = new ZContacts.URI(ZContacts.Contacts, accountId, contactIdsArr).include("emails").include("phones").include("address"); // No I18N
+			if (printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id] != null && totalLength > 0) {
+				loadingDiv();
+				ZContacts.contactprint.createTableContent(printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id], body, totalLength);
+			} else {
+				uri.GET().then(function(contacts) {
+					loadingDiv();
+					if (noOfContactsSelected == 1) {
+						contacts[0] = contacts;
+					}
+					ZContacts.contactprint.createTableContent(contacts, body, noOfContactsSelected);
+				});
+			}
+		} else {
+			accountId = ZContacts.getCurrentAccount().getAccountId();
+			categoryId = zmcontact.getCategory(ZContacts._currentCategoryId).category_id;
+			uri = new ZContacts.URI(ZContacts.PrintContacts, accountId).include("emails").include("phones").include("address").setSortBy(ZContacts.sortBy, true); // No I18N
+			if (!zmcontact.isRootFolder(categoryId)) {
+				uri.addFilter("categories", categoryId); // No I18N
+			}
+			var limit, start;
+			start = 0;
+			if (zmcontact.getCategory(ZContacts._currentCategoryId).contacts_count <= 100) {
+				limit = zmcontact.getCategory(ZContacts._currentCategoryId).contacts_count;
+				toLoadCount = -1;
+			} else {
+				limit = 100;
+				toLoadCount = zmcontact.getCategory(ZContacts._currentCategoryId).contacts_count - limit;
+			}
+			uri.setRange(start, limit);
+			if (printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id] != null && printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id].length > 0) {
+				loadingDiv();
+				ZContacts.contactprint.createTableContent(printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id], body, printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id].length);
+			} else {
+				uri.GETS().then(function(contacts) {
+					loadingDiv();
+					ZContacts.contactprint.createTableContent(contacts, body, contacts.length);
+				});
+			}
+		}
+
+		var editorActions = {
+			print : function() {
+				if (zmsuite.getCenter()[0].$el.find('#final_table_view_print_div').find('.contact_list').length == 0) {
+					zmUtil.succErrMsg('e', ZContacts.I18N.get("IAM.CONTACTS.PRINT.EMPTY.PREVIEW")); // No I18N
+					return;
+				}
+				var prtContent;
+				var winPrint = window.open('', '', 'left=0,top=0,width=800,height=800,toolbar=no,scrollbars=yes,status=no,position=fixed');
+				winPrint.document.write('<html><body onload="window.print()">');
+				winPrint.document.write('<link type="text/css" rel="stylesheet" href="' + ZContacts.meta.serviceInfo.contacts_server_url + '/new/css/new_style.css">');
+				if (zmsuite.getCenter(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID)[0].$el.find('#final_table_view_print_div').is(':visible')) {
+					prtContent = document.getElementsByClassName("zcs_contact_card_div")[0];
+					winPrint.document.write('<div style="width:1600px">');
+				}
+				winPrint.document.write('<div class="zcs_loading_cls" style="margin-left: 23%; margin-top: 23%;"></div>');
+				winPrint.document.write('<div id="loadContent" style="margin-left: 19%; margin-top: 2%;">' + ZContacts.I18N.get("IAM.CONTACTS.PRINT.FETCH") + '</div>');
+				if (!noOfContactsSelected) {
+					if (toLoadCount == -1) {
+						$(winPrint.document.getElementById('loadContent')).remove();
+						$(winPrint.document.getElementsByClassName('zcs_loading_cls')[0]).remove();
+						winPrint.document.write(prtContent.innerHTML);
+						winPrint.document.write('</div></body></html>');
+						zmsuite.closeWorkspace(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID);
+						winPrint.document.close();
+						winPrint.focus();
+					} else {
+						start = 100;
+						limit = zmcontact.getCategory(ZContacts._currentCategoryId).contacts_count;
+						uri.setRange(start, limit);
+						uri.GETS().then(function(contacts) {
+							$(winPrint.document.getElementById('loadContent')).remove();
+							ZContacts.contactprint.createTableContent(contacts, body, contacts.length);
+							$(winPrint.document.getElementsByClassName('zcs_loading_cls')[0]).remove();
+							winPrint.document.write(prtContent.innerHTML);
+							winPrint.document.write('</div></body></html>');
+							zmsuite.closeWorkspace(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID);
+							winPrint.document.close();
+							winPrint.focus();
+						});
+					}
+				} else {
+					$(winPrint.document.getElementById('loadContent')).remove();
+					$(winPrint.document.getElementsByClassName('zcs_loading_cls')[0]).remove();
+					winPrint.document.write(prtContent.innerHTML);
+					winPrint.document.write('</div></body></html>');
+					zmsuite.closeWorkspace(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID);
+					winPrint.document.close();
+					winPrint.focus();
+				}
+			},
+			cancel : function() {
+				if (zmTab.currentTab == ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID) {
+					zmsuite.closeWorkspace(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID);
+				}
+				zmcontact.updateHeaderBand(zmcontact.getCategory(ZContacts._currentCategoryId));
+				zmcontact.unChkAll();
+			}
+		};
+		var printAction = new ZContacts.contactprint({
+			actions : editorActions
+		});
+		printAction.render();
+		printAction.bindEvents();
+	};
+
+	ZContacts.contactprint.createTableContent = function(contacts, body, length) {
+		var contactprint = new ZContacts.contactprint();
+		contactprint.render();
+		var len = $(zmsuite.getCenter()[0].$el.find('#final_table_view_print_div').find('.contact_list')).length;
+		if (len) {
+			len = zmsuite.getCenter()[0].$el.find('#final_table_view_print_div').find('.contact_list').length;
+		}
+		var contactListArray = document.createDocumentFragment();
+		var name, contact_info, email_table, contactList, basicInfoList, basicInfoListDp, dpBg, dpShow, basicInfoListDetails, basicInfoListName, emailList, phnumList, officeAddressList, homeAddressList;
+		for (var i = len, j = 0; i < length + len; i++, j++) {
+			if (contacts[j] == null) {
+				continue;
+			}
+			name = (contacts[j].first_name || '') + ' ' + (contacts[j].middle_name || '') + ' ' + (contacts[j].last_name || '');
+			contact_info = (contacts[j].job_title || '');
+			email_table = '';
+			if (contacts[j].emails) {
+				for (var k = 0; k < contacts[j].emails.length; k++) {
+					if (contacts[j].emails[k].is_primary) {
+						email_table = contacts[j].emails[k].email_id;
+					}
+				}
+			}
+			var phone = '';
+			if (contacts[j].phones) {
+				for (var k = 0; k < contacts[j].phones.length; k++) {
+					if (contacts[j].phones[k].type == "mobile") {
+						phone += contacts[j].phones[k].number;
+						break;
+					}
+				}
+			}
+
+			contactList = document.createElement("div");
+			contactList.className = "contact_list";
+			contactList.id = contacts[j].contact_id;
+
+			basicInfoList = document.createElement("div");
+			basicInfoList.className = "basic_info_list";
+
+			basicInfoListDp = document.createElement("span");
+			basicInfoListDp.className = "basic_info_list_dp";
+			dpBg = document.createElement("span");
+			dpBg.className = "dp_bg";
+			dpBg.style.backgroundImage = 'url(' + contacts[j].photo_url + ')'; // No I18N
+			dpShow = document.createElement("span");
+			dpShow.className = "dp_show";
+			dpShow.style.backgroundImage = 'url(' + contacts[j].photo_url + ')'; // No I18N
+			basicInfoListDp.appendChild(dpBg);
+			basicInfoListDp.appendChild(dpShow);
+
+			basicInfoListDetails = document.createElement("span");
+			basicInfoListDetails.className = "basic_info_list_details";
+			basicInfoListName = document.createElement("span");
+			basicInfoListName.className = "basic_info_list_name";
+			basicInfoListName.appendChild(document.createTextNode(name));
+			basicInfoListDetails.appendChild(basicInfoListName);
+			emailList = document.createElement("div");
+			emailList.className = "email_list";
+			emailList.appendChild(document.createTextNode(email_table));
+			basicInfoListDetails.appendChild(emailList);
+			basicInfoList.appendChild(basicInfoListDp);
+			basicInfoList.appendChild(basicInfoListDetails);
+			contactList.appendChild(basicInfoList);
+
+			phnumList = document.createElement("div");
+			phnumList.className = "phnum_list";
+			if (phone.length == 0) {
+				phnumList.appendChild(document.createTextNode("--"));
+			} else {
+				phnumList.appendChild(document.createTextNode(phone));
+			}
+
+			contactList.appendChild(phnumList);
+
+			if (contacts[j].address) {
+				var home_address = "", work_address = "";
+				for (var k = 0; k < contacts[j].address.length; k++) {
+					if (contacts[j].address[k].type == "home") {
+						home_address += (contacts[j].address[k].street_addr ? contacts[j].address[k].street_addr : '') + (contacts[j].address[k].street_addr1 ? "," + contacts[j].address[k].street_addr1 : '') + (contacts[j].address[k].city ? "," + contacts[j].address[k].city : '') + (contacts[j].address[k].state ? "," + contacts[j].address[k].state : '') + (contacts[j].address[k].country ? "," + contacts[j].address[k].country : '') + (contacts[j].address[k].postal_code ? "," + contacts[j].address[k].postal_code : '');
+					}
+					if (contacts[j].address[k].type == "work") {
+						work_address += (contacts[j].address[k].street_addr ? contacts[j].address[k].street_addr : '') + (contacts[j].address[k].street_addr1 ? "," + contacts[j].address[k].street_addr1 : '') + (contacts[j].address[k].city ? "," + contacts[j].address[k].city : '') + (contacts[j].address[k].state ? "," + contacts[j].address[k].state : '') + (contacts[j].address[k].country ? "," + contacts[j].address[k].country : '') + (contacts[j].address[k].postal_code ? "," + contacts[j].address[k].postal_code : '');
+					}
+				}
+			}
+			officeAddressList = document.createElement("div");
+			officeAddressList.className = "officeaddress_list";
+			if (work_address == undefined || work_address.length == 0) {
+				officeAddressList.style.textAlign = "center";
+				officeAddressList.appendChild(document.createTextNode("--"));
+			} else {
+				officeAddressList.appendChild(document.createTextNode(work_address));
+			}
+			homeAddressList = document.createElement("div");
+			homeAddressList.className = "homeaddress_list";
+			if (home_address == undefined || home_address.length == 0) {
+				homeAddressList.style.textAlign = "center";
+				homeAddressList.appendChild(document.createTextNode("--"));
+			} else {
+				homeAddressList.appendChild(document.createTextNode(home_address));
+			}
+			contactList.appendChild(officeAddressList);
+			contactList.appendChild(homeAddressList);
+			contactListArray.appendChild(contactList);
+		}
+		body.append(contactListArray);
+
+		zmsuite.getCenter(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID)[0].$el.find('#final_table_view_print_div').find('.contact_list').on("mouseover", function() { // No I18N
+			if (!$(this).find('#cross').is(':visible')) {
+				$(this).append('<a id="cross" style="margin-top:30px; margin-right:40px;"><i class="msi-close"></i></a>');
+				$('#cross').click(function() {
+					for (var i = 0; i < ZContacts.contactprint.printValues(printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id]).length - 1; i++) {
+						if (printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id][i] != null && printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id][i].contact_id == this.parentNode.id) {
+							printResponse[zmcontact.getCategory(ZContacts._currentCategoryId).category_id][i] = null;
+							break;
+						}
+					}
+					$(this.parentNode).remove();
+				});
+			}
+		});
+
+		zmsuite.getCenter(ZContacts.ZMailConstants.PRINT_WORKSPACE_APP_ID)[0].$el.find('#final_table_view_print_div').find('.contact_list').on("mouseleave", function() { // No I18N
+			$(this).find('#cross').remove();
+		});
+
+		zmsuite.getCenter()[0].$el.find('.contact_list_float').children().css('padding-right', '5px'); // No I18N
+
+	};
+
+};

@@ -110,6 +110,11 @@ import {
   Handshake,
   LogOut,
   ChevronLeft,
+  Mic2,
+  CalendarDays,
+  MessageSquareMore,
+  UserPlus,
+  HandHelping,
 } from "lucide-react";
 
 import "./Sidebar.css";
@@ -146,6 +151,36 @@ const Sidebar = ({ collapsed, setCollapsed, mobileOpen, onMobileClose }) => {
       path: "/admin/activities",
       badge: null,
     },
+
+     {
+      id: "member",
+      label: "Members",
+      icon: <Calendar size={20} strokeWidth={1.75} />,
+      path: "/admin/members",
+      badge: null,
+    },
+
+
+{
+  id: "artists",
+  label: "Artists",
+  icon: <Mic2 size={20} strokeWidth={1.75} />,
+  path: "/admin/artists",
+},
+
+{
+  id: "testimonials",
+  label: "Testimonials",
+  path: "/admin/testimonials",
+},
+
+
+{
+  id: "events",
+  label: "Events",
+  icon: <CalendarDays size={20} strokeWidth={1.75} />,
+  path: "/admin/events",
+},
     {
       id: "gallery",
       label: "Gallery",
@@ -153,13 +188,50 @@ const Sidebar = ({ collapsed, setCollapsed, mobileOpen, onMobileClose }) => {
       path: "/admin/gallery",
       badge: null,
     },
+   {
+  id: "news",
+  label: "News",
+  icon: (
+    <Newspaper
+      size={20}
+      strokeWidth={1.75}
+    />
+  ),
+  path: "/admin/news",
+},
+
+{
+  id: "volunteer-registrations",
+  label: "Volunteer Registrations",
+  icon: <HandHelping size={20} strokeWidth={1.75} />,
+  path: "/admin/volunteer-registrations",
+},
+
+{
+  id: "membership-enquiries",
+  label: "Membership Enquiries",
+  icon: <UserPlus size={20} strokeWidth={1.75} />,
+  path: "/admin/membership-enquiries",
+}
+,
     {
-      id: "news",
-      label: "News",
-      icon: <Newspaper size={20} strokeWidth={1.75} />,
-      path: "/admin/news",
-      badge: "3",
-    },
+  id: "newsletter",
+  label: "Newsletter",
+  path: "/admin/newsletter",
+},
+
+{
+  id: "contact",
+  label: "Contact Enquiries",
+  icon: (
+    <MessageSquareMore
+      size={20}
+      strokeWidth={1.75}
+    />
+  ),
+  path: "/admin/contact",
+},
+
     {
       id: "partners",
       label: "Partners",

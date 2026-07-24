@@ -1,0 +1,145 @@
+// $Id: $
+ZContacts.exportPreferences = { 0: "IAM.CONTACTS.SETTINGS.RESTRICT", 1: "IAM.CONTACTS.SETTINGS.ALLOW.PERSONAL.EXPORT", 2: "IAM.CONTACTS.SETTINGS.ALLOW.BOTH.PERSONAL.ORGANIZATION.EXPORT" }; //No I18N
+ZContacts.getContactsSetting = (collection) => {
+	return new Promise((resolve, reject) => {
+		if (ZContacts.preferenceResult == "false") {
+			reject();
+		}
+		collection.add({
+			id: 'orgContactsAccess', // No I18N
+			title: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.SHOW.ORG.CONTACTS"),
+			value: ZContacts.preferenceResult.org_contacts_access.toString(),
+			type: 'radio', // No I18N
+			options: [
+				{ id: '0', text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.SHOW.CONTACTS.APP.AND.OTHER.SERVICES") },
+				{ id: '1', text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.HIDE.FROM.CONTACTS.APP.ALONE") },
+				{ id: '2', text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.HIDE.EVERYWHERE") }
+			],
+			onChange: (value) => {
+				new ZContacts.URI(ZContacts.OrgContactsPreferencesUpdate, "org", value).PUT().then(function(response) { //No I18N
+					if (response.status_code == 200) {
+						var msg = ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.UPDATED.SUCCESS");
+						zmUtil.succErrMsg('s', msg); // No I18N
+						ZContacts.preferenceResult.org_contacts_access = value;
+ 						collection.get("orgContactsAccess").attributes.value = value;
+					}
+					resolve();
+				}, function(response) {
+					try {
+						var newOptionDom = $(event.target);
+						var orgContactsAccessOptions = newOptionDom.parent().parent().parent().parent().children();
+						var oldOptionDom;
+						for (var i = 0; i < orgContactsAccessOptions.length; i++) {
+							if ($(orgContactsAccessOptions[i]).find("input").attr("data-checked") == "true") {
+								oldOptionDom = $($(orgContactsAccessOptions[i]).find("input"));
+								break;
+							}
+						}
+						oldOptionDom.click();
+					} catch(e) {
+						
+					}
+					if (response.status_code == 400) {
+						var errors = response.errors;
+						var code = errors[0].code;
+						if (code == "URL_ROLLING_THROTTLES_LIMIT_EXCEEDED") {
+							var msg = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.THROTTLES.REACHED.TRY.AGAIN.LATER"), 10);
+							zmUtil.succErrMsg('e', msg); // No I18N
+						}
+						
+					}
+					resolve();
+				});
+			}
+		});
+		collection.add({
+			id: "orgContactExport", // No I18N
+			title: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.EXPORT.PERMISSION"),
+			value: ZContacts.preferenceResult.export_permission.toString(), // work around
+			type: "dropdown", // No I18N
+			updateValueFromList: true, // use this to display text after selecting value from dropdown
+			defaultValue: ZContacts.I18N.get(ZContacts.exportPreferences[ZContacts.preferenceResult.export_permission]),
+			options: [
+				{
+					id: '0', // No I18N 
+					text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.RESTRICT")
+				}, {
+					id: '1', // No I18N
+					text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.ALLOW.PERSONAL.EXPORT")
+				}, {
+					id: '2', // No I18N
+					text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.ALLOW.BOTH.PERSONAL.ORGANIZATION.EXPORT")
+				}
+			],
+			onChange: (value) => {
+				new ZContacts.URI(ZContacts.ExportContactsPreferencesUpdate, "org", value).PUT().then(function(response) { //No I18N
+					if (response.status_code == 200) {
+						var msg = ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.UPDATED.SUCCESS");
+						zmUtil.succErrMsg('s', msg); // No I18N
+						ZContacts.preferenceResult.export_permission = value;
+ 						collection.get("orgContactExport").attributes.defaultValue = ZContacts.I18N.get(ZContacts.exportPreferences[ZContacts.preferenceResult.export_permission]);
+					}
+					resolve();
+				}, function(response) {
+					if (response.status_code == 400) {
+						var errors = response.errors;
+						var code = errors[0].code;
+						if (code == "URL_ROLLING_THROTTLES_LIMIT_EXCEEDED") {
+							var msg = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.THROTTLES.REACHED.TRY.AGAIN.LATER"), 10);
+							zmUtil.succErrMsg('e', msg); // No I18N
+						}
+					}
+					resolve();
+				});
+				
+			}
+		});
+		collection.add({
+			id: 'emailIdVisibility', // No I18N
+			title: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.EMAIL.VISIBILITY.ORG.CONTACTS"),
+			value: ZContacts.preferenceResult.email_id_visibility.toString(),
+			type: 'radio', // No I18N
+			options: [
+				{ id: '0', text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.HIDE.ALL.EMAILS") },
+				{ id: '1', text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.SHOW.PRIMARY.EMAIL") },
+				{ id: '2', text: ZContacts.I18N.get("IAM.CONTACTS.SETTINGS.SHOW.BOTH.PRIMARY.SECONDARY.EMAIL") }
+			],
+			onChange: (value) => {
+				new ZContacts.URI(ZContacts.OrgContactsEmailIdPreferencesUpdate, "org", value).PUT().then(function(response) { //No I18N
+					if (response.status_code == 200) {
+						var msg = ZContacts.I18N.get("IAM.CONTACTS.EMAILID.VISIBILITY.UPDATED.REFLECT.TIME");
+						zmUtil.succErrMsg('s', msg); // No I18N
+						ZContacts.preferenceResult.email_id_visibility = value;
+						collection.get("emailIdVisibility").attributes.value = value;
+					}
+					resolve();
+				}, function(response) {
+					try {
+						var newOptionDom = $(event.target);
+						var orgContactsAccessOptions = newOptionDom.parent().parent().parent().parent().children();
+						var oldOptionDom;
+						for (var i = 0; i < orgContactsAccessOptions.length; i++) {
+							if ($(orgContactsAccessOptions[i]).find("input").attr("data-checked") == "true") {
+								oldOptionDom = $($(orgContactsAccessOptions[i]).find("input"));
+								break;
+							}
+						}
+						oldOptionDom.click();
+					} catch(e) {
+						
+					}
+					if (response.status_code == 400) {
+						var errors = response.errors;
+						var code = errors[0].code;
+						if (code == "URL_ROLLING_THROTTLES_LIMIT_EXCEEDED") {
+							var msg = zmcontact.formatMessage(ZContacts.I18N.get("IAM.CONTACTS.THROTTLES.REACHED.TRY.AGAIN.LATER"), 10);
+							zmUtil.succErrMsg('e', msg); // No I18N
+						}
+					}
+					resolve();
+				});
+			}
+		});
+		resolve();
+	})
+}

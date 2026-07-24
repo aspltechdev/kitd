@@ -1,174 +1,183 @@
-import { useState, useEffect } from "react";
-import {
-  Heart,
-  Globe,
-  Shield,
-  FileText,
-  Coffee,
-  ArrowUp,
-  Mail,
-  ExternalLink,
-  MessageCircle,
-} from "lucide-react";
+// src/components/layout/Footer/Footer.jsx
 
+import { Link } from "react-router-dom";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+  FaLinkedinIn,
+  FaMapPin,
+  FaPhone,
+  FaEnvelope,
+  FaArrowRight,
+} from "react-icons/fa";
 import "./Footer.css";
+import logo from "../../assets/logo.png";
 
 const Footer = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  // Vite environment variables
-  const APP_VERSION = import.meta.env.VITE_APP_VERSION || "2.1.0";
-  const BUILD_ID = import.meta.env.VITE_BUILD_ID || "2024.1";
-
-  // Show scroll to top button after scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      const mainContent = document.querySelector(".dashboard-shell__main-content");
-      if (mainContent) {
-        setShowScrollTop(mainContent.scrollTop > 400);
-      }
-    };
-
-    const mainContent = document.querySelector(".dashboard-shell__main-content");
-    if (mainContent) {
-      mainContent.addEventListener("scroll", handleScroll);
-      return () => mainContent.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
-
-  // Update time every minute
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const scrollToTop = () => {
-    const mainContent = document.querySelector(".dashboard-shell__main-content");
-    if (mainContent) {
-      mainContent.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const quickLinks = [
-    { label: "Privacy Policy", icon: <Shield size={14} />, href: "#" },
-    { label: "Terms of Service", icon: <FileText size={14} />, href: "#" },
-    { label: "Documentation", icon: <FileText size={14} />, href: "#" },
-  ];
-
-  const socialLinks = [
-    { icon: <ExternalLink size={16} />, href: "#", label: "Website" },
-    { icon: <MessageCircle size={16} />, href: "#", label: "Community" },
-    { icon: <Mail size={16} />, href: "#", label: "Email" },
-  ];
+  const currentYear = new Date().getFullYear();
 
   return (
-    <>
-      {/* Scroll to Top Button */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="app-footer__scroll-top"
-          aria-label="Scroll to top"
-          title="Scroll to top"
-        >
-          <ArrowUp size={18} strokeWidth={2.5} />
-        </button>
-      )}
+    <footer className="footer">
+      {/* Top Wave/Divider */}
+      <div className="footer-divider-top">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+          <path 
+            d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" 
+            fill="currentColor"
+          />
+        </svg>
+      </div>
 
-      <footer className="app-footer" role="contentinfo">
-        <div className="app-footer__container">
-          {/* Left Section */}
-          <div className="app-footer__section app-footer__section--left">
-            <div className="app-footer__brand">
-              <div className="app-footer__logo">
-                <Globe size={16} strokeWidth={2} />
+      <div className="footer-container">
+        {/* Main Footer Content */}
+        <div className="footer-grid">
+          
+          {/* About Column */}
+          <div className="footer-col footer-col-about">
+            <Link to="/" className="footer-logo-link">
+              <img
+                src={logo}
+                alt="KITD - Klassischer Indischer Tanz Deutschland"
+                className="footer-logo"
+              />
+              <div className="footer-logo-text">
+                <span className="footer-logo-primary">KITD</span>
+                <span className="footer-logo-secondary">Classical Indian Dance Germany</span>
               </div>
-              <span className="app-footer__brand-text">
-                KITD Admin Panel
-              </span>
-            </div>
-
-            <p className="app-footer__copyright">
-              &copy; {new Date().getFullYear()} All rights reserved.
+            </Link>
+            
+            <p className="footer-description">
+              Dedicated to preserving, promoting and celebrating Indian Classical Dance 
+              across Germany through performances, education and community engagement.
             </p>
-          </div>
-
-          {/* Center Section */}
-          <div className="app-footer__section app-footer__section--center">
-            <nav className="app-footer__nav" aria-label="Footer navigation">
-              {quickLinks.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.href}
-                  className="app-footer__nav-link"
-                >
-                  <span className="app-footer__nav-icon">{link.icon}</span>
-                  <span>{link.label}</span>
-                </a>
-              ))}
-            </nav>
-          </div>
-
-          {/* Right Section */}
-          <div className="app-footer__section app-footer__section--right">
-            {/* Social Links */}
-            <div className="app-footer__social">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  className="app-footer__social-link"
-                  aria-label={social.label}
-                  title={social.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
-
-            {/* Time Display */}
-            <div className="app-footer__time">
-              <span className="app-footer__time-icon">
-                <Coffee size={12} />
-              </span>
-              <span className="app-footer__time-text">
-                {currentTime.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
+            
+            <div className="footer-social">
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="social-link"
+              >
+                <FaFacebookF size={15} />
+              </a>
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="social-link"
+              >
+                <FaInstagram size={15} />
+              </a>
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="social-link"
+              >
+                <FaYoutube size={15} />
+              </a>
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="social-link"
+              >
+                <FaLinkedinIn size={15} />
+              </a>
             </div>
           </div>
+
+          {/* Quick Links Column */}
+          <div className="footer-col">
+            <h3 className="footer-heading">Quick Links</h3>
+            <ul className="footer-links">
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/activities">Activities</Link></li>
+              <li><Link to="/events">Events</Link></li>
+              <li><Link to="/artists">Artists</Link></li>
+              <li><Link to="/gallery">Gallery</Link></li>
+              <li><Link to="/news">News</Link></li>
+            </ul>
+          </div>
+
+          {/* Membership Column */}
+          <div className="footer-col">
+            <h3 className="footer-heading">Get Involved</h3>
+            <ul className="footer-links">
+              <li><Link to="/membership">Become a Member</Link></li>
+              <li><Link to="/membership/benefits">Membership Benefits</Link></li>
+              <li><Link to="/volunteer">Volunteer With Us</Link></li>
+              <li><Link to="/contact">Contact Us</Link></li>
+              <li><Link to="/faq">FAQs</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact Column */}
+          <div className="footer-col">
+            <h3 className="footer-heading">Contact Us</h3>
+            <ul className="footer-contact-list">
+              <li className="footer-contact-item">
+                <span className="contact-icon">
+                  <FaMapPin size={15} />
+                </span>
+                <span className="contact-text">Germany</span>
+              </li>
+              <li className="footer-contact-item">
+                <span className="contact-icon">
+                  <FaPhone size={15} />
+                </span>
+                <a href="tel:+49XXXXXXXXXX" className="contact-link">+49 XXX XXX XXXX</a>
+              </li>
+              <li className="footer-contact-item">
+                <span className="contact-icon">
+                  <FaEnvelope size={15} />
+                </span>
+                <a href="mailto:info@kitd.de" className="contact-link">info@kitd.de</a>
+              </li>
+            </ul>
+
+            {/* Newsletter Signup */}
+            <div className="footer-newsletter">
+              <h4 className="newsletter-title">Stay Updated</h4>
+              <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
+                <input 
+                  type="email" 
+                  placeholder="Your email address" 
+                  className="newsletter-input"
+                  required
+                />
+                <button type="submit" className="newsletter-btn" aria-label="Subscribe">
+                  <FaArrowRight size={14} />
+                </button>
+              </form>
+            </div>
+          </div>
+
         </div>
 
         {/* Bottom Bar */}
-        <div className="app-footer__bottom">
-          <div className="app-footer__container">
-            <p className="app-footer__tagline">
-              Made with{" "}
-              <Heart
-                size={12}
-                className="app-footer__heart-icon"
-                fill="currentColor"
-              />{" "}
-              by KITD Team
+        <div className="footer-bottom">
+          <div className="footer-bottom-inner">
+            <p className="footer-copyright">
+              &copy; {currentYear} KITD &mdash; Klassischer Indischer Tanz Deutschland e.V. All rights reserved.
             </p>
-            <p className="app-footer__version">
-              v{APP_VERSION} • Build {BUILD_ID}
-            </p>
+            <div className="footer-bottom-links">
+              <Link to="/privacy-policy">Privacy Policy</Link>
+              <span className="footer-dot">·</span>
+              <Link to="/terms-and-conditions">Terms & Conditions</Link>
+              <span className="footer-dot">·</span>
+              <Link to="/imprint">Imprint</Link>
+            </div>
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 };
 

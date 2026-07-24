@@ -1,0 +1,580 @@
+// $Id:$
+$.subscribe("contacts/i18NLoaded", function(ev, obj) { //No I18N
+	if (zmail.Search && zmail.newSearch) {
+		var encodeHTML = ZContacts.Utils.encodeHTML;
+		var I18N = ZContacts.I18N;
+		var hasMore = false;
+		var searchParams = "";
+		ZContacts._filterList = [];
+		ZContacts._countSearchObj = {};
+		ZContacts.isSearchLoading = false;
+		var zcAutoListingRows = function(value) {
+			value = value || {};
+			var fullName = value.fn ? (value.fn + (value.ln ? " "+value.ln : "") ) : (""+(value.ln || ""));
+			var photo = (zmcontact.getJsStdUrl(value.photo) || "");
+			var email = (value.eid || "");
+			var zcSearchList = '<div><div style="text-transform: uppercase;background-color: #E5E5E5;float: left;border-radius: 100px;overflow: hidden;font-weight: 600;cursor: default;"><img src=' + photo + ' style="width: 40px;height: 40px;"></div><div style="margin-left: 50px;"><div><span class="zcs_new_search_autolistingrow">'+encodeHTML(fullName)+'</span>';
+			zcSearchList += '</div><div class="zcs_new_search_autolistingrow">' + encodeHTML(email) + '</div></div>';
+			return $(zcSearchList);
+		};
+		
+		var filterPrimaryEmailContact = function(contactsList) {
+			var value = [];
+			for (var i=0; i <= contactsList.length; i++){
+				if(typeof contactsList[i] != 'undefined'){
+					if(contactsList[i].attrs.isPrimary){
+						value.push(contactsList[i]);
+					}
+				}
+			}
+			return value;
+		};
+		
+		var filterLastNameList = function(contactsList){
+			var lastNameList = [];
+			for (var i = 0; i < contactsList.length; i++) {
+				var lastName = contactsList[i].attrs.ln
+				if(lastName) {
+					lastNameList.push(contactsList[i]);
+				}
+			}
+			return lastNameList;
+		};
+
+		var getName = function(value,type) {
+			var name = "";
+			if ($.type(value) === "object") {
+				if(type == "cn"){
+					name = (value.attrs.cn || "");
+				} else if(type == "ln"){
+					name = (value.ln || value.attrs.ln || '');
+				} else {
+					name = (value.fn || value.attrs.fn || '');
+				}
+			} else if ($.type(value) === "string") {
+				name = value;
+			} else {
+				name = "";
+			}
+			return name;
+		};
+
+		var commonContactsFilter = function(contactList){
+			var fList = [];
+			for (var i = 0; i < contactList.length; i++) {
+				fList.push(contactList[i].attrs);
+			}
+			return fList;
+		};
+		
+		var autoSuggestList = function(contactList, str, filterField) {
+			var filteredResult = "";
+			if((ZContacts.getCurrentAccount().type === ZContacts.ZMailConstants.GROUP_ACCOUNT) || (filterField === "company")){
+				contactList = [];
+				return contactList;
+			}
+
+			str = str.toLowerCase();
+			if(str){
+				zmail.ContactBook.get({ str: str, type: ["personal","org"] }).done(function (contactList) {
+					filteredResult = commonContactsFilter(contactList);
+                });
+			} else {
+				filteredResult = commonContactsFilter(contactList);
+			}
+			return filteredResult;
+		};
+
+		var renderResult = function(that, request, result) {
+			that.addHistory(request.data);
+			request.response = result;
+			that.mountView(request);
+		};
+
+		var contactsSearchParam = function(config) {
+			var that = this;
+			var obj = {
+				"page" : 1, // NO I18N
+				"per_page" : 50 // NO I18N
+			};
+
+			var isIgnoreSearch = false;
+			obj.skip_search = isIgnoreSearch;
+			for (var i = 0; i < config.data.length; i++) {
+				var className = config.data[i].className;
+				if(className == "AllContactsFilter") {
+					obj.q =  (config.data[i].value || config.data[i].actualValue);
+				} else if (className == "ContactsNameFilter") {
+					obj.filter_first_name = (config.data[i].value || config.data[i].actualValue)
+				} else if (className == "ContactsLastNameFilter") {
+					obj.filter_last_name = (config.data[i].value || config.data[i].actualValue)
+				} else if (className == "ContactsEmailFilter") {
+					obj.filter_email_id = (config.data[i].value || config.data[i].actualValue)
+				} else if (className == "ContactsCompanyFilter") {
+					obj.filter_company = (config.data[i].value || config.data[i].actualValue)
+				} else if(className == "SearchTypeFilter") {
+					var search_type_map = ZContacts.ImportMapConstants.SearchTypye_Map;
+					var value = (config.data[i].value || config.data[i].actualValue)
+					var typeParam = search_type_map[value];
+					obj.search_type = typeParam;
+					isIgnoreSearch = true;
+				}
+			}
+			if(!obj.search_type) {
+				obj.search_type = "3";
+			}
+
+			if(isIgnoreSearch && config.data.length == 1) {
+				obj.skip_search = isIgnoreSearch;
+				return false;
+			}
+
+			obj.config = config;
+			return obj;
+		};
+
+		var validate = function(value) {
+			if (!value && (this.nullableOnly || this.nullable)) {
+				return true;
+			}
+			if (this.restrictedToValues) {
+				var values = this.getValues();
+
+				if (_.isArray(values)) {
+					return _(values).contains(value);
+				}
+
+			} else if (this.regexp instanceof RegExp) {
+				return this.regex.test(value);
+			}
+			return Boolean(value);
+		};
+
+		((function(factory) {
+
+			"use strict"; // NO I18N
+
+			var Namespaces = zmail.Core.Namespaces;
+			var module = Namespaces.create("zmail.Search.Models.Filters"); // NO I18N
+			factory.call(module, module, function(str) {
+				return Namespaces.get(str, {
+					ignore__namespace : true
+				});
+			})
+
+		})(function(module, require) {
+
+			"use strict"; // NO I18N
+
+			var TypeCreator = require("zmail.Search.Utils.TypeCreator"); // NO I18N
+			var StringFilter = require("zmail.Search.Models.Filters.StringFilter"); // NO I18N
+
+			var SearchTypeFilter = TypeCreator.newType(StringFilter, {
+
+				className : "SearchTypeFilter", // NO I18N
+
+				name : I18N.get("IAM.CONTACTS.SEARCH.TYPE"), // No I18N
+
+				filterType : 'search_type', // No I18N
+
+				description : I18N.get("IAM.CONTACTS.SEARCH.TYPE.USING"), // No I18N
+
+				multipleInstance : false,
+
+				filterValues : false,
+
+				defaultValue: function () {
+		            return ZContacts.MappingType.search_type[0];
+		        },
+
+				values : function(str) {
+					return ZContacts.MappingType.search_type;
+				}, 
+
+				getValue : function() {
+					return getName(this.value, "fn"); // No I18N
+				},
+
+				autofillText : function(value) {
+					return getName(value, "fn"); // No I18N
+				},
+
+				validate : function(value) {
+					var valueList = ZContacts.MappingType.search_type;
+					if (!value && (this.nullableOnly || this.nullable)) {
+						return true;
+					}
+					if (this.restrictedToValues) {
+						var values = this.getValues();
+
+						if (_.isArray(values)) {
+							return _(values).contains(value);
+						}
+
+					} else if (this.regexp instanceof RegExp) {
+						return this.regex.test(value);
+					}
+					
+					for (var i = 0; i < valueList.length; i++) {
+						var test = valueList[i];
+						if(test.toLowerCase().startsWith(value)){
+							return true;
+						}
+					}
+				}
+
+			});
+
+			var AllContactsFilter = TypeCreator.newType(StringFilter, {
+
+				className : "AllContactsFilter", // NO I18N
+
+				name : I18N.get("IAM.SEARCH.CONTACTS.CONTAINS"), // NO I18N
+
+				filterType : 'all', // No I18N
+
+				description : I18N.get("IAM.SEARCH.CONTACTS.USING.ALL"), // No I18N
+
+				multipleInstance : false,
+
+				filterValues : true,
+
+				filterProps : ["eid", "fn" ], // No I18N
+
+				values : function(str) {
+					var contactsList = zmail.ContactBook.getMostUsedContacts();
+					return autoSuggestList(contactsList, str, 'all'); // No I18N
+				},
+
+				getValue : function() {
+					return getName(this.value, "fn"); // No I18N
+				},
+
+				autofillDOM : function(value) {
+					var contact = value.attrs || value;
+					return zcAutoListingRows(contact);
+				},
+
+				autofillText : function(value) {
+					return getName(value, "fn"); // No I18N
+				},
+
+				validate : function(value) {
+					return validate(value);
+				}
+
+			});
+
+			var ContactsNameFilter = TypeCreator.newType(StringFilter, {
+
+				className : "ContactsNameFilter", // NO I18N
+
+				name : I18N.get("IAM.SEARCH.CONTACTS.FIRST.NAME"), // NO I18N
+
+				filterType : 'names', // No I18N
+
+				description : I18N.get("IAM.SEARCH.CONTACTS.USING.NAME"), // No I18N
+
+				multipleInstance : false,
+
+				filterValues : true,
+
+				filterProps : [ "fn" ], // No I18N
+
+				values : function(str) {
+					var cList = zmail.ContactBook.getMostUsedContacts();
+					var contactsList = filterPrimaryEmailContact(cList);
+					return autoSuggestList(contactsList, str, 'names'); // No I18N
+				},
+
+				getValue : function() {
+					return getName(this.value, "fn"); // No I18N
+				},
+
+				autofillText : function(value) {
+					return getName(value, "fn"); // No I18N
+				},
+
+				validate : function(value) {
+					return validate(value);
+				}
+
+			});
+			
+			var ContactsLastNameFilter = TypeCreator.newType(StringFilter, {
+
+				className : "ContactsLastNameFilter", // NO I18N
+
+				name : I18N.get("IAM.SEARCH.CONTACTS.LAST.NAME"), // NO I18N
+
+				filterType : 'lastname', // No I18N
+
+				description : I18N.get("IAM.SEARCH.CONTACTS.USING.NAME"), // No I18N
+
+				multipleInstance : false,
+
+				filterValues : true,
+
+				filterProps : [ "ln" ], // No I18N
+
+				values : function(str) {
+					var cList = zmail.ContactBook.getMostUsedContacts();
+					var contactsList = filterLastNameList(cList);
+					return autoSuggestList(contactsList, str, 'lastname'); // No I18N
+				},
+
+				getValue : function() {
+					return getName(this.value, "ln"); // No I18N
+				},
+
+				autofillText : function(value) {
+					return getName(value, "ln"); // No I18N
+				},
+
+				validate : function(value) {
+					return validate(value);
+				}
+
+			});
+			
+
+			var ContactsEmailFilter = TypeCreator.newType(StringFilter, {
+
+				className : "ContactsEmailFilter", // NO I18N
+
+				name : I18N.get("IAM.SEARCH.CONTACTS.EMAILS"), // NO I18N
+
+				filterType : 'email', // No I18N
+
+				description : I18N.get("IAM.SEARCH.CONTACTS.USING.EMAILS"), // No I18N
+
+				multipleInstance : false,
+
+				filterValues : true,
+
+				filterProps : [ "eid" ], // No I18N
+
+				values : function(str) {
+					var contactsList = zmail.ContactBook.getMostUsedContacts();
+					return autoSuggestList(contactsList, str, 'email'); // No I18N
+				},
+
+				getValue : function() {
+					if (this.value){
+						var contact = this.value.attrs || this.value;
+						return contact.eid;
+					}
+				},
+
+				autofillDOM : function(value) {
+					var contact = value.attrs || value;
+					return zcAutoListingRows(contact);
+				},
+
+				autofillText : function(value) {
+					return getName(value, "fn"); // No I18N
+				},
+
+				validate : function(value) {
+					return validate(value);
+				}
+
+			});
+
+			var ContactsCompanyFilter = TypeCreator.newType(StringFilter, {
+
+				className : "ContactsCompanyFilter", // NO I18N
+
+				name : I18N.get("IAM.SEARCH.CONTACTS.COMPANY.NAME"), // NO I18N
+
+				filterType : 'company', // No I18N
+
+				description : I18N.get("IAM.SEARCH.CONTACTS.USING.COMPANY"), // No I18N
+
+				multipleInstance : false,
+
+				filterValues : true,
+
+				filterProps : ["company"], // No I18N
+
+				values : function(str) {
+					var contactsList = zmail.ContactBook.getMostUsedContacts();
+					return autoSuggestList(contactsList, str, 'company'); // No I18N
+				},
+
+				getValue : function() {
+					return getName(this.value,"fn"); // No I18N
+				},
+
+				autofillText : function(value) {
+					return getName(value, "fn"); // No I18N
+				},
+
+				validate : function(value) {
+					return validate(value);
+				}
+
+			});
+
+			module.SearchTypeFilter = SearchTypeFilter;
+			module.AllContactsFilter = AllContactsFilter;
+			module.ContactsNameFilter = ContactsNameFilter;
+			module.ContactsLastNameFilter = ContactsLastNameFilter
+			module.ContactsEmailFilter = ContactsEmailFilter;
+			module.ContactsCompanyFilter = ContactsCompanyFilter;
+			
+		}));
+
+		var Contexts = zmail.Search.Models.Contexts;
+		var Filters = zmail.Search.Models.Filters;
+		var ZContactsContext = new Contexts.SearchContext({
+
+			contextName : I18N.get("IAM.CONTACTS"), // No I18N
+
+			contextIcon : "msi-contacts", // No I18N
+
+			tabRegexp : /zm_Contacts/,
+
+			placeholder : I18N.get("IAM.CONTACTS.SEARCH.CONTACTS"), // No I18N
+
+			shortcutId : "contactsSearch",  // No I18N
+
+			contextID  : "contacts", // No I18N
+
+			defaultFilterClass : Filters.AllContactsFilter,
+
+			filterClass : [Filters.SearchTypeFilter, Filters.AllContactsFilter, Filters.ContactsNameFilter, Filters.ContactsLastNameFilter, Filters.ContactsEmailFilter, Filters.ContactsCompanyFilter],
+
+			onAdd: function (filterSet) {
+				if(!ZContacts._filterList.includes(filterSet[0].className)) {
+					ZContacts._filterList.push(filterSet[0].className);
+				}
+			},
+			
+			onRemove: function (filterSet) {
+				for (var i = 0; i < ZContacts._filterList.length; i++) {
+					if (filterSet.classNameList[ZContacts._filterList[i]].length != undefined && filterSet.classNameList[ZContacts._filterList[i]].length == 0) {
+						if (ZContacts._filterList[i] == "SearchTypeFilter") {
+							if(filterSet.list.length > 0) {
+								ZContacts.isRemoved = true;
+								ZContacts._filterList.splice(ZContacts._filterList.indexOf("SearchTypeFilter"), 1);
+							} else {
+								ZContacts.isRemoved = false;
+								ZContacts._filterList.splice(ZContacts._filterList.indexOf("SearchTypeFilter"), 1);
+							}
+						}
+					}
+				}
+			},
+			
+			searchQuery : function(config) {
+				return contactsSearchParam(config);
+			},
+
+			ajax : function(requestParam) {
+				var config = requestParam.config;
+				if(zmApp.currentApp != ZContacts.ZMailConstants.CONTACTS_TAB){
+					var contactsURI = new ZContacts.URI(ZContacts.Contacts, zmail.zuid).setSortBy("usage_count", false).include("emails").include("phones"); // No I18N
+					var defaultParams = (contactsURI.getParams() ? ('?' + contactsURI.getParams()) : "");
+					ZContactsContext.url = contactsURI.requestURI + defaultParams;
+				};
+				delete requestParam.config;
+				delete requestParam.skip_search;
+				searchParams = requestParam;
+				ZContacts.isSearchLoading  = true;
+				return $.getJSON(this.url + '&' + $.param(requestParam)).then(function(json) {
+					var contactList = [];
+					ZContacts._countSearchObj.category_name = I18N.get("IAM.CONTACTS.SEARCH.RESULTS");
+					ZContacts._countSearchObj.contacts_count = 0;
+					if (json.status_code == 200) {
+						ZContacts.isSearchLoading  = false;
+						hasMore = json.has_more;
+						ZContacts._countSearchObj.contacts_count = json.contacts.length;
+						ZContacts._countSearchObj.has_more = json.has_more;
+						zmcontact.updateHeaderBand(ZContacts._countSearchObj, 0, false);
+						for (var i = 0; i < json.contacts.length; i++) {
+							contactList.push(ZContacts.Contacts.create(json.contacts[i]))
+						}
+						return contactList;
+					} else if (json.status_code == 404) {
+						zmcontact.updateHeaderBand(ZContacts._countSearchObj, 0, false);
+						return contactList;
+					}
+				}, function(json) {
+					zmUtil.succErrMsg('e', ZContacts.getMessageFromResponse(json)); // No I18N
+
+				});
+			},
+
+			hasPagination : function(hasMore) {
+				return hasMore;
+			},
+
+			mountView : function(config){
+				var framework = this.getFrameworkInstance();
+				var that = this;
+				var div = "";
+				var contacts = config.response;
+				this.dependencyPromise.done(function () {
+					zmcontact.contactsList(contacts, false, false);
+				});
+				this.hasPagination();
+			},
+
+			active : function() {
+				this.dependencyPromise.resolve();
+			},
+			
+			getNextPage : function() {
+				if (hasMore) {
+					searchParams.page = searchParams.page + 1 ;
+					var listElem = zmsuite.getCenter()[0].getNodes()[2].$el[0]
+					var destroyLoadingDiv = zmComponent.loadingBand({
+						container : $(listElem).find('.SC_conLft').get(0), // No i18N
+						type : "pagination" // No i18N
+					});
+					ZContacts.isSearchLoading  = true;
+					var url = this.url;
+					if(ZContacts.newSearchDeletedCount > 0) {
+						url = url + "&prepend_contacts="+ZContacts.newSearchDeletedCount; // No i18N
+					}
+					return $.getJSON(url + '&' + $.param(searchParams)).then(function(json) {
+						var hasNextContactList = [];
+						ZContacts._countSearchObj.category_name = I18N.get("IAM.CONTACTS.SEARCH.RESULTS");
+						ZContacts.newSearchDeletedCount = 0;
+						destroyLoadingDiv();
+						ZContacts.isSearchLoading = false;
+						if (json.status_code == 200) {
+							hasMore = json.has_more;
+							ZContacts._countSearchObj.contacts_count = ZContacts._countSearchObj.contacts_count + json.contacts.length;
+							ZContacts._countSearchObj.has_more = json.has_more;
+							zmcontact.updateHeaderBand(ZContacts._countSearchObj, 0, false);
+							for (var i = 0; i < json.contacts.length; i++) {
+								hasNextContactList.push(ZContacts.Contacts.create(json.contacts[i]))
+							}
+						} else if (json.status_code == 404) {
+							zmcontact.updateHeaderBand(ZContacts._countSearchObj, 0, false);
+						}
+						if (hasNextContactList.length) {
+							zmcontact.contactsList(hasNextContactList, true, false);
+						}
+					}, function(json) {
+						zmUtil.succErrMsg('e', ZContacts.getMessageFromResponse(json)); // No I18N
+
+					});
+				}
+			} 
+			
+
+		});
+
+		// registering created context
+		var contactsURI = new ZContacts.URI(ZContacts.Contacts, ZContacts.getCurrentAccount().getAccountId()).setSortBy("usage_count", false).include("emails").include("phones"); // No I18N
+		var defaultParams = (contactsURI.getParams() ? ('?' + contactsURI.getParams()) : "");
+		ZContactsContext.url = contactsURI.requestURI + defaultParams;
+		ZContacts.newSearchContext = ZContactsContext;
+	    zmail.Search.Models.Contexts.contactsSearchContext = ZContactsContext;
+		zmail.Search.registerContext(ZContactsContext);
+
+	};
+});

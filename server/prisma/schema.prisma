@@ -158,3 +158,75 @@ model Partner {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
+
+
+
+model MembershipEnquiry {
+  id               Int      @id @default(autoincrement())
+
+  photo            String?
+
+  fullName         String
+  email            String
+  mobile           String
+
+  gender           String?
+  dateOfBirth      DateTime?
+
+  occupation       String?
+
+  membershipType   String?
+
+  danceStyle       String?
+
+  experience       String?
+
+  address          String?
+
+  city             String?
+
+  state            String?
+
+  country          String?
+
+  message          String?
+
+  status           String   @default("NEW")
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+model VolunteerRegistration {
+  id               Int      @id @default(autoincrement())
+
+  fullName         String
+  email            String
+  mobile           String?
+
+  city             String?
+  state            String?
+  country          String?
+
+  occupation       String?
+  organization     String?
+
+  interests        String?   // Social Media, Events, Regional Rep, Admin, etc.
+  experience       String?
+  availability     String?
+
+  message          String?
+
+  status           String    @default("NEW")
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
