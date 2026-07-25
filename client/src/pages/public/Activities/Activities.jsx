@@ -1,99 +1,275 @@
+// // src/components/home/ActivitiesSection/ActivitiesSection.jsx
+
+// import { useEffect, useState } from "react";
+// import { Link } from "react-router-dom";
+// import { ArrowRight } from "lucide-react";
+// import { getAllActivities } from "../../../api/activity.api";
+// import "./ActivitiesSection.css";
+
+// const ActivitiesSection = () => {
+//   const [activities, setActivities] = useState([]);
+
+//   useEffect(() => {
+//     fetchActivities();
+//   }, []);
+
+//   const fetchActivities = async () => {
+//     try {
+//       const res = await getAllActivities({
+//         page: 1,
+//         limit: 4,
+//       });
+
+//       const data =
+//         res.data?.data?.activities ||
+//         res.data?.data ||
+//         [];
+
+//       setActivities(data);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   return (
+//     <section className="activities-section">
+
+//       <div className="container">
+
+//         <div className="section-header">
+
+//           <span className="section-tag">
+//             OUR ACTIVITIES
+//           </span>
+
+//           <h2>
+//             Bringing Indian Classical Dance
+//             <br />
+//             to Communities Across Germany
+//           </h2>
+
+//         </div>
+
+//         {activities.map((activity, index) => (
+
+//           <div
+//             key={activity.id}
+//             className={`activity-row ${
+//               index % 2 !== 0 ? "reverse" : ""
+//             }`}
+//           >
+
+//             <div className="activity-image">
+
+//               <img
+//                 src={activity.image}
+//                 alt={activity.title}
+//               />
+
+//             </div>
+
+//             <div className="activity-content">
+
+//               <span className="activity-number">
+//                 {String(index + 1).padStart(2, "0")}
+//               </span>
+
+//               <h3>{activity.title}</h3>
+
+//               <p>{activity.description}</p>
+
+//               <Link
+//                 to={`/activities/${activity.slug}`}
+//                 className="activity-btn"
+//               >
+//                 Learn More
+//                 <ArrowRight size={18} />
+//               </Link>
+
+//             </div>
+
+//           </div>
+
+//         ))}
+
+//       </div>
+
+//     </section>
+//   );
+// };
+
+// export default ActivitiesSection;
+
+
 // src/components/home/ActivitiesSection/ActivitiesSection.jsx
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { getAllActivities } from "../../../api/activity.api";
+import { ArrowRight, Music, Users, Globe, BookOpen } from "lucide-react";
 import "./ActivitiesSection.css";
 
+// Fallback activities based on brochure content
+const FALLBACK_ACTIVITIES = [
+  {
+    id: 1,
+    icon: <Music size={28} strokeWidth={1.5} />,
+    title: "Classical Dance Performances",
+    description:
+      "Showcasing the richness and diversity of Indian Classical Dance through public performances, festivals, and cultural celebrations across Germany.",
+    slug: "performances",
+    image: "https://images.pexels.com/photos/8021124/pexels-photo-8021124.jpeg?auto=compress&cs=tinysrgb&w=600",
+  },
+  {
+    id: 2,
+    icon: <BookOpen size={28} strokeWidth={1.5} />,
+    title: "Workshops & Masterclasses",
+    description:
+      "Organising educational workshops, lecture demonstrations, and masterclasses led by experienced artists to encourage continuous learning and skill development.",
+    slug: "workshops",
+    image: "https://images.pexels.com/photos/6898854/pexels-photo-6898854.jpeg?auto=compress&cs=tinysrgb&w=600",
+  },
+  {
+    id: 3,
+    icon: <Users size={28} strokeWidth={1.5} />,
+    title: "Community Collaboration",
+    description:
+      "Building meaningful connections between artists, institutions, and cultural organisations to strengthen the Indian Classical Dance community throughout Germany.",
+    slug: "collaboration",
+    image: "https://images.pexels.com/photos/31521700/pexels-photo-31521700.jpeg?auto=compress&cs=tinysrgb&w=600",
+  },
+  {
+    id: 4,
+    icon: <Globe size={28} strokeWidth={1.5} />,
+    title: "Cultural Exchange",
+    description:
+      "Promoting intercultural dialogue by introducing Indian Classical Dance traditions to wider audiences through collaborative initiatives and public engagement.",
+    slug: "cultural-exchange",
+    image: "https://images.pexels.com/photos/6898858/pexels-photo-6898858.jpeg?auto=compress&cs=tinysrgb&w=600",
+  },
+];
+
 const ActivitiesSection = () => {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState(FALLBACK_ACTIVITIES);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     fetchActivities();
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    const section = document.querySelector('.activities-section');
+    if (section) observer.observe(section);
+
+    return () => {
+      if (section) observer.unobserve(section);
+    };
   }, []);
 
   const fetchActivities = async () => {
     try {
-      const res = await getAllActivities({
-        page: 1,
-        limit: 4,
-      });
-
-      const data =
-        res.data?.data?.activities ||
-        res.data?.data ||
-        [];
-
-      setActivities(data);
+      // Uncomment when API is ready
+      // const res = await getAllActivities({ page: 1, limit: 4 });
+      // const data = res.data?.data?.activities || res.data?.data || [];
+      // if (data.length > 0) setActivities(data);
+      
+      // Using fallback data for now
     } catch (err) {
-      console.error(err);
+      console.error("Failed to fetch activities:", err);
+      // Keep using fallback data
     }
   };
 
   return (
-    <section className="activities-section">
-
-      <div className="container">
-
-        <div className="section-header">
-
-          <span className="section-tag">
-            OUR ACTIVITIES
-          </span>
-
-          <h2>
-            Bringing Indian Classical Dance
+    <section className={`activities-section ${isVisible ? 'visible' : ''}`}>
+      <div className="activities-container">
+        
+        {/* Section Header */}
+        <div className="activities-header">
+          <div className="activities-eyebrow">
+            <span className="activities-eyebrow-line" />
+            <span className="activities-eyebrow-text">What We Do</span>
+          </div>
+          
+          <h2 className="activities-title">
+            Preserving, Promoting &
+            <span className="activities-title-accent"> Celebrating</span>
             <br />
-            to Communities Across Germany
+            Indian Classical Dance
           </h2>
-
+          
+          <p className="activities-subtitle">
+            Through performances, educational initiatives, collaborations, and 
+            cultural exchange, KITD creates opportunities for artists and communities 
+            to connect while preserving the rich traditions of Indian Classical Dance 
+            across Germany.
+          </p>
         </div>
 
-        {activities.map((activity, index) => (
+        {/* Activities Grid */}
+        <div className="activities-grid">
+          {activities.map((activity, index) => (
+            <Link
+              to={`/activities/${activity.slug || activity.id}`}
+              key={activity.id || index}
+              className="activity-card"
+              style={{ transitionDelay: `${index * 0.1}s` }}
+            >
+              {/* Card Image */}
+              <div className="activity-card-image">
+                <img
+                  src={activity.image}
+                  alt={activity.title}
+                  loading="lazy"
+                />
+                <div className="activity-card-overlay" />
+                
+                {/* Icon on image */}
+                <div className="activity-card-icon">
+                  {activity.icon}
+                </div>
+              </div>
 
-          <div
-            key={activity.id}
-            className={`activity-row ${
-              index % 2 !== 0 ? "reverse" : ""
-            }`}
-          >
+              {/* Card Content */}
+              <div className="activity-card-content">
+                <span className="activity-card-number">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                
+                <h3 className="activity-card-title">
+                  {activity.title}
+                </h3>
+                
+                <p className="activity-card-description">
+                  {activity.description}
+                </p>
+                
+                <span className="activity-card-link">
+                  <span>Explore Activity</span>
+                  <ArrowRight size={15} strokeWidth={1.5} />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
 
-            <div className="activity-image">
-
-              <img
-                src={activity.image}
-                alt={activity.title}
-              />
-
-            </div>
-
-            <div className="activity-content">
-
-              <span className="activity-number">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-
-              <h3>{activity.title}</h3>
-
-              <p>{activity.description}</p>
-
-              <Link
-                to={`/activities/${activity.slug}`}
-                className="activity-btn"
-              >
-                Learn More
-                <ArrowRight size={18} />
-              </Link>
-
-            </div>
-
-          </div>
-
-        ))}
+        {/* Bottom CTA */}
+        <div className="activities-cta-wrapper">
+          <Link to="/activities" className="activities-cta">
+            <span>View All Activities</span>
+            <span className="activities-cta-icon">
+              <ArrowRight size={16} strokeWidth={1.5} />
+            </span>
+          </Link>
+        </div>
 
       </div>
-
     </section>
   );
 };

@@ -1,0 +1,936 @@
+/* src/pages/MissionVision/MissionVisionPage.css */
+
+/* ============================================
+   MISSION & VISION PAGE - COMPLETE STYLES
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+/* ============================================
+   GLOBAL PAGE STYLES
+   ============================================ */
+.missionvision-page {
+  padding-top: 90px;
+}
+
+.mv-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.mv-hero {
+  position: relative;
+  padding: 80px 0 60px;
+  background: #0F0F0F;
+  overflow: hidden;
+}
+
+.mv-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 50%, rgba(139, 30, 63, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 50%, rgba(201, 169, 110, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.mv-hero-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.mv-hero-content {
+  max-width: 650px;
+}
+
+.mv-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.mv-hero-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
+}
+
+.mv-hero-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #C9A96E;
+}
+
+.mv-hero-title {
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 400;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+}
+
+.mv-hero-title-accent {
+  color: #C9A96E;
+}
+
+.mv-hero-description {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 300;
+  max-width: 550px;
+}
+
+/* ============================================
+   BREADCRUMB
+   ============================================ */
+.mv-breadcrumb {
+  padding: 16px 0;
+  background: #FDFCFA;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mv-breadcrumb .mv-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #777777;
+}
+
+.mv-breadcrumb a {
+  color: #777777;
+  text-decoration: none;
+  transition: color 0.25s ease;
+  font-weight: 300;
+}
+
+.mv-breadcrumb a:hover {
+  color: #8B1E3F;
+}
+
+.mv-breadcrumb span {
+  color: #1A1A1A;
+  font-weight: 400;
+}
+
+.mv-breadcrumb svg {
+  color: #CCCCCC;
+}
+
+/* ============================================
+   MISSION SECTION
+   ============================================ */
+.mv-mission {
+  padding: 100px 0;
+  background: #FFFFFF;
+}
+
+.mv-mission-wrapper {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mv-mission-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-mission-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 64px;
+}
+
+.mv-mission-icon-large {
+  width: 80px;
+  height: 80px;
+  background: rgba(139, 30, 63, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8B1E3F;
+  margin: 0 auto 24px;
+}
+
+.mv-mission-tags {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mv-tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #C9A96E;
+}
+
+.mv-tag-dot {
+  color: #C9A96E;
+  opacity: 0.4;
+  font-size: 12px;
+}
+
+.mv-mission-title {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+}
+
+.mv-mission-description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555555;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* Mission Feature Cards */
+.mv-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.mv-mission-card {
+  background: #FDFCFA;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.35s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.mv-mission-wrapper.visible .mv-mission-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-mission-card:hover {
+  border-color: rgba(139, 30, 63, 0.15);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.05);
+  transform: translateY(-3px);
+}
+
+.mv-mission-card-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(139, 30, 63, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8B1E3F;
+  margin: 0 auto 16px;
+  transition: all 0.3s ease;
+}
+
+.mv-mission-card:hover .mv-mission-card-icon {
+  background: #8B1E3F;
+  color: #FFFFFF;
+}
+
+.mv-mission-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 10px;
+  letter-spacing: -0.2px;
+}
+
+.mv-mission-card-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #666666;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   VISION SECTION
+   ============================================ */
+.mv-vision {
+  padding: 100px 0;
+  background: #FDFCFA;
+}
+
+.mv-vision-wrapper {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mv-vision-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-vision-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 64px;
+}
+
+.mv-vision-icon-large {
+  width: 80px;
+  height: 80px;
+  background: rgba(201, 169, 110, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #C9A96E;
+  margin: 0 auto 24px;
+}
+
+.mv-vision-title {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.mv-vision-headline {
+  font-size: 22px;
+  font-weight: 400;
+  color: #8B1E3F;
+  line-height: 1.5;
+  margin: 0 0 16px;
+  letter-spacing: -0.3px;
+}
+
+.mv-vision-description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555555;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* Vision Cards */
+.mv-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.mv-vision-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.35s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.mv-vision-wrapper.visible .mv-vision-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-vision-card:hover {
+  border-color: rgba(201, 169, 110, 0.3);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.05);
+  transform: translateY(-3px);
+}
+
+.mv-vision-card-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(201, 169, 110, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #C9A96E;
+  margin: 0 auto 16px;
+  transition: all 0.3s ease;
+}
+
+.mv-vision-card:hover .mv-vision-card-icon {
+  background: #C9A96E;
+  color: #FFFFFF;
+}
+
+.mv-vision-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 10px;
+  letter-spacing: -0.2px;
+}
+
+.mv-vision-card-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #666666;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   CORE VALUES SECTION
+   ============================================ */
+.mv-values {
+  padding: 100px 0;
+  background: #FFFFFF;
+}
+
+.mv-values-wrapper {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mv-values-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-values-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.mv-values-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.mv-values-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
+}
+
+.mv-values-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #8B1E3F;
+}
+
+.mv-values-title {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.mv-values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.mv-value-card {
+  display: flex;
+  gap: 16px;
+  padding: 28px 24px;
+  background: #FDFCFA;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  transition: all 0.35s ease;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.mv-values-wrapper.visible .mv-value-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-value-card:hover {
+  border-color: rgba(139, 30, 63, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.mv-value-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(139, 30, 63, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8B1E3F;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.mv-value-card:hover .mv-value-icon {
+  background: #8B1E3F;
+  color: #FFFFFF;
+}
+
+.mv-value-content {
+  flex: 1;
+}
+
+.mv-value-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 6px;
+  letter-spacing: -0.2px;
+}
+
+.mv-value-description {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #666666;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   QUOTE SECTION
+   ============================================ */
+.mv-quote-section {
+  position: relative;
+  padding: 100px 0;
+  background: #0F0F0F;
+  overflow: hidden;
+}
+
+.mv-quote-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(139, 30, 63, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.mv-quote-wrapper {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mv-quote-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-quote-icon {
+  color: #C9A96E;
+  opacity: 0.3;
+  margin-bottom: 32px;
+}
+
+.mv-quote-lines {
+  margin-bottom: 32px;
+}
+
+.mv-quote-line {
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+  letter-spacing: -0.3px;
+  font-style: italic;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.mv-quote-line-accent {
+  color: #C9A96E;
+  font-weight: 400;
+}
+
+.mv-quote-divider {
+  width: 60px;
+  height: 1px;
+  background: rgba(201, 169, 110, 0.4);
+  margin: 0 auto 16px;
+}
+
+.mv-quote-attribution {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.mv-cta {
+  padding: 100px 0;
+  background: #FDFCFA;
+}
+
+.mv-cta-wrapper {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mv-cta-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mv-cta-title {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.mv-cta-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555555;
+  margin: 0 0 36px;
+  font-weight: 300;
+}
+
+.mv-cta-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mv-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+  transition: all 0.35s ease;
+}
+
+.mv-cta-btn-primary {
+  background: #8B1E3F;
+  color: #FFFFFF;
+  border: none;
+}
+
+.mv-cta-btn-primary:hover {
+  background: #6B0F2E;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(139, 30, 63, 0.3);
+}
+
+.mv-cta-btn-primary:hover svg {
+  transform: translateX(4px);
+}
+
+.mv-cta-btn-primary svg {
+  transition: transform 0.35s ease;
+}
+
+.mv-cta-btn-secondary {
+  background: transparent;
+  color: #8B1E3F;
+  border: 1px solid rgba(139, 30, 63, 0.3);
+}
+
+.mv-cta-btn-secondary:hover {
+  background: rgba(139, 30, 63, 0.04);
+  border-color: #8B1E3F;
+  transform: translateY(-2px);
+}
+
+.mv-cta-btn-secondary:hover svg {
+  transform: translateX(4px);
+}
+
+.mv-cta-btn-secondary svg {
+  transition: transform 0.35s ease;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .mv-container,
+  .mv-hero-container {
+    padding: 0 32px;
+  }
+
+  .mv-mission-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mv-vision-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mv-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .missionvision-page {
+    padding-top: 72px;
+  }
+
+  .mv-hero {
+    padding: 60px 0 48px;
+  }
+
+  .mv-hero-title {
+    font-size: 32px;
+  }
+
+  .mv-hero-description {
+    font-size: 15px;
+  }
+
+  .mv-mission {
+    padding: 80px 0;
+  }
+
+  .mv-mission-header {
+    margin-bottom: 48px;
+  }
+
+  .mv-mission-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .mv-vision {
+    padding: 80px 0;
+  }
+
+  .mv-vision-header {
+    margin-bottom: 48px;
+  }
+
+  .mv-vision-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .mv-vision-headline {
+    font-size: 19px;
+  }
+
+  .mv-values {
+    padding: 80px 0;
+  }
+
+  .mv-values-header {
+    margin-bottom: 48px;
+  }
+
+  .mv-values-grid {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .mv-quote-section {
+    padding: 80px 0;
+  }
+
+  .mv-cta {
+    padding: 80px 0;
+  }
+
+  .mv-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .mv-cta-btn {
+    justify-content: center;
+  }
+
+  .mv-container,
+  .mv-hero-container {
+    padding: 0 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  .mv-hero {
+    padding: 48px 0 40px;
+  }
+
+  .mv-hero-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .mv-hero-title {
+    font-size: 26px;
+  }
+
+  .mv-hero-description {
+    font-size: 14px;
+  }
+
+  .mv-mission {
+    padding: 60px 0;
+  }
+
+  .mv-mission-icon-large,
+  .mv-vision-icon-large {
+    width: 64px;
+    height: 64px;
+  }
+
+  .mv-mission-icon-large svg,
+  .mv-vision-icon-large svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mv-mission-title {
+    font-size: 24px;
+  }
+
+  .mv-mission-description {
+    font-size: 14px;
+  }
+
+  .mv-mission-tags {
+    gap: 8px;
+  }
+
+  .mv-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .mv-vision {
+    padding: 60px 0;
+  }
+
+  .mv-vision-title {
+    font-size: 24px;
+  }
+
+  .mv-vision-headline {
+    font-size: 17px;
+  }
+
+  .mv-vision-description {
+    font-size: 14px;
+  }
+
+  .mv-values {
+    padding: 60px 0;
+  }
+
+  .mv-values-title {
+    font-size: 24px;
+  }
+
+  .mv-value-card {
+    padding: 20px 16px;
+  }
+
+  .mv-value-title {
+    font-size: 15px;
+  }
+
+  .mv-value-description {
+    font-size: 12px;
+  }
+
+  .mv-quote-section {
+    padding: 60px 0;
+  }
+
+  .mv-quote-line {
+    font-size: 20px;
+  }
+
+  .mv-cta {
+    padding: 60px 0;
+  }
+
+  .mv-cta-title {
+    font-size: 24px;
+  }
+
+  .mv-cta-text {
+    font-size: 14px;
+  }
+
+  .mv-container,
+  .mv-hero-container {
+    padding: 0 20px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.mv-cta-btn:focus-visible,
+.mv-breadcrumb a:focus-visible {
+  outline: 2px solid #8B1E3F;
+  outline-offset: 3px;
+}

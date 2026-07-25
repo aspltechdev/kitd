@@ -1,0 +1,156 @@
+/* src/pages/Artists/ArtistsPage.css */
+
+/* ============================================
+   ARTISTS PAGE - COMPLETE STYLES
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+.artists-page { padding-top: 90px; }
+.art-container { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
+
+/* HERO */
+.art-hero { position: relative; padding: 80px 0 60px; background: #0F0F0F; overflow: hidden; }
+.art-hero-bg { position: absolute; inset: 0; background: radial-gradient(circle at 30% 50%, rgba(139,30,63,0.1) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(201,169,110,0.05) 0%, transparent 50%); pointer-events: none; }
+.art-hero-container { position: relative; z-index: 1; max-width: 1320px; margin: 0 auto; padding: 0 40px; }
+.art-hero-content { max-width: 720px; }
+.art-hero-eyebrow { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.art-hero-eyebrow-line { width: 32px; height: 1px; background: #C9A96E; opacity: 0.7; }
+.art-hero-eyebrow-text { font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #C9A96E; }
+.art-hero-title { font-size: clamp(36px, 4.5vw, 56px); font-weight: 400; line-height: 1.2; color: #FFFFFF; margin: 0 0 20px; letter-spacing: -0.5px; }
+.art-hero-title-accent { color: #C9A96E; }
+.art-hero-description { font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.6); margin: 0; font-weight: 300; max-width: 620px; }
+
+/* BREADCRUMB */
+.art-breadcrumb { padding: 16px 0; background: #FDFCFA; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.art-breadcrumb .art-container { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #777; }
+.art-breadcrumb a { color: #777; text-decoration: none; font-weight: 300; }
+.art-breadcrumb a:hover { color: #8B1E3F; }
+.art-breadcrumb span { color: #1A1A1A; font-weight: 400; }
+.art-breadcrumb svg { color: #CCC; }
+
+/* ABOUT COMMUNITY */
+.art-about { padding: 80px 0 40px; background: #FFF; }
+.art-about-wrapper { text-align: center; max-width: 700px; margin: 0 auto; opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+.art-about-wrapper.visible { opacity: 1; transform: translateY(0); }
+.art-about-eyebrow { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+.art-about-eyebrow-line { width: 32px; height: 1px; background: #C9A96E; opacity: 0.7; }
+.art-about-eyebrow-text { font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #8B1E3F; }
+.art-about-title { font-size: clamp(28px, 3.5vw, 40px); font-weight: 400; color: #1A1A1A; margin: 0 0 20px; }
+.art-about-title-accent { color: #8B1E3F; }
+.art-about-description { font-size: 16px; line-height: 1.8; color: #555; margin: 0; font-weight: 300; }
+
+/* SEARCH & FILTER */
+.art-filter { padding: 40px 0 60px; background: #FFF; }
+.art-filter-wrapper { background: #FDFCFA; border: 1px solid rgba(0,0,0,0.06); border-radius: 4px; padding: 28px; opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+.art-filter-wrapper.visible { opacity: 1; transform: translateY(0); }
+.art-filter-header { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #1A1A1A; margin-bottom: 20px; }
+.art-filter-header svg { color: #8B1E3F; }
+.art-filter-controls { display: flex; flex-direction: column; gap: 16px; }
+.art-search-box { display: flex; align-items: center; gap: 10px; background: #FFF; border: 1px solid rgba(0,0,0,0.1); padding: 12px 16px; border-radius: 3px; }
+.art-search-box svg { color: #999; flex-shrink: 0; }
+.art-search-box input { flex: 1; border: none; outline: none; font-size: 14px; color: #1A1A1A; font-weight: 300; }
+.art-search-box input::placeholder { color: #AAA; }
+.art-filter-selects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.art-filter-selects select { padding: 10px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; font-size: 13px; color: #1A1A1A; background: #FFF; outline: none; cursor: pointer; font-weight: 300; }
+.art-filter-selects select:focus { border-color: #8B1E3F; }
+
+/* FEATURED ARTISTS */
+.art-featured { padding: 60px 0 80px; background: #FDFCFA; }
+.art-featured-header { text-align: center; margin-bottom: 48px; }
+.art-featured-eyebrow { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; color: #C9A96E; }
+.art-featured-eyebrow-text { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; }
+.art-featured-title { font-size: clamp(28px, 3.5vw, 38px); font-weight: 400; color: #1A1A1A; margin: 0; }
+.art-featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.art-featured-grid.visible { opacity: 1; transform: translateY(0); }
+.art-featured-card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden; transition: all 0.35s ease; opacity: 0; transform: translateY(20px); }
+.art-featured-grid.visible .art-featured-card { opacity: 1; transform: translateY(0); }
+.art-featured-card:hover { border-color: rgba(139,30,63,0.15); box-shadow: 0 16px 32px rgba(0,0,0,0.05); transform: translateY(-3px); }
+.art-featured-image { position: relative; aspect-ratio: 3/4; overflow: hidden; }
+.art-featured-image img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s ease; }
+.art-featured-card:hover .art-featured-image img { transform: scale(1.05); }
+.art-featured-badge { position: absolute; top: 12px; right: 12px; background: rgba(139,30,63,0.9); color: #FFF; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 5px 10px; border-radius: 3px; }
+.art-featured-content { padding: 22px 20px; }
+.art-featured-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #777; margin-bottom: 10px; }
+.art-featured-meta svg { color: #8B1E3F; }
+.art-meta-dot { color: #CCC; }
+.art-featured-name { font-size: 17px; font-weight: 500; color: #1A1A1A; margin: 0 0 8px; }
+.art-featured-bio { font-size: 13px; line-height: 1.6; color: #666; margin: 0 0 16px; font-weight: 300; }
+.art-featured-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #8B1E3F; text-decoration: none; transition: gap 0.3s; }
+.art-featured-card:hover .art-featured-link { gap: 10px; }
+
+/* ARTIST DIRECTORY */
+.art-directory { padding: 80px 0 100px; background: #FFF; }
+.art-directory-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
+.art-directory-title { font-size: clamp(24px, 3vw, 34px); font-weight: 400; color: #1A1A1A; margin: 0; }
+.art-directory-count { font-size: 14px; color: #999; margin: 0; }
+.art-directory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.art-directory-grid.visible { opacity: 1; transform: translateY(0); }
+.art-directory-card { background: #FDFCFA; border: 1px solid rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden; transition: all 0.35s ease; opacity: 0; transform: translateY(15px); }
+.art-directory-grid.visible .art-directory-card { opacity: 1; transform: translateY(0); }
+.art-directory-card:hover { border-color: rgba(139,30,63,0.12); box-shadow: 0 10px 24px rgba(0,0,0,0.04); transform: translateY(-2px); }
+.art-directory-image { aspect-ratio: 3/4; overflow: hidden; }
+.art-directory-image img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s; }
+.art-directory-card:hover .art-directory-image img { transform: scale(1.05); }
+.art-directory-content { padding: 18px 16px; }
+.art-directory-dance { display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #C9A96E; background: rgba(201,169,110,0.08); padding: 3px 8px; border-radius: 3px; margin-bottom: 8px; }
+.art-directory-location { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #999; margin-bottom: 8px; }
+.art-directory-name { font-size: 15px; font-weight: 500; color: #1A1A1A; margin: 0 0 4px; }
+.art-directory-role { font-size: 12px; color: #8B1E3F; margin: 0 0 8px; }
+.art-directory-bio { font-size: 12px; line-height: 1.55; color: #777; margin: 0 0 14px; font-weight: 300; }
+.art-directory-link { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: #8B1E3F; text-decoration: none; transition: gap 0.3s; }
+.art-directory-card:hover .art-directory-link { gap: 8px; }
+.art-directory-empty { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999; }
+.art-directory-empty svg { color: #C9A96E; opacity: 0.4; margin-bottom: 16px; }
+.art-directory-empty h3 { font-size: 18px; color: #1A1A1A; margin: 0 0 8px; }
+.art-directory-empty p { font-size: 14px; margin: 0; }
+
+/* JOIN CTA */
+.art-join { position: relative; padding: 100px 0; background: #8B1E3F; overflow: hidden; }
+.art-join-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(201,169,110,0.08) 0%, transparent 60%); pointer-events: none; }
+.art-join-wrapper { position: relative; z-index: 1; text-align: center; max-width: 600px; margin: 0 auto; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.art-join-wrapper.visible { opacity: 1; transform: translateY(0); }
+.art-join-title { font-size: clamp(28px, 3.5vw, 40px); font-weight: 400; color: #FFF; margin: 0 0 16px; }
+.art-join-description { font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.6); margin: 0 0 36px; font-weight: 300; }
+.art-join-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.art-join-btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; font-size: 14px; font-weight: 500; text-decoration: none; border-radius: 3px; transition: all 0.35s ease; }
+.art-join-btn-primary { background: #FFF; color: #8B1E3F; }
+.art-join-btn-primary:hover { background: #F5F5F5; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+.art-join-btn-secondary { background: transparent; color: #FFF; border: 1px solid rgba(255,255,255,0.3); }
+.art-join-btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+
+/* CONTACT CTA */
+.art-contact { padding: 80px 0; background: #FDFCFA; }
+.art-contact-wrapper { text-align: center; max-width: 500px; margin: 0 auto; opacity: 0; transform: translateY(20px); transition: all 0.7s ease; }
+.art-contact-wrapper.visible { opacity: 1; transform: translateY(0); }
+.art-contact-title { font-size: 22px; font-weight: 400; color: #1A1A1A; margin: 0 0 10px; }
+.art-contact-text { font-size: 14px; color: #777; margin: 0 0 20px; font-weight: 300; }
+.art-contact-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: #8B1E3F; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.3s; padding-bottom: 2px; }
+.art-contact-link:hover { border-bottom-color: #8B1E3F; gap: 12px; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .art-container, .art-hero-container { padding: 0 32px; }
+  .art-featured-grid { grid-template-columns: repeat(2, 1fr); }
+  .art-directory-grid { grid-template-columns: repeat(2, 1fr); }
+  .art-filter-selects { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .artists-page { padding-top: 72px; }
+  .art-hero { padding: 60px 0 48px; }
+  .art-hero-title { font-size: 32px; }
+  .art-container, .art-hero-container { padding: 0 24px; }
+  .art-featured-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .art-directory-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .art-filter-selects { grid-template-columns: 1fr; }
+  .art-join-buttons { flex-direction: column; align-items: stretch; max-width: 300px; margin: 0 auto; }
+  .art-join-btn { justify-content: center; }
+  .art-directory-header { flex-direction: column; gap: 8px; }
+}
+@media (max-width: 480px) {
+  .art-hero { padding: 48px 0 40px; }
+  .art-hero-title { font-size: 26px; }
+  .art-container, .art-hero-container { padding: 0 20px; }
+  .art-about-title { font-size: 24px; }
+  .art-join-title { font-size: 24px; }
+}

@@ -1,95 +1,523 @@
-.membership-cta{
-    position:relative;
-    padding:120px 0;
-    background:url("/images/membership-banner.jpg") center/cover no-repeat;
-    overflow:hidden;
+/* src/components/home/MembershipCTA/MembershipCTA.css */
+
+/* ============================================
+   MEMBERSHIP CTA - BROCHURE ALIGNED
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+/* ============================================
+   SECTION BASE
+   ============================================ */
+.membership-cta {
+  position: relative;
+  padding: 120px 0;
+  background: #0F0F0F;
+  overflow: hidden;
 }
 
-.membership-overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(20,20,20,.65);
+.membership-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(139, 30, 63, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 70% 30%, rgba(201, 169, 110, 0.08) 0%, transparent 60%);
+  z-index: 1;
 }
 
-.membership-content{
-    position:relative;
-    z-index:2;
-    max-width:760px;
-    margin:auto;
-    text-align:center;
-    color:#fff;
+.membership-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
+  z-index: 1;
+  pointer-events: none;
 }
 
-.membership-content h2{
-    font-size:52px;
-    line-height:1.2;
-    margin:20px 0;
+.membership-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
 }
 
-.membership-content p{
-    font-size:18px;
-    line-height:1.9;
-    color:#f5f5f5;
-    margin-bottom:40px;
+.membership-content {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.membership-buttons{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+.membership-header {
+  margin-bottom: 36px;
 }
 
-.membership-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:16px 34px;
-    border-radius:50px;
-    text-decoration:none;
-    font-weight:600;
-    transition:.3s;
+.membership-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
 }
 
-.membership-btn.primary{
-    background:#8B1E3F;
-    color:#fff;
+.visible .membership-eyebrow {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.membership-btn.primary:hover{
-    background:#a82a4f;
+.membership-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
 }
 
-.membership-btn.secondary{
-    border:2px solid #fff;
-    color:#fff;
+.membership-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #C9A96E;
 }
 
-.membership-btn.secondary:hover{
-    background:#fff;
-    color:#111;
+.membership-title {
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 
-@media(max-width:768px){
-
-.membership-cta{
-    padding:80px 20px;
+.visible .membership-title {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.membership-content h2{
-    font-size:36px;
+.membership-title-accent {
+  color: #C9A96E;
 }
 
-.membership-content p{
-    font-size:16px;
+.membership-description {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
 }
 
-.membership-buttons{
-    flex-direction:column;
+.visible .membership-description {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.membership-btn{
-    justify-content:center;
+/* ============================================
+   BENEFITS
+   ============================================ */
+.membership-benefits {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
 }
 
+.membership-benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.visible .membership-benefit-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.benefit-check {
+  color: #C9A96E;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.benefit-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* ============================================
+   MEMBERSHIP TYPES PILLS
+   ============================================ */
+.membership-types {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.membership-type-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.visible .membership-type-pill {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.membership-type-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.type-pill-icon {
+  color: #C9A96E;
+  display: flex;
+  align-items: center;
+}
+
+.type-pill-name {
+  white-space: nowrap;
+}
+
+/* ============================================
+   CTA BUTTONS
+   ============================================ */
+.membership-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+}
+
+.visible .membership-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.membership-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  border-radius: 3px;
+  transition: all 0.35s ease;
+}
+
+.membership-btn-primary {
+  background: #8B1E3F;
+  color: #FFFFFF;
+  border: none;
+}
+
+.membership-btn-primary:hover {
+  background: #A83250;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(139, 30, 63, 0.4);
+}
+
+.membership-btn-primary:hover svg {
+  transform: translateX(3px);
+}
+
+.membership-btn-primary svg {
+  transition: transform 0.35s ease;
+}
+
+.membership-btn-secondary {
+  background: transparent;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.membership-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.membership-btn-secondary:hover svg {
+  transform: translateX(3px);
+}
+
+.membership-btn-secondary svg {
+  transition: transform 0.35s ease;
+}
+
+/* ============================================
+   PRICING PREVIEW
+   ============================================ */
+.membership-pricing {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.pricing-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.35s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.visible .pricing-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pricing-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(201, 169, 110, 0.3);
+}
+
+.pricing-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pricing-item-icon {
+  color: #C9A96E;
+  display: flex;
+  align-items: center;
+}
+
+.pricing-item-type {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.3px;
+}
+
+.pricing-item-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.pricing-item-price {
+  font-size: 28px;
+  font-weight: 300;
+  color: #FFFFFF;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.pricing-item-period {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.pricing-item-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .membership-cta {
+    padding: 100px 0;
+  }
+
+  .membership-container {
+    padding: 0 32px;
+  }
+
+  .membership-pricing {
+    gap: 16px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .membership-cta {
+    padding: 80px 0;
+  }
+
+  .membership-container {
+    padding: 0 24px;
+  }
+
+  .membership-content {
+    max-width: 100%;
+  }
+
+  .membership-benefits {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .membership-types {
+    gap: 10px;
+  }
+
+  .membership-actions {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 48px;
+  }
+
+  .membership-btn {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .membership-pricing {
+    grid-template-columns: 1fr;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+
+  .pricing-item {
+    padding: 20px 18px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  .membership-cta {
+    padding: 60px 0;
+  }
+
+  .membership-container {
+    padding: 0 20px;
+  }
+
+  .membership-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .membership-title {
+    font-size: 24px;
+  }
+
+  .membership-description {
+    font-size: 14px;
+  }
+
+  .membership-benefits {
+    max-width: 240px;
+  }
+
+  .benefit-text {
+    font-size: 13px;
+  }
+
+  .membership-type-pill {
+    font-size: 11px;
+    padding: 6px 14px;
+  }
+
+  .membership-actions {
+    max-width: 280px;
+  }
+
+  .membership-btn {
+    padding: 14px 24px;
+    font-size: 13px;
+  }
+
+  .pricing-item-price {
+    font-size: 24px;
+  }
+
+  .pricing-item-desc {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .membership-cta *,
+  .membership-cta *::before,
+  .membership-cta *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.membership-btn:focus-visible {
+  outline: 2px solid #C9A96E;
+  outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  .membership-overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
 }

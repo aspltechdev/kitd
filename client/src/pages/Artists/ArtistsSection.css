@@ -1,107 +1,594 @@
-.artists-section{
-    padding:100px 0;
-    background:#ffffff;
+/* src/components/home/ArtistsSection/ArtistsSection.css */
+
+/* ============================================
+   ARTISTS SECTION - BROCHURE ALIGNED
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+/* ============================================
+   SECTION BASE
+   ============================================ */
+.artists-section {
+  position: relative;
+  padding: 120px 0;
+  background: #FDFCFA;
+  overflow: hidden;
 }
 
-.artists-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:40px;
+.artists-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(201, 169, 110, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 30, 63, 0.02) 0%, transparent 50%);
+  pointer-events: none;
 }
 
-.artist-card{
-    background:#fff;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 12px 35px rgba(0,0,0,.08);
-    transition:.35s;
+.artists-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
 }
 
-.artist-card:hover{
-    transform:translateY(-10px);
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+.artists-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 80px;
 }
 
-.artist-image{
-    height:420px;
-    overflow:hidden;
+.artists-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
 }
 
-.artist-image img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:.5s;
+.visible .artists-eyebrow {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.artist-card:hover img{
-    transform:scale(1.05);
+.artists-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
 }
 
-.artist-content{
-    padding:30px;
+.artists-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #8B1E3F;
 }
 
-.artist-style{
-    color:#B58A4B;
-    font-size:14px;
-    text-transform:uppercase;
-    letter-spacing:2px;
+.artists-title {
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #1A1A1A;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 
-.artist-content h3{
-    font-size:30px;
-    margin:15px 0;
+.visible .artists-title {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.artist-city{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:#666;
-    margin-bottom:18px;
+.artists-title-accent {
+  color: #8B1E3F;
 }
 
-.artist-content p{
-    color:#666;
-    line-height:1.8;
+.artists-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555555;
+  margin: 0;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
 }
 
-.artist-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    margin-top:25px;
-    color:#8B1E3F;
-    font-weight:600;
-    text-decoration:none;
+.visible .artists-subtitle {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.artist-btn:hover{
-    gap:16px;
+/* ============================================
+   ARTISTS GRID
+   ============================================ */
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
 }
 
-.artist-footer{
-    margin-top:60px;
-    text-align:center;
+/* ============================================
+   ARTIST CARD
+   ============================================ */
+.artist-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  display: flex;
+  flex-direction: column;
 }
 
-.view-all-artists{
-    display:inline-block;
-    padding:15px 35px;
-    background:#8B1E3F;
-    color:#fff;
-    border-radius:50px;
-    text-decoration:none;
+.visible .artist-card {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-@media(max-width:992px){
-
-.artists-grid{
-    grid-template-columns:1fr;
+.artist-card:hover {
+  border-color: rgba(139, 30, 63, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
 }
 
-.artist-image{
-    height:350px;
+/* Card Image */
+.artist-card-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
 }
 
+.artist-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.artist-card:hover .artist-card-image img {
+  transform: scale(1.06);
+}
+
+.artist-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.3) 0%,
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.artist-card:hover .artist-card-overlay {
+  opacity: 1;
+}
+
+/* Card Content */
+.artist-card-content {
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Dance Form Badge */
+.artist-dance-form {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #C9A96E;
+  background: rgba(201, 169, 110, 0.08);
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+
+/* Name & Role */
+.artist-card-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+
+.artist-card-role {
+  font-size: 12px;
+  color: #8B1E3F;
+  margin: 0 0 12px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* Meta - Dance Form • City */
+.artist-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #777777;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.artist-card-dance {
+  font-weight: 500;
+  color: #555555;
+}
+
+.artist-card-separator {
+  color: #CCCCCC;
+}
+
+.artist-card-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #777777;
+}
+
+.artist-card-location svg {
+  color: #8B1E3F;
+  flex-shrink: 0;
+}
+
+/* Biography */
+.artist-card-bio {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #666666;
+  margin: 0 0 16px;
+  font-weight: 300;
+  flex: 1;
+}
+
+/* Card Link */
+.artist-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8B1E3F;
+  text-decoration: none;
+  transition: gap 0.3s ease;
+  margin-top: auto;
+}
+
+.artist-card:hover .artist-card-link {
+  gap: 12px;
+}
+
+.artist-card-link svg {
+  transition: transform 0.3s ease;
+}
+
+.artist-card:hover .artist-card-link svg {
+  transform: translateX(3px);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.artists-empty {
+  text-align: center;
+  padding: 80px 40px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  margin-bottom: 60px;
+}
+
+.artists-empty-icon {
+  color: #C9A96E;
+  opacity: 0.4;
+  margin-bottom: 20px;
+}
+
+.artists-empty-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 12px;
+}
+
+.artists-empty-text {
+  font-size: 15px;
+  color: #777777;
+  margin: 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ============================================
+   LOADING SKELETON
+   ============================================ */
+.artists-loading {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+.artist-card-skeleton {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-content {
+  padding: 20px 18px;
+}
+
+.skeleton-badge {
+  height: 12px;
+  width: 60px;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+
+.skeleton-name {
+  height: 18px;
+  width: 70%;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+
+.skeleton-role {
+  height: 12px;
+  width: 50%;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+
+.skeleton-meta {
+  height: 12px;
+  width: 80%;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+
+.skeleton-text {
+  height: 12px;
+  width: 100%;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+  margin-bottom: 16px;
+}
+
+.skeleton-link {
+  height: 12px;
+  width: 35%;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   BOTTOM CTA
+   ============================================ */
+.artists-cta-wrapper {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+}
+
+.visible .artists-cta-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.artists-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8B1E3F;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease, gap 0.3s ease;
+}
+
+.artists-cta:hover {
+  border-bottom-color: #8B1E3F;
+  gap: 18px;
+}
+
+.artists-cta-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.artists-cta:hover .artists-cta-icon {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .artists-section {
+    padding: 100px 0;
+  }
+
+  .artists-container {
+    padding: 0 32px;
+  }
+
+  .artists-grid,
+  .artists-loading {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .artists-section {
+    padding: 80px 0;
+  }
+
+  .artists-container {
+    padding: 0 24px;
+  }
+
+  .artists-header {
+    margin-bottom: 60px;
+  }
+
+  .artists-grid,
+  .artists-loading {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .artist-card-image {
+    aspect-ratio: 16/9;
+    object-position: center 25%;
+  }
+
+  .artist-card-content {
+    padding: 18px 16px;
+  }
+
+  .artist-card-name {
+    font-size: 16px;
+  }
+
+  .artists-empty {
+    padding: 60px 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  .artists-section {
+    padding: 60px 0;
+  }
+
+  .artists-container {
+    padding: 0 20px;
+  }
+
+  .artists-header {
+    margin-bottom: 48px;
+  }
+
+  .artists-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .artists-title {
+    font-size: 24px;
+  }
+
+  .artists-subtitle {
+    font-size: 14px;
+  }
+
+  .artist-card-content {
+    padding: 16px 14px;
+  }
+
+  .artist-card-name {
+    font-size: 15px;
+  }
+
+  .artist-dance-form {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .artists-empty {
+    padding: 48px 20px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .artists-section *,
+  .artists-section *::before,
+  .artists-section *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .artist-card-image img {
+    transform: none !important;
+  }
+}
+
+.artist-card-link:focus-visible,
+.artists-cta:focus-visible {
+  outline: 2px solid #8B1E3F;
+  outline-offset: 3px;
 }

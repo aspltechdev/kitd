@@ -7,7 +7,7 @@
 
 import "./Home.css";
 import HeroSection from "../public/Hero/HeroSection";
-import AboutSection from "../About/AboutSection";
+import AboutSection from "../public/About/AboutSection";
 import MissionVisionSection from "../public/MissionVisionSection/MissionVisionSection";
 import ActivitiesSection from "../public/Activities/Activities";
 import EventsSection from "../Events/Events";

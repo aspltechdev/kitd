@@ -1,110 +1,416 @@
-.mission-section{
-    padding:100px 0;
-    background:#f8f8f8;
+/* src/components/home/MissionVisionSection/MissionVisionSection.css */
+
+/* ============================================
+   MISSION & VISION SECTION - BROCHURE ALIGNED
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+/* ============================================
+   SECTION BASE
+   ============================================ */
+.mission-section {
+  position: relative;
+  padding: 120px 0;
+  background: #FDFCFA;
+  overflow: hidden;
 }
 
-.container{
-    width:90%;
-    max-width:1300px;
-    margin:auto;
+.mission-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 10% 90%, rgba(201, 169, 110, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 90% 10%, rgba(139, 30, 63, 0.02) 0%, transparent 50%);
+  pointer-events: none;
 }
 
-.mission-header{
-    text-align:center;
-    max-width:800px;
-    margin:auto;
-    margin-bottom:70px;
+.mission-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
 }
 
-.section-tag{
-    display:inline-block;
-    color:#B58A4B;
-    letter-spacing:3px;
-    text-transform:uppercase;
-    font-size:14px;
-    font-weight:600;
-    margin-bottom:15px;
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+.mission-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 80px;
 }
 
-.mission-header h2{
-    font-size:46px;
-    color:#1d1d1d;
-    margin-bottom:20px;
-    line-height:1.2;
+.mission-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
 }
 
-.mission-header p{
-    color:#666;
-    font-size:17px;
-    line-height:1.9;
+.visible .mission-eyebrow {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.mission-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:35px;
+.mission-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
 }
 
-.mission-card{
-    background:#fff;
-    border-radius:20px;
-    padding:45px 35px;
-    transition:.35s;
-    box-shadow:0 10px 40px rgba(0,0,0,.05);
+.mission-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #8B1E3F;
 }
 
-.mission-card:hover{
-    transform:translateY(-10px);
+.mission-title {
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #1A1A1A;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 
-.mission-icon{
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    background:#8B1E3F;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:25px;
+.visible .mission-title {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.mission-card h3{
-    font-size:26px;
-    margin-bottom:18px;
-    color:#1d1d1d;
+.mission-title-accent {
+  color: #8B1E3F;
 }
 
-.mission-card p{
-    color:#666;
-    line-height:1.9;
-    font-size:16px;
+.mission-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555555;
+  margin: 0;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
 }
 
-@media(max-width:992px){
-
-.mission-grid{
-    grid-template-columns:1fr;
+.visible .mission-subtitle {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.mission-header h2{
-    font-size:36px;
+/* ============================================
+   MISSION GRID
+   ============================================ */
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 60px;
 }
 
+/* ============================================
+   MISSION CARDS
+   ============================================ */
+.mission-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  padding: 40px 32px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-@media(max-width:576px){
-
-.mission-section{
-    padding:70px 0;
+.mission-card:nth-child(1) {
+  transition-delay: 0.1s;
 }
 
-.mission-header h2{
-    font-size:30px;
+.mission-card:nth-child(2) {
+  transition-delay: 0.2s;
 }
 
-.mission-card{
-    padding:35px 25px;
+.mission-card:nth-child(3) {
+  transition-delay: 0.3s;
 }
 
+.visible .mission-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mission-card:hover {
+  border-color: rgba(139, 30, 63, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
+}
+
+/* Card Accent Line */
+.mission-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #8B1E3F, #C9A96E);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mission-card:hover .mission-card-accent {
+  transform: scaleX(1);
+}
+
+/* Card Header */
+.mission-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.mission-card-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(139, 30, 63, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8B1E3F;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.mission-card:hover .mission-card-icon {
+  background: #8B1E3F;
+  color: #FFFFFF;
+}
+
+.mission-card-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #C9A96E;
+}
+
+/* Card Content */
+.mission-card-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 16px;
+  letter-spacing: -0.2px;
+  line-height: 1.4;
+}
+
+.mission-card-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666666;
+  margin: 0 0 24px;
+  font-weight: 300;
+  flex: 1;
+}
+
+/* Card List */
+.mission-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.mission-card-list li {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8B1E3F;
+  background: rgba(139, 30, 63, 0.05);
+  padding: 6px 14px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+}
+
+.mission-card:hover .mission-card-list li {
+  background: rgba(139, 30, 63, 0.08);
+}
+
+/* ============================================
+   CTA
+   ============================================ */
+.mission-cta-wrapper {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+}
+
+.visible .mission-cta-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mission-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8B1E3F;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease, gap 0.3s ease;
+}
+
+.mission-cta:hover {
+  border-bottom-color: #8B1E3F;
+  gap: 18px;
+}
+
+.mission-cta-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.mission-cta:hover .mission-cta-icon {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .mission-section {
+    padding: 100px 0;
+  }
+
+  .mission-container {
+    padding: 0 32px;
+  }
+
+  .mission-grid {
+    gap: 24px;
+  }
+
+  .mission-card {
+    padding: 32px 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .mission-section {
+    padding: 80px 0;
+  }
+
+  .mission-container {
+    padding: 0 24px;
+  }
+
+  .mission-header {
+    margin-bottom: 60px;
+  }
+
+  .mission-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .mission-card {
+    padding: 28px 24px;
+  }
+
+  .mission-card-title {
+    font-size: 17px;
+  }
+
+  .mission-card-text {
+    font-size: 13px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  .mission-section {
+    padding: 60px 0;
+  }
+
+  .mission-container {
+    padding: 0 20px;
+  }
+
+  .mission-header {
+    margin-bottom: 48px;
+  }
+
+  .mission-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .mission-title {
+    font-size: 24px;
+  }
+
+  .mission-subtitle {
+    font-size: 14px;
+  }
+
+  .mission-card {
+    padding: 24px 20px;
+  }
+
+  .mission-card-list {
+    gap: 6px;
+  }
+
+  .mission-card-list li {
+    font-size: 10px;
+    padding: 5px 12px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .mission-section *,
+  .mission-section *::before,
+  .mission-section *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.mission-cta:focus-visible {
+  outline: 2px solid #8B1E3F;
+  outline-offset: 4px;
 }

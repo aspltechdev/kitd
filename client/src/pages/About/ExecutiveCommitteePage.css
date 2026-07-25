@@ -1,0 +1,625 @@
+/* src/pages/ExecutiveCommittee/ExecutiveCommitteePage.css */
+
+/* ============================================
+   EXECUTIVE COMMITTEE PAGE - COMPLETE STYLES
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+/* ============================================
+   GLOBAL PAGE STYLES
+   ============================================ */
+.executive-page {
+  padding-top: 90px;
+}
+
+.executive-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.executive-hero {
+  position: relative;
+  padding: 80px 0 60px;
+  background: #0F0F0F;
+  overflow: hidden;
+}
+
+.executive-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 50%, rgba(139, 30, 63, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 50%, rgba(201, 169, 110, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.executive-hero-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.executive-hero-content {
+  max-width: 650px;
+}
+
+.executive-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.executive-hero-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
+}
+
+.executive-hero-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #C9A96E;
+}
+
+.executive-hero-title {
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 400;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+}
+
+.executive-hero-title-accent {
+  color: #C9A96E;
+}
+
+.executive-hero-description {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 300;
+  max-width: 550px;
+}
+
+/* ============================================
+   BREADCRUMB
+   ============================================ */
+.executive-breadcrumb {
+  padding: 16px 0;
+  background: #FDFCFA;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.executive-breadcrumb .executive-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #777777;
+}
+
+.executive-breadcrumb a {
+  color: #777777;
+  text-decoration: none;
+  transition: color 0.25s ease;
+  font-weight: 300;
+}
+
+.executive-breadcrumb a:hover {
+  color: #8B1E3F;
+}
+
+.executive-breadcrumb span {
+  color: #1A1A1A;
+  font-weight: 400;
+}
+
+.executive-breadcrumb svg {
+  color: #CCCCCC;
+}
+
+/* ============================================
+   COMMITTEE GRID
+   ============================================ */
+.executive-committee {
+  padding: 80px 0;
+  background: #FFFFFF;
+}
+
+.executive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   EXECUTIVE CARD
+   ============================================ */
+.executive-card {
+  background: #FDFCFA;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.executive-grid.visible .executive-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.executive-card:hover {
+  border-color: rgba(139, 30, 63, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
+}
+
+/* Card Image */
+.executive-card-image {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+
+.executive-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-card:hover .executive-card-image img {
+  transform: scale(1.06);
+}
+
+.executive-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.executive-card:hover .executive-card-overlay {
+  opacity: 1;
+}
+
+.executive-card-social {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.executive-social-link {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8B1E3F;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.executive-social-link:hover {
+  background: #8B1E3F;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Card Content */
+.executive-card-content {
+  padding: 24px 20px;
+}
+
+.executive-card-designation {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #C9A96E;
+  margin-bottom: 8px;
+}
+
+.executive-card-name {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 12px;
+  letter-spacing: -0.2px;
+}
+
+.executive-card-bio {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #666666;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   GOVERNANCE SECTION
+   ============================================ */
+.executive-governance {
+  padding: 100px 0;
+  background: #FDFCFA;
+}
+
+.executive-governance-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.executive-governance-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.executive-governance-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
+}
+
+.executive-governance-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #8B1E3F;
+}
+
+.executive-governance-title {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.executive-governance-title-accent {
+  color: #8B1E3F;
+}
+
+.executive-governance-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-governance-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.executive-governance-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: all 0.35s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.executive-governance-grid.visible .executive-governance-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.executive-governance-card:hover {
+  border-color: rgba(139, 30, 63, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
+}
+
+.executive-governance-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(139, 30, 63, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8B1E3F;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.executive-governance-card:hover .executive-governance-icon {
+  background: #8B1E3F;
+  color: #FFFFFF;
+}
+
+.executive-governance-card-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 12px;
+  letter-spacing: -0.2px;
+}
+
+.executive-governance-card-description {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #666666;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.executive-cta {
+  padding: 100px 0;
+  background: #FFFFFF;
+}
+
+.executive-cta-wrapper {
+  text-align: center;
+  max-width: 550px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-cta-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.executive-cta-title {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.executive-cta-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555555;
+  margin: 0 0 32px;
+  font-weight: 300;
+}
+
+.executive-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  background: #8B1E3F;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+  transition: all 0.35s ease;
+}
+
+.executive-cta-btn:hover {
+  background: #6B0F2E;
+  gap: 16px;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(139, 30, 63, 0.3);
+}
+
+.executive-cta-btn svg {
+  transition: transform 0.35s ease;
+}
+
+.executive-cta-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .executive-container,
+  .executive-hero-container {
+    padding: 0 32px;
+  }
+
+  .executive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .executive-governance-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .executive-page {
+    padding-top: 72px;
+  }
+
+  .executive-hero {
+    padding: 60px 0 48px;
+  }
+
+  .executive-hero-title {
+    font-size: 32px;
+  }
+
+  .executive-hero-description {
+    font-size: 15px;
+  }
+
+  .executive-committee {
+    padding: 60px 0;
+  }
+
+  .executive-grid {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+
+  .executive-governance {
+    padding: 80px 0;
+  }
+
+  .executive-governance-grid {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .executive-governance-header {
+    margin-bottom: 48px;
+  }
+
+  .executive-cta {
+    padding: 80px 0;
+  }
+
+  .executive-container,
+  .executive-hero-container {
+    padding: 0 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  .executive-hero {
+    padding: 48px 0 40px;
+  }
+
+  .executive-hero-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .executive-hero-title {
+    font-size: 26px;
+  }
+
+  .executive-hero-description {
+    font-size: 14px;
+  }
+
+  .executive-breadcrumb .executive-container {
+    font-size: 12px;
+  }
+
+  .executive-committee {
+    padding: 48px 0;
+  }
+
+  .executive-card-content {
+    padding: 20px 16px;
+  }
+
+  .executive-card-name {
+    font-size: 16px;
+  }
+
+  .executive-card-bio {
+    font-size: 12px;
+  }
+
+  .executive-governance {
+    padding: 60px 0;
+  }
+
+  .executive-governance-title {
+    font-size: 24px;
+  }
+
+  .executive-governance-card {
+    padding: 28px 20px;
+  }
+
+  .executive-governance-card-title {
+    font-size: 16px;
+  }
+
+  .executive-governance-card-description {
+    font-size: 12px;
+  }
+
+  .executive-cta {
+    padding: 60px 0;
+  }
+
+  .executive-cta-title {
+    font-size: 24px;
+  }
+
+  .executive-cta-text {
+    font-size: 14px;
+  }
+
+  .executive-container,
+  .executive-hero-container {
+    padding: 0 20px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.executive-cta-btn:focus-visible,
+.executive-social-link:focus-visible {
+  outline: 2px solid #8B1E3F;
+  outline-offset: 3px;
+}

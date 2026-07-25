@@ -411,8 +411,8 @@ const Header = () => {
       key: "about",
       items: [
         { path: "/about", label: "About KITD" },
-        { path: "/about#mission", label: "Mission & Vision" },
-        { path: "/team", label: "Executive Committee" },
+        { path: "/about/mission-vision", label: "Mission & Vision" },
+        { path: "/about/executive-committee", label: "Executive Committee" },
       ]
     },
     { path: "/activities", label: "Activities" },
@@ -421,12 +421,12 @@ const Header = () => {
     {
       path: "/gallery",
       label: "Gallery",
-      dropdown: true,
-      key: "gallery",
-      items: [
-        { path: "/gallery/photos", label: "Photos" },
-        { path: "/gallery/videos", label: "Videos" },
-      ]
+      // dropdown: true,
+      // key: "gallery",
+      // items: [
+      //   { path: "/gallery/photos", label: "Photos" },
+      //   { path: "/gallery/videos", label: "Videos" },
+      // ]
     },
     { path: "/news", label: "News" },
     {

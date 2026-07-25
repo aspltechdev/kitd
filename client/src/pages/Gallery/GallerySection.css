@@ -1,103 +1,484 @@
-.gallery-section{
-    padding:100px 0;
-    background:#f8f8f8;
+/* src/components/home/GallerySection/GallerySection.css */
+
+/* ============================================
+   GALLERY SECTION - BROCHURE ALIGNED
+   Classical Indian Dance Germany e.V.
+   Primary: #8B1E3F | Accent: #C9A96E
+   ============================================ */
+
+/* ============================================
+   SECTION BASE
+   ============================================ */
+.gallery-section {
+  position: relative;
+  padding: 120px 0;
+  background: #FFFFFF;
+  overflow: hidden;
 }
 
-.gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:25px;
+.gallery-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
 }
 
-.gallery-card{
-    position:relative;
-    overflow:hidden;
-    border-radius:20px;
-    height:320px;
-    cursor:pointer;
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+.gallery-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 80px;
 }
 
-.gallery-card img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:.5s;
+.gallery-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
 }
 
-.gallery-overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.55);
-
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-
-    color:#fff;
-
-    opacity:0;
-    transition:.35s;
-
-    text-align:center;
-    padding:20px;
+.visible .gallery-eyebrow {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.gallery-card:hover .gallery-overlay{
-    opacity:1;
+.gallery-eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: #C9A96E;
+  opacity: 0.7;
 }
 
-.gallery-card:hover img{
-    transform:scale(1.08);
+.gallery-eyebrow-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #8B1E3F;
 }
 
-.gallery-overlay h3{
-    margin-top:15px;
-    font-size:22px;
+.gallery-title {
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #1A1A1A;
+  margin: 0 0 20px;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 
-.gallery-footer{
-    text-align:center;
-    margin-top:60px;
+.visible .gallery-title {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.gallery-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:15px 35px;
-    border-radius:50px;
-    background:#8B1E3F;
-    color:#fff;
-    text-decoration:none;
-    font-weight:600;
-    transition:.3s;
+.gallery-title-accent {
+  color: #8B1E3F;
 }
 
-.gallery-btn:hover{
-    background:#B58A4B;
+.gallery-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555555;
+  margin: 0;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
 }
 
-@media(max-width:992px){
-
-.gallery-grid{
-    grid-template-columns:repeat(2,1fr);
+.visible .gallery-subtitle {
+  opacity: 1;
+  transform: translateY(0);
 }
 
+/* ============================================
+   GALLERY GRID
+   ============================================ */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
 }
 
-@media(max-width:576px){
-
-.gallery-section{
-    padding:70px 0;
+/* ============================================
+   GALLERY CARD
+   ============================================ */
+.gallery-card {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.gallery-grid{
-    grid-template-columns:1fr;
+.visible .gallery-card {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.gallery-card{
-    height:260px;
+.gallery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
+/* Card Image */
+.gallery-card-image {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-card:hover .gallery-card-image img {
+  transform: scale(1.08);
+}
+
+.gallery-card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.3) 40%,
+    rgba(0, 0, 0, 0.05) 70%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.gallery-card:hover .gallery-card-gradient {
+  opacity: 1;
+}
+
+/* Card Overlay Content */
+.gallery-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 20px;
+  color: #FFFFFF;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.gallery-card:hover .gallery-card-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Camera Icon */
+.gallery-card-icon {
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+/* Title */
+.gallery-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 8px;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+}
+
+/* Meta Info */
+.gallery-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.gallery-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gallery-meta-separator {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Category Badge */
+.gallery-card-category {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #C9A96E;
+  background: rgba(201, 169, 110, 0.15);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.gallery-empty {
+  text-align: center;
+  padding: 80px 40px;
+  background: #FDFCFA;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  margin-bottom: 60px;
+}
+
+.gallery-empty-icon {
+  color: #C9A96E;
+  opacity: 0.4;
+  margin-bottom: 20px;
+}
+
+.gallery-empty-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 12px;
+}
+
+.gallery-empty-text {
+  font-size: 15px;
+  color: #777777;
+  margin: 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ============================================
+   LOADING SKELETON
+   ============================================ */
+.gallery-loading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
+}
+
+.gallery-card-skeleton {
+  aspect-ratio: 4/3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gallery-card-skeleton .skeleton-image {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   BOTTOM CTA
+   ============================================ */
+.gallery-cta-wrapper {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+}
+
+.visible .gallery-cta-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8B1E3F;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease, gap 0.3s ease;
+}
+
+.gallery-cta:hover {
+  border-bottom-color: #8B1E3F;
+  gap: 18px;
+}
+
+.gallery-cta-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.gallery-cta:hover .gallery-cta-icon {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  .gallery-section {
+    padding: 100px 0;
+  }
+
+  .gallery-container {
+    padding: 0 32px;
+  }
+
+  .gallery-grid,
+  .gallery-loading {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .gallery-section {
+    padding: 80px 0;
+  }
+
+  .gallery-container {
+    padding: 0 24px;
+  }
+
+  .gallery-header {
+    margin-bottom: 60px;
+  }
+
+  .gallery-grid,
+  .gallery-loading {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .gallery-card-overlay {
+    padding: 16px 14px;
+  }
+
+  .gallery-card-title {
+    font-size: 14px;
+  }
+
+  .gallery-card-meta {
+    font-size: 10px;
+  }
+
+  .gallery-empty {
+    padding: 60px 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE
+   ============================================ */
+@media (max-width: 480px) {
+  .gallery-section {
+    padding: 60px 0;
+  }
+
+  .gallery-container {
+    padding: 0 20px;
+  }
+
+  .gallery-header {
+    margin-bottom: 48px;
+  }
+
+  .gallery-eyebrow-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .gallery-title {
+    font-size: 24px;
+  }
+
+  .gallery-subtitle {
+    font-size: 14px;
+  }
+
+  .gallery-grid,
+  .gallery-loading {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .gallery-card-overlay {
+    padding: 12px 10px;
+  }
+
+  .gallery-card-title {
+    font-size: 13px;
+  }
+
+  .gallery-card-meta {
+    font-size: 9px;
+    gap: 4px;
+  }
+
+  .gallery-card-category {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  .gallery-empty {
+    padding: 48px 20px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-section *,
+  .gallery-section *::before,
+  .gallery-section *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .gallery-card-image img {
+    transform: none !important;
+  }
+}
+
+.gallery-card:focus-visible,
+.gallery-cta:focus-visible {
+  outline: 2px solid #8B1E3F;
+  outline-offset: 3px;
 }

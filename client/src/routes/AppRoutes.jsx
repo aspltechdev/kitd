@@ -47,6 +47,21 @@ import VolunteerRegistrations from "../pages/admin/volunteer-registration/Volunt
 import ViewVolunteerRegistration from "../pages/admin/volunteer-registration/ViewVolunteerRegistration";
 import Home from "../pages/Home/Home";
 import PublicLayout from "../layouts/PublicLayout";
+import AboutSection from "../pages/public/About/AboutSection";
+import AboutPage from "../pages/About/AboutPage";
+import MissionPage from "../pages/Mission/MissionPage";
+import ExecutiveCommitteePage from "../pages/About/ExecutiveCommitteePage";
+import ActivitiesPage from "../pages/Activities/ActivitiesPage";
+import EventsPage from "../pages/Events/EventsPage";
+import ArtistsPage from "../pages/Artists/ArtistsPage";
+import GalleryPage from "../pages/Gallery/GalleryPage";
+import NewsPage from "../pages/News/NewsPage";
+import NewsDetails from "../pages/News/NewsDetails";
+import MembershipPage from "../pages/Membership/MembershipPage";
+import MembershipBenefits from "../pages/Membership/MembershipBenefits";
+import MembershipFAQ from "../pages/Membership/MembershipFAQ";
+import VolunteerPage from "../pages/Volunteer/VolunteerPage";
+import ContactPage from "../pages/Contact/ContactPage";
 
 const AppRoutes = () => {
     return (
@@ -61,37 +76,95 @@ const AppRoutes = () => {
     <Route
         path="/"
         element={<Home />}
+
+
     />
-{/* 
-    <Route
+
+     <Route
         path="/about"
-        element={<AboutSection />}
+        element={<AboutPage />}
     />
 
-    <Route
+
+ <Route
+        path="/about/mission-vision"
+        element={<MissionPage />}
+    />
+
+    
+
+ <Route
+        path="/about/executive-committee"
+        element={<ExecutiveCommitteePage />}
+    />
+
+
+ <Route
         path="/activities"
-        element={<Activities />}
+        element={<ActivitiesPage />}
     />
-
     <Route
         path="/events"
         element={<EventsPage />}
     />
 
-    <Route
+       <Route
         path="/artists"
-        element={<Artists />}
+        element={<ArtistsPage />}
     />
-
-    <Route
+  <Route
         path="/gallery"
         element={<GalleryPage />}
+
+
     />
+
+      {/* <Route
+        path="/gallery"
+        element={<GalleryPage />}
+    /> */}
 
     <Route
         path="/news"
-        element={<NewsPage />}
+        element={<NewsPage/>}
     />
+
+      <Route path="/news/:slug" element={<NewsDetails />} />
+
+       <Route
+        path="/membership"
+        element={<MembershipPage />}
+    />
+
+          <Route
+        path="/membership/benefits"
+        element={<MembershipBenefits />}
+    />
+
+           <Route
+        path="/membership/faq"
+        element={<MembershipFAQ />}
+    />
+    <Route
+        path="/volunteer"
+        element={<VolunteerPage />}
+    />
+
+ <Route
+        path="/contact"
+        element={<ContactPage />}
+    /> 
+
+{/* 
+   
+
+   
+
+    
+
+ 
+
+  
 
     <Route
         path="/membership"
