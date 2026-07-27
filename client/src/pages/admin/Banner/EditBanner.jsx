@@ -30,7 +30,7 @@ const EditBanner = () => {
           "Failed to load banner."
       );
 
-      navigate("/admin/banner");
+      navigate("/admin/banners");
     }
   };
 
@@ -60,7 +60,7 @@ const EditBanner = () => {
 
       toast.success("Hero banner updated successfully.");
 
-      navigate("/admin/banner");
+      navigate("/admin/banners");
     } catch (error) {
       toast.error(
         error.response?.data?.message ||

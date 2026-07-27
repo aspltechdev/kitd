@@ -150,7 +150,7 @@ app.use("/api/testimonials", testimonialRoutes);
 
 // Membership
 app.use("/api/memberships", membershipRoutes);
-
+app.use("/api/members", membershipRoutes);
 // Contact
 app.use("/api/contacts", contactRoutes);
 

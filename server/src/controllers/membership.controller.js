@@ -39,17 +39,41 @@ export const getById = async (req, res) => {
   }
 };
 
+
 export const create = async (req, res) => {
   try {
-    const membership = await membershipService.create(req.body);
+    console.log("BODY:", req.body);
 
-    res.status(201).json({
+    const data = {
+      memberId: req.body.memberId,
+      fullName: req.body.fullName,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      gender: req.body.gender,
+      membershipType: req.body.membershipType,
+      city: req.body.city || null,
+      state: req.body.state || null,
+      country: req.body.country || null,
+      joinedDate: req.body.joinedDate
+        ? new Date(req.body.joinedDate)
+        : null,
+      expiryDate: req.body.expiryDate
+        ? new Date(req.body.expiryDate)
+        : null,
+      isActive: req.body.isActive === "true",
+    };
+
+    const membership = await membershipService.create(data);
+
+    return res.status(201).json({
       success: true,
-      message: "Membership application submitted successfully",
+      message: "Membership created successfully",
       data: membership,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -58,15 +82,36 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const membership = await membershipService.update(req.params.id, req.body);
+    const data = {
+      memberId: req.body.memberId,
+      fullName: req.body.fullName,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      gender: req.body.gender,
+      membershipType: req.body.membershipType,
+      city: req.body.city || null,
+      state: req.body.state || null,
+      country: req.body.country || null,
+      joinedDate: req.body.joinedDate
+        ? new Date(req.body.joinedDate)
+        : null,
+      expiryDate: req.body.expiryDate
+        ? new Date(req.body.expiryDate)
+        : null,
+      isActive: req.body.isActive === "true",
+    };
 
-    res.status(200).json({
+    const membership = await membershipService.update(req.params.id, data);
+
+    return res.status(200).json({
       success: true,
       message: "Membership updated successfully",
       data: membership,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       success: false,
       message: error.message,
     });

@@ -39,9 +39,36 @@ export const getById = async (req, res) => {
   }
 };
 
+// export const create = async (req, res) => {
+//   try {
+//     const team = await teamService.create(req.body);
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Team member created successfully",
+//       data: team,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
 export const create = async (req, res) => {
   try {
-    const team = await teamService.create(req.body);
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    const data = {
+      name: req.body.name,
+      designation: req.body.designation,
+      biography: req.body.biography,
+      image: req.file?.filename,
+    };
+
+    const team = await teamService.create(data);
 
     res.status(201).json({
       success: true,
@@ -49,12 +76,15 @@ export const create = async (req, res) => {
       data: team,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
+
 
 export const update = async (req, res) => {
   try {

@@ -8,29 +8,19 @@ datasource db {
 }
 
 model Banner {
-  id            Int      @id @default(autoincrement())
-  title         String
-  subtitle      String?
-  description   String?
-
-  mediaType     BannerMediaType @default(IMAGE)
-  mediaUrl      String
-
-  buttonText    String?
-  buttonLink    String?
-
-  displayOrder  Int      @default(1)
-  isActive      Boolean  @default(true)
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           Int             @id @default(autoincrement())
+  title        String
+  subtitle     String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  buttonLink   String?
+  buttonText   String?
+  description  String?
+  displayOrder Int             @default(1)
+  isActive     Boolean         @default(true)
+  mediaType    BannerMediaType @default(IMAGE)
+  mediaUrl     String
 }
-
-enum BannerMediaType {
-  IMAGE
-  VIDEO
-}
-
 
 model Team {
   id          Int      @id @default(autoincrement())
@@ -43,23 +33,44 @@ model Team {
 }
 
 model Membership {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String
-  phone       String
-  city        String?
-  message     String?
-  createdAt   DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+
+  memberId        String   @unique
+  fullName        String
+  email           String   @unique
+  mobile          String
+
+  gender          String
+  membershipType  String
+
+  city            String?
+  state           String?
+  country          String?
+
+  joinedDate      DateTime?
+  expiryDate      DateTime?
+
+  image           String?
+
+  isActive        Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+model Activity {
+  id               Int       @id @default(autoincrement())
+  title            String
+  description      String
+  image            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  date             DateTime?
+  displayOrder     Int       @default(0)
+  isActive         Boolean   @default(true)
+  location         String?
+  shortDescription String?
 }
 
-model Activity {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  image       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
 model Event {
   id          Int      @id @default(autoincrement())
   title       String
@@ -72,21 +83,21 @@ model Event {
 }
 
 model Artist {
-  id          Int      @id @default(autoincrement())
-  name        String
-  biography   String?
-  danceForm   String
-  city        String
-  image       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  biography String?
+  danceForm String
+  city      String
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Gallery {
-  id          Int      @id @default(autoincrement())
-  title       String
-  image       String
-  createdAt   DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  title     String
+  image     String
+  createdAt DateTime @default(now())
 }
 
 model News {
@@ -97,6 +108,7 @@ model News {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 model Newsletter {
   id        Int      @id @default(autoincrement())
   email     String   @unique
@@ -105,13 +117,13 @@ model Newsletter {
 }
 
 model Contact {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String
-  phone       String?
-  subject     String?
-  message     String
-  createdAt   DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
 }
 
 model User {
@@ -123,7 +135,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 
 model Testimonial {
   id          Int      @id @default(autoincrement())
@@ -138,15 +149,6 @@ model Testimonial {
   updatedAt   DateTime @updatedAt
 }
 
-
-enum PartnerType {
-  ACADEMIC_PARTNER
-  TECHNOLOGY_PARTNER
-  MEDIA_PARTNER
-  EVENT_PARTNER
-  SPONSOR
-}
-
 model Partner {
   id          Int         @id @default(autoincrement())
   name        String
@@ -159,74 +161,56 @@ model Partner {
   updatedAt   DateTime    @updatedAt
 }
 
-
-
 model MembershipEnquiry {
-  id               Int      @id @default(autoincrement())
-
-  photo            String?
-
-  fullName         String
-  email            String
-  mobile           String
-
-  gender           String?
-  dateOfBirth      DateTime?
-
-  occupation       String?
-
-  membershipType   String?
-
-  danceStyle       String?
-
-  experience       String?
-
-  address          String?
-
-  city             String?
-
-  state            String?
-
-  country          String?
-
-  message          String?
-
-  status           String   @default("NEW")
-
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id             Int       @id @default(autoincrement())
+  photo          String?
+  fullName       String
+  email          String
+  mobile         String
+  gender         String?
+  dateOfBirth    DateTime?
+  occupation     String?
+  membershipType String?
+  danceStyle     String?
+  experience     String?
+  address        String?
+  city           String?
+  state          String?
+  country        String?
+  message        String?
+  status         String    @default("NEW")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
-
-
-
-
-
-
-
-
 model VolunteerRegistration {
-  id               Int      @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
+  fullName     String
+  email        String
+  mobile       String?
+  city         String?
+  state        String?
+  country      String?
+  occupation   String?
+  organization String?
+  interests    String?
+  experience   String?
+  availability String?
+  message      String?
+  status       String   @default("NEW")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
 
-  fullName         String
-  email            String
-  mobile           String?
+enum BannerMediaType {
+  IMAGE
+  VIDEO
+}
 
-  city             String?
-  state            String?
-  country          String?
-
-  occupation       String?
-  organization     String?
-
-  interests        String?   // Social Media, Events, Regional Rep, Admin, etc.
-  experience       String?
-  availability     String?
-
-  message          String?
-
-  status           String    @default("NEW")
-
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+enum PartnerType {
+  ACADEMIC_PARTNER
+  TECHNOLOGY_PARTNER
+  MEDIA_PARTNER
+  EVENT_PARTNER
+  SPONSOR
 }

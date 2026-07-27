@@ -16,6 +16,8 @@ export const getById = async (id) => {
   });
 };
 
+
+
 export const create = async (data) => {
   return await prisma.membership.create({
     data,

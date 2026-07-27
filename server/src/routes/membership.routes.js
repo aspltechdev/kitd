@@ -3,6 +3,9 @@ import * as membershipController from "../controllers/membership.controller.js";
 import  authMiddleware  from "../middleware/auth.middleware.js";
 import { authorize } from "../middleware/role.middleware.js";
 
+
+import { upload } from "../middleware/upload.middleware.js";
+
 const router = express.Router();
 
 // =======================
@@ -10,8 +13,13 @@ const router = express.Router();
 // =======================
 
 // Submit Membership Application
-router.post("/", membershipController.create);
-
+router.post(
+  "/",
+  authMiddleware,
+  authorize("ADMIN"),
+  upload("memberships").single("photo"), // use the actual field name
+  membershipController.create
+);
 // =======================
 // Protected Routes (Admin)
 // =======================
