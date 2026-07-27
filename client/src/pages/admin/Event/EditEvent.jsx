@@ -175,14 +175,18 @@
 // export default EditEvent;
 
 
+// src/pages/admin/Events/EditEvent.jsx
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { ArrowLeft, CalendarEdit, Save, Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { ArrowLeft, Save, X, AlertCircle, Calendar, Loader } from "lucide-react";
 
 import EventForm from "./EventForm";
-import { getEventById, updateEvent } from "../../../api/events.api";
+import {
+  getEventById,
+  updateEvent,
+} from "../../../api/events.api";
 
 import "./EditEvent.css";
 
@@ -191,47 +195,27 @@ const EditEvent = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
-  const [fetchError, setFetchError] = useState(null);
+  const [fetchLoading, setFetchLoading] = useState(true);
   const [initialValues, setInitialValues] = useState(null);
-
-  const fetchEvent = useCallback(async () => {
-    try {
-      setFetching(true);
-      setFetchError(null);
-
-      const res = await getEventById(id);
-
-      const event =
-        res.data?.data?.event ||
-        res.data?.data ||
-        res.data;
-
-      if (!event || (typeof event === 'object' && Object.keys(event).length === 0)) {
-        throw new Error("Event not found");
-      }
-
-      setInitialValues(event);
-    } catch (error) {
-      console.error("Fetch event error:", error);
-      const errorMessage =
-        error.response?.data?.message || error.message || "Failed to fetch event details.";
-      
-      setFetchError(errorMessage);
-      toast.error(errorMessage);
-      
-      // Navigate back after a delay on error
-      setTimeout(() => {
-        navigate("/admin/events");
-      }, 3000);
-    } finally {
-      setFetching(false);
-    }
-  }, [id, navigate]);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     fetchEvent();
-  }, [fetchEvent]);
+  }, [id]);
+
+  const fetchEvent = async () => {
+    try {
+      setFetchLoading(true);
+      const res = await getEventById(id);
+      const event = res.data?.data?.event || res.data?.data || res.data;
+      setInitialValues(event);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch event.");
+      navigate("/admin/events");
+    } finally {
+      setFetchLoading(false);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -239,36 +223,29 @@ const EditEvent = () => {
 
       const formData = new FormData();
 
-      // Append all form fields
-      const fields = {
-        title: data.title,
-        slug: data.slug || "",
-        shortDescription: data.shortDescription || "",
-        description: data.description || "",
-        eventType: data.eventType || "",
-        startDate: data.startDate || "",
-        endDate: data.endDate || "",
-        startTime: data.startTime || "",
-        endTime: data.endTime || "",
-        venue: data.venue || "",
-        city: data.city || "",
-        country: data.country || "",
-        organizer: data.organizer || "",
-        registrationLink: data.registrationLink || "",
-        registrationFee: data.registrationFee || 0,
-        maxParticipants: data.maxParticipants || 0,
-        chiefGuest: data.chiefGuest || "",
-        contactPerson: data.contactPerson || "",
-        contactNumber: data.contactNumber || "",
-        email: data.email || "",
-        displayOrder: data.displayOrder || 1,
-        featured: data.featured || false,
-        isActive: data.isActive !== undefined ? data.isActive : true,
-      };
-
-      Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+      formData.append("title", data.title);
+      formData.append("slug", data.slug || "");
+      formData.append("shortDescription", data.shortDescription || "");
+      formData.append("description", data.description || "");
+      formData.append("eventType", data.eventType || "");
+      formData.append("startDate", data.startDate || "");
+      formData.append("endDate", data.endDate || "");
+      formData.append("startTime", data.startTime || "");
+      formData.append("endTime", data.endTime || "");
+      formData.append("venue", data.venue || "");
+      formData.append("city", data.city || "");
+      formData.append("country", data.country || "");
+      formData.append("organizer", data.organizer || "");
+      formData.append("registrationLink", data.registrationLink || "");
+      formData.append("registrationFee", data.registrationFee || 0);
+      formData.append("maxParticipants", data.maxParticipants || 0);
+      formData.append("chiefGuest", data.chiefGuest || "");
+      formData.append("contactPerson", data.contactPerson || "");
+      formData.append("contactNumber", data.contactNumber || "");
+      formData.append("email", data.email || "");
+      formData.append("displayOrder", data.displayOrder || 1);
+      formData.append("featured", data.featured);
+      formData.append("isActive", data.isActive);
 
       // Upload new banner only if selected
       if (data.banner && data.banner.length > 0) {
@@ -276,130 +253,158 @@ const EditEvent = () => {
       }
 
       await updateEvent(id, formData);
-      toast.success("Event updated successfully!");
+
+      toast.success("Event updated successfully! 🎉");
+
       navigate("/admin/events");
     } catch (error) {
-      console.error("Update event error:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to update event. Please try again."
-      );
+      toast.error(error.response?.data?.message || "Failed to update event.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Loading State
-  if (fetching) {
+  const handleCancel = () => {
+    if (loading) return;
+    setShowCancelModal(true);
+  };
+
+  const confirmCancel = () => {
+    setShowCancelModal(false);
+    navigate("/admin/events");
+  };
+
+  if (fetchLoading) {
     return (
-      <div className="edit-event">
-        <div className="edit-event__loading">
-          <div className="edit-event__loading-card">
-            <div className="edit-event__loading-spinner">
-              <div className="edit-event__spinner-ring" />
-            </div>
-            <div className="edit-event__loading-content">
-              <CalendarEdit size={40} strokeWidth={1.5} className="edit-event__loading-icon" />
-              <h2 className="edit-event__loading-title">Loading Event</h2>
-              <p className="edit-event__loading-text">
-                Fetching event details...
-              </p>
-              <div className="edit-event__loading-bar">
-                <div className="edit-event__loading-progress" />
-              </div>
-            </div>
-          </div>
+      <div className="edit-event-page">
+        <div className="edit-event-page__loading">
+          <div className="spinner"></div>
+          <p>Loading event details...</p>
         </div>
       </div>
     );
   }
 
-  // Error State
-  if (fetchError && !initialValues) {
+  if (!initialValues) {
     return (
-      <div className="edit-event">
-        <div className="edit-event__error">
-          <div className="edit-event__error-card">
-            <div className="edit-event__error-icon-wrapper">
-              <AlertCircle size={48} strokeWidth={1.5} className="edit-event__error-icon" />
-            </div>
-            <h2 className="edit-event__error-title">Failed to Load Event</h2>
-            <p className="edit-event__error-message">{fetchError}</p>
-            <p className="edit-event__error-redirect">
-              Redirecting back to events list...
-            </p>
-            <div className="edit-event__error-actions">
-              <button onClick={fetchEvent} className="edit-event__retry-btn">
-                <RefreshCw size={16} strokeWidth={2} />
-                <span>Retry</span>
-              </button>
-              <Link to="/admin/events" className="edit-event__back-btn-secondary">
-                <ArrowLeft size={16} strokeWidth={2} />
-                <span>Go to Events</span>
-              </Link>
-            </div>
-          </div>
+      <div className="edit-event-page">
+        <div className="edit-event-page__not-found">
+          <AlertCircle size={48} className="not-found-icon" />
+          <h2>Event Not Found</h2>
+          <p>The event you're trying to edit doesn't exist or has been removed.</p>
+          <Link to="/admin/events" className="btn btn--primary">
+            Back to Events
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="edit-event">
-      {/* Page Header */}
-      <div className="edit-event__header">
-        <div className="edit-event__header-top">
-          <Link to="/admin/events" className="edit-event__back-link">
-            <ArrowLeft size={18} strokeWidth={2} />
-            <span>Back to Events</span>
-          </Link>
+    <div className="edit-event-page">
+      <div className="edit-event-page__container">
+        
+        {/* Header */}
+        <div className="edit-event-page__header">
+          <div className="edit-event-page__header-left">
+            <Link to="/admin/events" className="back-btn">
+              <ArrowLeft size={18} />
+              Back to Events
+            </Link>
+            <div className="edit-event-page__header-title">
+              <div className="edit-event-page__header-icon">
+                <Calendar size={24} strokeWidth={2} />
+              </div>
+              <div>
+                <h1 className="edit-event-page__title">Edit Event</h1>
+                <p className="edit-event-page__subtitle">
+                  Update event details and information
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="edit-event-page__header-actions">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="btn btn--secondary"
+              disabled={loading}
+            >
+              <X size={18} />
+              Cancel
+            </button>
+          </div>
         </div>
 
-        <div className="edit-event__header-content">
-          <div className="edit-event__header-left">
-            <div className="edit-event__header-icon">
-              <CalendarEdit size={24} strokeWidth={2} />
+        {/* Form Card */}
+        <div className="edit-event-page__form-card">
+          <div className="form-card__header">
+            <div className="form-card__header-icon">
+              <Calendar size={24} />
             </div>
-            <div className="edit-event__header-text">
-              <h1 className="edit-event__title">Edit Event</h1>
-              <p className="edit-event__subtitle">
-                Update event details for "{initialValues?.title || 'Untitled Event'}"
+            <div>
+              <h2 className="form-card__title">Edit Event Details</h2>
+              <p className="form-card__subtitle">
+                Update the information below to modify this event
               </p>
             </div>
           </div>
 
-          <div className="edit-event__header-actions">
-            <Link to="/admin/events" className="edit-event__cancel-btn">
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              form="event-form"
-              disabled={loading}
-              className="edit-event__save-btn"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={18} strokeWidth={2} className="edit-event__save-icon--spinning" />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <>
-                  <Save size={18} strokeWidth={2} />
-                  <span>Update Event</span>
-                </>
-              )}
-            </button>
+          <EventForm
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            loading={loading}
+            isEdit={true}
+          />
+        </div>
+
+        {/* Tips Section */}
+        <div className="edit-event-page__tips">
+          <div className="tips-card">
+            <div className="tips-header">
+              <AlertCircle size={20} className="tips-icon" />
+              <h3>Tips for Updating Events</h3>
+            </div>
+            <ul className="tips-list">
+              <li>Keep the title descriptive and engaging</li>
+              <li>Update dates if the event has been rescheduled</li>
+              <li>Add a new banner image to refresh the event</li>
+              <li>Review the description for accuracy and completeness</li>
+              <li>Adjust display order to control listing position</li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      {/* Form Section */}
-      <div className="edit-event__form-container">
-        <EventForm
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          loading={loading}
-        />
+        {/* Cancel Confirmation Modal */}
+        {showCancelModal && (
+          <div className="modal-overlay" onClick={() => setShowCancelModal(false)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal__header">
+                <AlertCircle size={24} className="modal__icon" />
+                <h2>Cancel Editing</h2>
+              </div>
+              <div className="modal__body">
+                <p>
+                  Are you sure you want to cancel? Your changes will be lost.
+                </p>
+              </div>
+              <div className="modal__footer">
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="modal-btn modal-btn--cancel"
+                >
+                  Continue Editing
+                </button>
+                <button
+                  onClick={confirmCancel}
+                  className="modal-btn modal-btn--delete"
+                >
+                  Yes, Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
