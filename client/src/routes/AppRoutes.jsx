@@ -423,6 +423,17 @@ const AppRoutes = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+</Route>
+
 <Route element={<AdminLayout />}>
 
 
@@ -440,15 +451,6 @@ const AppRoutes = () => {
   path="/admin/news/edit/:id"
   element={<EditNews />}
 />
-
-
-
-</Route>
-
-
-
-
-
 
 
 
