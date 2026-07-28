@@ -91,11 +91,13 @@ import activityRoutes from "./routes/activity.routes.js";
 import eventRoutes from "./routes/event.routes.js";
 import artistRoutes from "./routes/artist.routes.js";
 import galleryRoutes from "./routes/gallery.routes.js";
-import newsRoutes from "./routes/newsletter.routes.js";
+
+import newsRoutes from "./routes/news.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import partnerRoutes from "./routes/partner.routes.js";
 import testimonialRoutes from "./routes/testimonial.routes.js";
 import volunteerRegistrationRoutes from "./routes/volunteerRegistration.routes.js";
+import membershipEnquiryRoutes from "./routes/membershipEnquiry.routes.js";
 // Middleware
 import { notFound } from "./middleware/notFound.middleware.js";
 import { errorHandler } from "./middleware/error.middleware.js";
@@ -151,6 +153,7 @@ app.use("/api/testimonials", testimonialRoutes);
 // Membership
 app.use("/api/memberships", membershipRoutes);
 app.use("/api/members", membershipRoutes);
+app.use("/api/membership-enquiries", membershipEnquiryRoutes);
 // Contact
 app.use("/api/contacts", contactRoutes);
 

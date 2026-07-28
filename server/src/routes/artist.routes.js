@@ -2,6 +2,7 @@ import express from "express";
 import * as artistController from "../controllers/artist.controller.js";
 import  authMiddleware  from "../middleware/auth.middleware.js";
 import { authorize } from "../middleware/role.middleware.js";
+import { upload } from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -20,10 +21,18 @@ router.get("/:id", artistController.getById);
 // =======================
 
 // Create artist
+// router.post(
+//   "/",
+//   authMiddleware,
+//   authorize("ADMIN"),
+//   artistController.create
+// );
+
 router.post(
   "/",
   authMiddleware,
   authorize("ADMIN"),
+  upload("artists").single("image"),
   artistController.create
 );
 
@@ -32,6 +41,7 @@ router.put(
   "/:id",
   authMiddleware,
   authorize("ADMIN"),
+  upload("artists").single("image"),
   artistController.update
 );
 

@@ -62,6 +62,7 @@ import MembershipBenefits from "../pages/Membership/MembershipBenefits";
 import MembershipFAQ from "../pages/Membership/MembershipFAQ";
 import VolunteerPage from "../pages/Volunteer/VolunteerPage";
 import ContactPage from "../pages/Contact/ContactPage";
+import MemberRegistration from "../pages/member-registration/MemberRegistration";
 
 const AppRoutes = () => {
     return (
@@ -468,7 +469,10 @@ const AppRoutes = () => {
 
 
 
-
+<Route
+  path="/member-registration/:token"
+  element={<MemberRegistration />}
+/>
 
 
 

@@ -2,7 +2,7 @@ import express from "express";
 import * as galleryController from "../controllers/gallery.controller.js";
 import authMiddleware  from "../middleware/auth.middleware.js";
 import { authorize } from "../middleware/role.middleware.js";
-
+import { upload } from "../middleware/upload.middleware.js";
 const router = express.Router();
 
 // =======================
@@ -24,6 +24,7 @@ router.post(
   "/",
   authMiddleware,
   authorize("ADMIN"),
+    upload("gallery").single("image"),
   galleryController.create
 );
 
@@ -32,6 +33,7 @@ router.put(
   "/:id",
   authMiddleware,
   authorize("ADMIN"),
+   upload("gallery").single("image"),
   galleryController.update
 );
 

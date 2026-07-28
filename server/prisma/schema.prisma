@@ -117,13 +117,25 @@ model Newsletter {
 }
 
 model Contact {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String
-  phone     String?
-  subject   String?
-  message   String
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+
+  fullName     String
+  email        String
+  phone        String?
+
+  city         String?
+  state        String?
+  country      String?
+
+  subject      String?
+  enquiryType  String?
+
+  message      String
+
+  status       String   @default("NEW")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model User {
@@ -178,6 +190,13 @@ model MembershipEnquiry {
   state          String?
   country        String?
   message        String?
+
+registrations MemberRegistration[]
+
+registrationToken   String?
+tokenExpiry         DateTime?
+
+remarks             String?
   status         String    @default("NEW")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -213,4 +232,33 @@ enum PartnerType {
   MEDIA_PARTNER
   EVENT_PARTNER
   SPONSOR
+}
+
+
+
+model MemberRegistration {
+  id                  Int      @id @default(autoincrement())
+
+  enquiryId           Int
+  enquiry             MembershipEnquiry @relation(fields: [enquiryId], references: [id])
+
+  fullName            String
+  gender              String?
+  dateOfBirth         DateTime?
+
+  address             String?
+  city                String?
+  state               String?
+  country             String?
+
+  danceStyle          String?
+  guru                String?
+  experience          String?
+
+  document            String?
+
+  status              String @default("REGISTRATION_SUBMITTED")
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }

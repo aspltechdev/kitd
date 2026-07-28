@@ -39,9 +39,37 @@ export const getById = async (req, res) => {
   }
 };
 
+// export const create = async (req, res) => {
+//   try {
+//     const gallery = await galleryService.create(req.body);
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Gallery item created successfully",
+//       data: gallery,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
 export const create = async (req, res) => {
   try {
-    const gallery = await galleryService.create(req.body);
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    const data = {
+      title: req.body.title,
+      image: req.file?.filename || "",
+    };
+
+    console.log("DATA:", data);
+
+    const gallery = await galleryService.create(data);
 
     res.status(201).json({
       success: true,
@@ -49,6 +77,8 @@ export const create = async (req, res) => {
       data: gallery,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -56,16 +86,47 @@ export const create = async (req, res) => {
   }
 };
 
+
+
+// export const update = async (req, res) => {
+//   try {
+//     const gallery = await galleryService.update(req.params.id, req.body);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Gallery item updated successfully",
+//       data: gallery,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
+
 export const update = async (req, res) => {
   try {
-    const gallery = await galleryService.update(req.params.id, req.body);
+    const data = {
+      title: req.body.title,
+    };
+
+    if (req.file) {
+      data.image = req.file.filename;
+    }
+
+    const gallery = await galleryService.update(req.params.id, data);
 
     res.status(200).json({
       success: true,
-      message: "Gallery item updated successfully",
+      message: "Gallery updated successfully",
       data: gallery,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,

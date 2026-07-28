@@ -29,3 +29,34 @@ export const approveMembershipEnquiry = (id) =>
 // Delete Membership Enquiry
 export const deleteMembershipEnquiry = (id) =>
   api.delete(`/membership-enquiries/${id}`);
+
+
+export const validateRegistrationToken = (token) => {
+  return api.get(`/membership-enquiries/token/${token}`);
+};
+
+// Submit Registration
+export const registerMember = (token, formData) => {
+  return api.post(
+    `/membership-enquiries/register/${token}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};
+
+
+export const startMembershipReview = (id) =>
+  api.patch(`/membership-enquiries/${id}/start-review`);
+
+export const sendMembershipRegistration = (id) =>
+  api.patch(`/membership-enquiries/${id}/send-registration`);
+
+export const requestMembershipChanges = (id, data) =>
+  api.patch(`/membership-enquiries/${id}/request-changes`, data);
+
+export const approveMembershipMember = (id) =>
+  api.patch(`/membership-enquiries/${id}/approve-member`);

@@ -1,23 +1,129 @@
+// import prisma from "../config/prisma.js";
+
+// export const getAll = async () => {
+//   return await prisma.membershipEnquiry.findMany({
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//   });
+// };
+
+// export const getById = async (id) => {
+//   return await prisma.membershipEnquiry.findUnique({
+//     where: {
+//       id: Number(id),
+//     },
+//   });
+// };
+
+// export const create = async (data) => {
+//   return await prisma.membershipEnquiry.create({
+//     data: {
+//       ...data,
+//       status: "NEW",
+//     },
+//   });
+// };
+
+// export const updateStatus = async (id, status) => {
+//   return await prisma.membershipEnquiry.update({
+//     where: {
+//       id: Number(id),
+//     },
+//     data: {
+//       status,
+//     },
+//   });
+// };
+
+// export const approve = async (id) => {
+//   const enquiry = await prisma.membershipEnquiry.findUnique({
+//     where: {
+//       id: Number(id),
+//     },
+//   });
+
+//   if (!enquiry) {
+//     throw new Error("Membership enquiry not found");
+//   }
+
+//   const member = await prisma.member.create({
+//     data: {
+//       photo: enquiry.photo,
+//       fullName: enquiry.fullName,
+//       email: enquiry.email,
+//       mobile: enquiry.mobile,
+//       gender: enquiry.gender,
+//       membershipType: enquiry.membershipType,
+//       city: enquiry.city,
+//       state: enquiry.state,
+//       country: enquiry.country,
+//       joinedDate: new Date(),
+//       isActive: true,
+//     },
+//   });
+
+//   await prisma.membershipEnquiry.update({
+//     where: {
+//       id: Number(id),
+//     },
+//     data: {
+//       status: "APPROVED",
+//     },
+//   });
+
+//   return member;
+// };
+
+// export const remove = async (id) => {
+//   return await prisma.membershipEnquiry.delete({
+//     where: {
+//       id: Number(id),
+//     },
+//   });
+// };
+
+
 import prisma from "../config/prisma.js";
 
+// =======================
+// Get All
+// =======================
 export const getAll = async () => {
-  return await prisma.membershipEnquiry.findMany({
+  return prisma.membershipEnquiry.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
 };
 
+// =======================
+// Get By ID
+// =======================
 export const getById = async (id) => {
-  return await prisma.membershipEnquiry.findUnique({
+  return prisma.membershipEnquiry.findUnique({
     where: {
       id: Number(id),
     },
   });
 };
 
+// =======================
+// Get By Registration Token
+// =======================
+export const getByToken = async (token) => {
+  return prisma.membershipEnquiry.findFirst({
+    where: {
+      registrationToken: token,
+    },
+  });
+};
+
+// =======================
+// Create Enquiry
+// =======================
 export const create = async (data) => {
-  return await prisma.membershipEnquiry.create({
+  return prisma.membershipEnquiry.create({
     data: {
       ...data,
       status: "NEW",
@@ -25,8 +131,11 @@ export const create = async (data) => {
   });
 };
 
+// =======================
+// Update Status
+// =======================
 export const updateStatus = async (id, status) => {
-  return await prisma.membershipEnquiry.update({
+  return prisma.membershipEnquiry.update({
     where: {
       id: Number(id),
     },
@@ -36,6 +145,72 @@ export const updateStatus = async (id, status) => {
   });
 };
 
+// =======================
+// Start Review
+// =======================
+export const startReview = async (id) => {
+  return prisma.membershipEnquiry.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      status: "UNDER_REVIEW",
+    },
+  });
+};
+
+// =======================
+// Send Registration Link
+// =======================
+export const sendRegistration = async (
+  id,
+  registrationToken,
+  tokenExpiry
+) => {
+  return prisma.membershipEnquiry.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      status: "REGISTRATION_PENDING",
+      registrationToken,
+      tokenExpiry,
+    },
+  });
+};
+
+// =======================
+// Registration Submitted
+// =======================
+export const registrationSubmitted = async (id) => {
+  return prisma.membershipEnquiry.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      status: "REGISTRATION_SUBMITTED",
+    },
+  });
+};
+
+// =======================
+// Request Changes
+// =======================
+export const requestChanges = async (id, remarks) => {
+  return prisma.membershipEnquiry.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      status: "CHANGES_REQUESTED",
+      remarks,
+    },
+  });
+};
+
+// =======================
+// Approve Member
+// =======================
 export const approve = async (id) => {
   const enquiry = await prisma.membershipEnquiry.findUnique({
     where: {
@@ -47,9 +222,14 @@ export const approve = async (id) => {
     throw new Error("Membership enquiry not found");
   }
 
-  const member = await prisma.member.create({
+  // Generate Member ID
+  const year = new Date().getFullYear();
+  const memberId = `KITD-${year}-${String(enquiry.id).padStart(4, "0")}`;
+
+  // Create Membership
+  const membership = await prisma.membership.create({
     data: {
-      photo: enquiry.photo,
+      memberId,
       fullName: enquiry.fullName,
       email: enquiry.email,
       mobile: enquiry.mobile,
@@ -59,26 +239,35 @@ export const approve = async (id) => {
       state: enquiry.state,
       country: enquiry.country,
       joinedDate: new Date(),
+      expiryDate: null,
       isActive: true,
     },
   });
 
+  // Update enquiry
   await prisma.membershipEnquiry.update({
     where: {
       id: Number(id),
     },
     data: {
       status: "APPROVED",
+      registrationToken: null,
+      tokenExpiry: null,
     },
   });
 
-  return member;
+  return membership;
 };
 
+// =======================
+// Delete
+// =======================
 export const remove = async (id) => {
-  return await prisma.membershipEnquiry.delete({
+  return prisma.membershipEnquiry.delete({
     where: {
       id: Number(id),
     },
   });
 };
+
+
