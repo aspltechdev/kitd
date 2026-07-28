@@ -228,7 +228,7 @@
 //           previousExperience: "",
 //           message: ""
 //         });
-//       }, 5000);
+//       }, 5050);
 //     }
 //   };
 
@@ -1033,7 +1033,7 @@ const VolunteerPage = () => {
 //             previousExperience: "",
 //             message: ""
 //           });
-//         }, 5000);
+//         }, 5050);
         
 //       } catch (error) {
 //         console.error("Error submitting volunteer form:", error);
@@ -1144,7 +1144,7 @@ const handleSubmit = async (e) => {
           previousExperience: "",
           message: ""
         });
-      }, 5000);
+      }, 5050);
       
       return () => clearTimeout(resetTimer);
       
@@ -1195,7 +1195,7 @@ const handleSubmit = async (e) => {
     }
   };
 
-  
+
 
   const toggleJourneyStep = (id) => {
     setExpandedJourney(expandedJourney === id ? null : id);

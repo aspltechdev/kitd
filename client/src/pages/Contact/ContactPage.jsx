@@ -145,7 +145,7 @@
 // //           enquiryType: "",
 // //           message: ""
 // //         });
-// //       }, 5000);
+// //       }, 5050);
 // //     }
 // //   };
 
@@ -761,7 +761,7 @@
 //           enquiryType: "",
 //           message: ""
 //         });
-//       }, 5000);
+//       }, 5050);
 //     }
 //   };
 
@@ -1421,7 +1421,7 @@ const ContactPage = () => {
   //         enquiryType: "",
   //         message: ""
   //       });
-  //     }, 5000);
+  //     }, 5050);
       
   //     return () => clearTimeout(resetTimer);
       
@@ -1536,7 +1536,7 @@ const ContactPage = () => {
 //           enquiryType: "",
 //           message: ""
 //         });
-//       }, 5000);
+//       }, 5050);
       
 //       return () => clearTimeout(resetTimer);
       
@@ -1660,7 +1660,7 @@ const handleSubmit = async (e) => {
           enquiryType: "",
           message: ""
         });
-      }, 5000);
+      }, 5050);
       
       return () => clearTimeout(resetTimer);
       
@@ -1705,7 +1705,7 @@ const handleSubmit = async (e) => {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <div className="contact-page">
 

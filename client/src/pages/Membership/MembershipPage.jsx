@@ -177,7 +177,7 @@
 // //           occupation: "",
 // //           message: ""
 // //         });
-// //       }, 5000);
+// //       }, 5050);
 // //     }
 // //   };
 
@@ -884,7 +884,7 @@
 //           occupation: "",
 //           message: ""
 //         });
-//       }, 5000);
+//       }, 5050);
       
 //       return () => clearTimeout(resetTimer);
       
@@ -1743,7 +1743,7 @@ const MembershipPage = () => {
         });
         setPhoto(null);
         setPhotoPreview(null);
-      }, 5000);
+      }, 5050);
       
       return () => clearTimeout(resetTimer);
       
