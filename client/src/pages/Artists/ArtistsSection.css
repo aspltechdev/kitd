@@ -1,594 +1,706 @@
 /* src/components/home/ArtistsSection/ArtistsSection.css */
 
 /* ============================================
-   ARTISTS SECTION - BROCHURE ALIGNED
-   Classical Indian Dance Germany e.V.
-   Primary: #8B1E3F | Accent: #C9A96E
+   ARTISTS SECTION - MARQUEE STYLES
    ============================================ */
 
-/* ============================================
-   SECTION BASE
-   ============================================ */
-.artists-section {
+.kitd-artists {
+  padding: 100px 0;
+  background: linear-gradient(180deg, #ffffff 0%, #faf8f9 100%);
   position: relative;
-  padding: 120px 0;
-  background: #FDFCFA;
   overflow: hidden;
 }
 
-.artists-section::before {
-  content: '';
+/* --------------------------------------------
+   DECORATIVE ELEMENTS
+   -------------------------------------------- */
+.kitd-artists__deco {
   position: absolute;
-  inset: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(201, 169, 110, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(139, 30, 63, 0.02) 0%, transparent 50%);
+  border-radius: 50%;
+  opacity: 0.03;
   pointer-events: none;
 }
 
-.artists-container {
-  max-width: 1320px;
+.kitd-artists__deco--1 {
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  right: -150px;
+  background: #8B1E3F;
+  animation: kitdArtistsFloat 22s ease-in-out infinite;
+}
+
+.kitd-artists__deco--2 {
+  width: 350px;
+  height: 350px;
+  bottom: -100px;
+  left: -100px;
+  background: #C41E3A;
+  animation: kitdArtistsFloat 18s ease-in-out infinite reverse;
+}
+
+.kitd-artists__deco--3 {
+  width: 150px;
+  height: 150px;
+  top: 40%;
+  left: 10%;
+  background: #8B1E3F;
+  animation: kitdArtistsFloat 28s ease-in-out infinite;
+}
+
+@keyframes kitdArtistsFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(25px, -25px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* --------------------------------------------
+   CONTAINER
+   -------------------------------------------- */
+.kitd-artists__container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ============================================
-   SECTION HEADER
-   ============================================ */
-.artists-header {
+/* --------------------------------------------
+   HEADER
+   -------------------------------------------- */
+.kitd-artists__header {
   text-align: center;
-  max-width: 680px;
-  margin: 0 auto 80px;
+  max-width: 720px;
+  margin: 0 auto 60px;
 }
 
-.artists-eyebrow {
+.kitd-artists__eyebrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 20px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
-}
-
-.visible .artists-eyebrow {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.artists-eyebrow-line {
-  width: 32px;
-  height: 1px;
-  background: #C9A96E;
-  opacity: 0.7;
-}
-
-.artists-eyebrow-text {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #8B1E3F;
-}
-
-.artists-title {
-  font-size: clamp(32px, 3.5vw, 48px);
-  font-weight: 400;
-  line-height: 1.25;
-  color: #1A1A1A;
-  margin: 0 0 20px;
-  letter-spacing: -0.5px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-}
-
-.visible .artists-title {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.artists-title-accent {
-  color: #8B1E3F;
-}
-
-.artists-subtitle {
-  font-size: 16px;
-  line-height: 1.7;
-  color: #555555;
-  margin: 0;
-  font-weight: 300;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
-}
-
-.visible .artists-subtitle {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ============================================
-   ARTISTS GRID
-   ============================================ */
-.artists-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-bottom: 60px;
-}
-
-/* ============================================
-   ARTIST CARD
-   ============================================ */
-.artist-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0;
-  transform: translateY(30px);
-  display: flex;
-  flex-direction: column;
-}
-
-.visible .artist-card {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.artist-card:hover {
-  border-color: rgba(139, 30, 63, 0.15);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-  transform: translateY(-4px);
-}
-
-/* Card Image */
-.artist-card-image {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3/4;
-  overflow: hidden;
-}
-
-.artist-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.artist-card:hover .artist-card-image img {
-  transform: scale(1.06);
-}
-
-.artist-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.3) 0%,
-    transparent 40%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.artist-card:hover .artist-card-overlay {
-  opacity: 1;
-}
-
-/* Card Content */
-.artist-card-content {
-  padding: 20px 18px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-/* Dance Form Badge */
-.artist-dance-form {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #C9A96E;
-  background: rgba(201, 169, 110, 0.08);
-  padding: 4px 10px;
-  border-radius: 3px;
-  margin-bottom: 12px;
-  align-self: flex-start;
-}
-
-/* Name & Role */
-.artist-card-name {
-  font-size: 17px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin: 0 0 4px;
-  letter-spacing: -0.2px;
-}
-
-.artist-card-role {
-  font-size: 12px;
-  color: #8B1E3F;
-  margin: 0 0 12px;
-  font-weight: 400;
-  letter-spacing: 0.2px;
-}
-
-/* Meta - Dance Form • City */
-.artist-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #777777;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.artist-card-dance {
-  font-weight: 500;
-  color: #555555;
-}
-
-.artist-card-separator {
-  color: #CCCCCC;
-}
-
-.artist-card-location {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #777777;
-}
-
-.artist-card-location svg {
-  color: #8B1E3F;
-  flex-shrink: 0;
-}
-
-/* Biography */
-.artist-card-bio {
-  font-size: 13px;
-  line-height: 1.6;
-  color: #666666;
-  margin: 0 0 16px;
-  font-weight: 300;
-  flex: 1;
-}
-
-/* Card Link */
-.artist-card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #8B1E3F;
-  text-decoration: none;
-  transition: gap 0.3s ease;
-  margin-top: auto;
-}
-
-.artist-card:hover .artist-card-link {
   gap: 12px;
-}
-
-.artist-card-link svg {
-  transition: transform 0.3s ease;
-}
-
-.artist-card:hover .artist-card-link svg {
-  transform: translateX(3px);
-}
-
-/* ============================================
-   EMPTY STATE
-   ============================================ */
-.artists-empty {
-  text-align: center;
-  padding: 80px 40px;
-  background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
-  margin-bottom: 60px;
-}
-
-.artists-empty-icon {
-  color: #C9A96E;
-  opacity: 0.4;
-  margin-bottom: 20px;
-}
-
-.artists-empty-title {
-  font-size: 20px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin: 0 0 12px;
-}
-
-.artists-empty-text {
-  font-size: 15px;
-  color: #777777;
-  margin: 0;
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-}
-
-/* ============================================
-   LOADING SKELETON
-   ============================================ */
-.artists-loading {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-bottom: 60px;
-}
-
-.artist-card-skeleton {
-  background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.skeleton-image {
-  width: 100%;
-  aspect-ratio: 3/4;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-.skeleton-content {
-  padding: 20px 18px;
-}
-
-.skeleton-badge {
-  height: 12px;
-  width: 60px;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 3px;
-  margin-bottom: 12px;
-}
-
-.skeleton-name {
-  height: 18px;
-  width: 70%;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 3px;
-  margin-bottom: 8px;
-}
-
-.skeleton-role {
-  height: 12px;
-  width: 50%;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 3px;
-  margin-bottom: 12px;
-}
-
-.skeleton-meta {
-  height: 12px;
-  width: 80%;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 3px;
-  margin-bottom: 12px;
-}
-
-.skeleton-text {
-  height: 12px;
-  width: 100%;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 3px;
   margin-bottom: 16px;
 }
 
-.skeleton-link {
-  height: 12px;
-  width: 35%;
-  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 3px;
+.kitd-artists__eyebrow-line {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #8B1E3F);
+  border-radius: 2px;
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* ============================================
-   BOTTOM CTA
-   ============================================ */
-.artists-cta-wrapper {
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
-}
-
-.visible .artists-cta-wrapper {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.artists-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 0;
-  font-size: 14px;
-  font-weight: 500;
+.kitd-artists__eyebrow-text {
+  font-size: 13px;
+  font-weight: 600;
   color: #8B1E3F;
-  text-decoration: none;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid transparent;
-  transition: all 0.3s ease, gap 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 3px;
 }
 
-.artists-cta:hover {
-  border-bottom-color: #8B1E3F;
-  gap: 18px;
+.kitd-artists__title {
+  font-size: 44px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 16px;
+  line-height: 1.1;
 }
 
-.artists-cta-icon {
+.kitd-artists__title-accent {
+  color: #8B1E3F;
+  position: relative;
+}
+
+.kitd-artists__title-accent::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(139, 30, 63, 0.15);
+  border-radius: 2px;
+}
+
+.kitd-artists__subtitle {
+  font-size: 18px;
+  color: #666;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* --------------------------------------------
+   MARQUEE WRAPPER
+   -------------------------------------------- */
+.kitd-artists__marquee-wrapper {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 0;
+  margin-bottom: 40px;
+}
+
+.kitd-artists__marquee {
+  overflow: hidden;
+  position: relative;
+}
+
+.kitd-artists__marquee-track {
+  display: flex;
+  gap: 20px;
+  animation: kitdArtistsMarquee 40s linear infinite;
+  width: max-content;
+}
+
+.kitd-artists__marquee-wrapper:hover .kitd-artists__marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes kitdArtistsMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+/* --------------------------------------------
+   MARQUEE CARD
+   -------------------------------------------- */
+.kitd-artists__marquee-card {
+  position: relative;
+  width: 280px;
+  min-height: 340px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.kitd-artists__marquee-card--hovered {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(139, 30, 63, 0.2);
+}
+
+.kitd-artists__marquee-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.kitd-artists__marquee-card--hovered .kitd-artists__marquee-bg {
+  transform: scale(1.08);
+}
+
+.kitd-artists__marquee-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.88;
+  transition: opacity 0.4s ease;
+}
+
+.kitd-artists__marquee-card--hovered .kitd-artists__marquee-overlay {
+  opacity: 0.95;
+}
+
+/* Content */
+.kitd-artists__marquee-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 340px;
+  padding: 20px 18px 18px;
+}
+
+.kitd-artists__marquee-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
   display: flex;
   align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.kitd-artists__marquee-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kitd-artists__marquee-dance {
+  display: inline-block;
+  padding: 3px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  letter-spacing: 0.5px;
+}
+
+.kitd-artists__marquee-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.kitd-artists__marquee-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 2px;
+  line-height: 1.2;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+.kitd-artists__marquee-role {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 6px;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
+.kitd-artists__marquee-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
+.kitd-artists__marquee-location svg {
+  opacity: 0.7;
+}
+
+.kitd-artists__marquee-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+  opacity: 0.7;
+}
+
+.kitd-artists__marquee-link:hover {
+  gap: 10px;
+  opacity: 1;
+}
+
+.kitd-artists__marquee-link svg {
   transition: transform 0.3s ease;
 }
 
-.artists-cta:hover .artists-cta-icon {
+.kitd-artists__marquee-link:hover svg {
   transform: translateX(4px);
 }
 
-/* ============================================
-   RESPONSIVE - TABLET
-   ============================================ */
-@media (max-width: 1024px) {
-  .artists-section {
-    padding: 100px 0;
-  }
-
-  .artists-container {
-    padding: 0 32px;
-  }
-
-  .artists-grid,
-  .artists-loading {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
+/* --------------------------------------------
+   LOADING STATE
+   -------------------------------------------- */
+.kitd-artists__loading {
+  padding: 20px 0;
+  overflow: hidden;
 }
 
-/* ============================================
-   RESPONSIVE - MOBILE
-   ============================================ */
-@media (max-width: 768px) {
-  .artists-section {
-    padding: 80px 0;
+.kitd-artists__loading-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+}
+
+.kitd-artists__loading-card {
+  width: 280px;
+  min-height: 340px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
+}
+
+.kitd-artists__loading-image {
+  width: 100%;
+  padding-bottom: 75%;
+  background: #e8e8e8;
+  animation: kitdArtistsPulse 1.5s ease-in-out infinite;
+}
+
+.kitd-artists__loading-content {
+  padding: 16px;
+}
+
+.kitd-artists__loading-badge {
+  height: 16px;
+  width: 60px;
+  background: #e8e8e8;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  animation: kitdArtistsPulse 1.5s ease-in-out infinite;
+}
+
+.kitd-artists__loading-name {
+  height: 18px;
+  background: #e8e8e8;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  animation: kitdArtistsPulse 1.5s ease-in-out infinite;
+  width: 75%;
+}
+
+.kitd-artists__loading-role {
+  height: 12px;
+  background: #e8e8e8;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  animation: kitdArtistsPulse 1.5s ease-in-out infinite;
+  width: 55%;
+}
+
+.kitd-artists__loading-location {
+  height: 10px;
+  background: #e8e8e8;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  animation: kitdArtistsPulse 1.5s ease-in-out infinite;
+  width: 40%;
+}
+
+.kitd-artists__loading-link {
+  height: 12px;
+  background: #e8e8e8;
+  border-radius: 4px;
+  animation: kitdArtistsPulse 1.5s ease-in-out infinite;
+  width: 30%;
+}
+
+@keyframes kitdArtistsPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* --------------------------------------------
+   EMPTY STATE
+   -------------------------------------------- */
+.kitd-artists__empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #f0f0f0;
+}
+
+.kitd-artists__empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #f8f5f6;
+  color: #8B1E3F;
+  margin-bottom: 16px;
+}
+
+.kitd-artists__empty-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+}
+
+.kitd-artists__empty-text {
+  font-size: 15px;
+  color: #666;
+  margin: 0 0 24px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --------------------------------------------
+   CTA
+   -------------------------------------------- */
+.kitd-artists__cta-wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.kitd-artists__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 44px;
+  background: transparent;
+  color: #8B1E3F;
+  border: 2px solid #8B1E3F;
+  border-radius: 60px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.kitd-artists__cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  transition: left 0.5s ease;
+  z-index: -1;
+}
+
+.kitd-artists__cta:hover::before {
+  left: 0;
+}
+
+.kitd-artists__cta:hover {
+  color: #fff;
+  transform: translateY(-4px);
+  box-shadow: 0 14px 50px rgba(139, 30, 63, 0.25);
+  gap: 16px;
+  border-color: #8B1E3F;
+}
+
+.kitd-artists__cta-icon {
+  transition: transform 0.3s ease;
+}
+
+.kitd-artists__cta:hover .kitd-artists__cta-icon {
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------
+   RESPONSIVE
+   -------------------------------------------- */
+@media (max-width: 1024px) {
+  .kitd-artists__marquee-card {
+    width: 240px;
+    min-height: 300px;
   }
 
-  .artists-container {
-    padding: 0 24px;
+  .kitd-artists__marquee-content {
+    min-height: 300px;
+    padding: 16px 14px 14px;
   }
 
-  .artists-header {
-    margin-bottom: 60px;
-  }
-
-  .artists-grid,
-  .artists-loading {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 40px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .artist-card-image {
-    aspect-ratio: 16/9;
-    object-position: center 25%;
-  }
-
-  .artist-card-content {
-    padding: 18px 16px;
-  }
-
-  .artist-card-name {
+  .kitd-artists__marquee-name {
     font-size: 16px;
   }
 
-  .artists-empty {
-    padding: 60px 24px;
+  .kitd-artists__loading-card {
+    width: 240px;
+    min-height: 300px;
   }
 }
 
-/* ============================================
-   RESPONSIVE - SMALL MOBILE
-   ============================================ */
-@media (max-width: 480px) {
-  .artists-section {
+@media (max-width: 768px) {
+  .kitd-artists {
     padding: 60px 0;
   }
 
-  .artists-container {
-    padding: 0 20px;
+  .kitd-artists__title {
+    font-size: 32px;
   }
 
-  .artists-header {
-    margin-bottom: 48px;
+  .kitd-artists__marquee-card {
+    width: 200px;
+    min-height: 260px;
   }
 
-  .artists-eyebrow-text {
-    font-size: 10px;
-    letter-spacing: 3px;
+  .kitd-artists__marquee-content {
+    min-height: 260px;
+    padding: 14px 12px 12px;
   }
 
-  .artists-title {
-    font-size: 24px;
-  }
-
-  .artists-subtitle {
-    font-size: 14px;
-  }
-
-  .artist-card-content {
-    padding: 16px 14px;
-  }
-
-  .artist-card-name {
+  .kitd-artists__marquee-name {
     font-size: 15px;
   }
 
-  .artist-dance-form {
+  .kitd-artists__marquee-role {
+    font-size: 11px;
+  }
+
+  .kitd-artists__marquee-dance {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .kitd-artists__marquee-badge {
     font-size: 9px;
     padding: 3px 8px;
   }
 
-  .artists-empty {
-    padding: 48px 20px;
+  .kitd-artists__loading-card {
+    width: 200px;
+    min-height: 260px;
+  }
+
+  .kitd-artists__cta {
+    padding: 14px 32px;
+    font-size: 15px;
+  }
+
+  .kitd-artists__marquee-track {
+    gap: 14px;
+    animation-duration: 30s;
   }
 }
 
-/* ============================================
-   ACCESSIBILITY
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .artists-section *,
-  .artists-section *::before,
-  .artists-section *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+@media (max-width: 480px) {
+  .kitd-artists {
+    padding: 40px 0;
   }
-  
-  .artist-card-image img {
+
+  .kitd-artists__title {
+    font-size: 26px;
+  }
+
+  .kitd-artists__subtitle {
+    font-size: 15px;
+  }
+
+  .kitd-artists__marquee-card {
+    width: 170px;
+    min-height: 220px;
+  }
+
+  .kitd-artists__marquee-content {
+    min-height: 220px;
+    padding: 12px 10px 10px;
+  }
+
+  .kitd-artists__marquee-name {
+    font-size: 13px;
+  }
+
+  .kitd-artists__marquee-role {
+    font-size: 10px;
+  }
+
+  .kitd-artists__marquee-location {
+    font-size: 10px;
+  }
+
+  .kitd-artists__marquee-dance {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .kitd-artists__marquee-link {
+    font-size: 11px;
+  }
+
+  .kitd-artists__loading-card {
+    width: 170px;
+    min-height: 220px;
+  }
+
+  .kitd-artists__cta {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .kitd-artists__deco {
+    display: none;
+  }
+
+  .kitd-artists__marquee-track {
+    gap: 10px;
+    animation-duration: 25s;
+  }
+}
+
+/* --------------------------------------------
+   ACCESSIBILITY
+   -------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .kitd-artists__marquee-track {
+    animation-duration: 0.01ms !important;
+    animation-play-state: running !important;
+  }
+
+  .kitd-artists__marquee-card,
+  .kitd-artists__marquee-card--hovered,
+  .kitd-artists__marquee-bg,
+  .kitd-artists__marquee-link,
+  .kitd-artists__cta,
+  .kitd-artists__deco {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+
+  .kitd-artists__marquee-bg {
     transform: none !important;
   }
+
+  .kitd-artists__marquee-card--hovered .kitd-artists__marquee-bg {
+    transform: none !important;
+  }
+
+  .kitd-artists__cta::before {
+    display: none;
+  }
+
+  .kitd-artists__loading-image,
+  .kitd-artists__loading-badge,
+  .kitd-artists__loading-name,
+  .kitd-artists__loading-role,
+  .kitd-artists__loading-location,
+  .kitd-artists__loading-link {
+    animation: none !important;
+  }
 }
 
-.artist-card-link:focus-visible,
-.artists-cta:focus-visible {
-  outline: 2px solid #8B1E3F;
+.kitd-artists__marquee-link:focus-visible,
+.kitd-artists__cta:focus-visible {
+  outline: 2px solid #ffffff;
   outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  .kitd-artists__marquee-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .kitd-artists__cta {
+    border: 2px solid ButtonText;
+  }
 }
