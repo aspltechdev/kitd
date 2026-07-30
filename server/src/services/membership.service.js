@@ -20,7 +20,7 @@ export const getById = async (id) => {
 
 export const create = async (data) => {
   return await prisma.membership.create({
-    data,
+    data,  // This automatically handles all fields passed in
   });
 };
 
@@ -37,6 +37,20 @@ export const remove = async (id) => {
   return await prisma.membership.delete({
     where: {
       id: Number(id),
+    },
+  });
+};
+
+// membershipEnquiry.service.js
+
+export const approve = async (id, memberId) => {
+  return prisma.membershipEnquiry.update({
+    where: { id: Number(id) },
+    data: {
+      status: "APPROVED",
+      memberId: memberId,
+      sepaToken: null,
+      sepaTokenExpiry: null,
     },
   });
 };

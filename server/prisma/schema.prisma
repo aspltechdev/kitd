@@ -32,31 +32,7 @@ model Team {
   updatedAt   DateTime @updatedAt
 }
 
-model Membership {
-  id              Int      @id @default(autoincrement())
 
-  memberId        String   @unique
-  fullName        String
-  email           String   @unique
-  mobile          String
-
-  gender          String
-  membershipType  String
-
-  city            String?
-  state           String?
-  country          String?
-
-  joinedDate      DateTime?
-  expiryDate      DateTime?
-
-  image           String?
-
-  isActive        Boolean  @default(true)
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
 model Activity {
   id               Int       @id @default(autoincrement())
   title            String
@@ -210,7 +186,6 @@ enum PartnerType {
 
 
 
-
 model MembershipEnquiry {
   id             Int       @id @default(autoincrement())
   photo          String?
@@ -221,7 +196,7 @@ model MembershipEnquiry {
   gender         String?
   dateOfBirth    DateTime?
   occupation     String?
-  biography      String?   @db.Text
+  biography      String?
   membershipType String?
   danceStyle     String?
   experience     String?
@@ -231,41 +206,68 @@ model MembershipEnquiry {
   country        String?
   postalCode     String?
   socialLinks    Json?
-  message        String?   @db.Text
+  message        String?
 
-  registrations MemberRegistration[]
+  // SEPA Consent Fields
+  sepaToken            String?   @unique
+  sepaTokenExpiry      DateTime?
+  sepaConsentSent      Boolean   @default(false)
+  sepaConsentSentAt    DateTime?
+  sepaConsentReceived  Boolean   @default(false)
+  sepaConsentReceivedAt DateTime?
+  sepaConsentFile      String?
+  iban                 String?
+  accountHolder        String?
+  bankName             String?
 
-  registrationToken   String?
-  tokenExpiry         DateTime?
-
-  remarks             String?
+  memberId       String?   @unique
+  remarks        String?
   status         String    @default("NEW")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 }
 
-model MemberRegistration {
-  id             Int       @id @default(autoincrement())
-  enquiryId      Int
-  enquiry        MembershipEnquiry @relation(fields: [enquiryId], references: [id])
-  
-  fullName       String
-  stageName      String?
-  gender         String?
-  dateOfBirth    DateTime?
-  address        String?
-  city           String?
-  state          String?
-  country        String?
-  postalCode     String?
-  danceStyle     String?
-  guru           String?
-  experience     String?
-  biography      String?   @db.Text
-  socialLinks    Json?
-  document       String?
-  
-  status         String    @default("PENDING")
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+model Membership {
+  id              Int      @id @default(autoincrement())
+
+  memberId        String   @unique
+  fullName        String
+  stageName       String?
+  email           String   @unique
+  mobile          String
+  gender          String?
+  dateOfBirth     DateTime?
+  occupation      String?
+  biography       String?
+  membershipType  String?
+  danceStyle      String?
+  experience      String?
+  address         String?
+  city            String?
+  state           String?
+  country         String?
+  postalCode      String?
+  socialLinks     Json?
+  message         String?
+  photo           String?
+
+  // SEPA Payment Details
+  iban                 String?
+  accountHolder        String?
+  bankName             String?
+  sepaMandateFile      String?
+  sepaMandateReference String?
+  paymentStatus        String?   @default("ACTIVE")
+
+  // Membership Details
+  joinedDate      DateTime?
+  expiryDate      DateTime?
+  annualFee       Float?
+  paymentDay      Int?
+
+  image           String?
+  isActive        Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

@@ -881,22 +881,573 @@
 // };
 
 
+// import { v4 as uuidv4 } from "uuid";
+// import * as membershipEnquiryService from "../services/membershipEnquiry.service.js";
+// import { sendEmail } from "../services/email.service.js";
+// import membershipEmail from "../templates/membershipEmail.js";
+// import underReviewEmail from "../templates/underReviewEmail.js";
+// import registrationInvitationEmail from "../templates/registrationInvitationEmail.js";
+// import registrationSubmittedEmail from "../templates/registrationSubmittedEmail.js";
+// import changesRequestedEmail from "../templates/changesRequestedEmail.js";
+// import memberApprovedEmail from "../templates/memberApprovedEmail.js";
+// import adminRegistrationReceivedEmail from "../templates/adminRegistrationReceivedEmail.js";
+// import * as memberRegistrationService from "../services/memberRegistration.service.js";
+
+// export const getAll = async (req, res) => {
+//   try {
+//     const enquiries = await membershipEnquiryService.getAll();
+
+//     res.status(200).json({
+//       success: true,
+//       data: enquiries,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const getById = async (req, res) => {
+//   try {
+//     const enquiry = await membershipEnquiryService.getById(req.params.id);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Membership enquiry not found",
+//       });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const create = async (req, res) => {
+//   try {
+//     // Handle file upload if present
+//     const photo = req.file?.filename || null;
+
+//     // Parse socialLinks if it's a string (from FormData)
+//     let socialLinks = req.body.socialLinks;
+//     if (typeof socialLinks === 'string') {
+//       try {
+//         socialLinks = JSON.parse(socialLinks);
+//       } catch (e) {
+//         socialLinks = null;
+//       }
+//     }
+
+//     // Handle dateOfBirth conversion
+//     const dateOfBirth = req.body.dateOfBirth 
+//       ? new Date(req.body.dateOfBirth) 
+//       : null;
+
+//     // Prepare enquiry data with all new fields
+//     const enquiryData = {
+//       fullName: req.body.fullName,
+//       stageName: req.body.stageName || null,
+//       email: req.body.email?.toLowerCase().trim(),
+//       mobile: req.body.mobile,
+//       gender: req.body.gender || null,
+//       dateOfBirth: dateOfBirth,
+//       occupation: req.body.occupation || null,
+//       biography: req.body.biography || null,
+//       membershipType: req.body.membershipType || null,
+//       danceStyle: req.body.danceStyle || null,
+//       experience: req.body.experience || null,
+//       address: req.body.address || null,
+//       city: req.body.city || null,
+//       state: req.body.state || null,
+//       country: req.body.country || null,
+//       postalCode: req.body.postalCode || null,
+//       socialLinks: socialLinks,
+//       message: req.body.message || null,
+//       photo: photo,
+//     };
+
+//     // Save enquiry
+//     const enquiry = await membershipEnquiryService.create(enquiryData);
+
+//     // Send confirmation email
+//     try {
+//       await sendEmail({
+//         to: enquiry.email,
+//         subject: "Membership Application Received - KITD Germany",
+//         html: membershipEmail(enquiry.fullName),
+//       });
+
+//       console.log("Membership confirmation email sent.");
+//     } catch (emailError) {
+//       console.error("Email Error:", emailError.message);
+//       // Continue even if email fails
+//     }
+
+//     // Send notification to admin
+//     try {
+//       await sendEmail({
+//         to: process.env.ADMIN_EMAIL,
+//         subject: `New Membership Application - ${enquiry.fullName}`,
+//         html: `
+//           <h2>New Membership Application Received</h2>
+//           <p><strong>Name:</strong> ${enquiry.fullName}</p>
+//           <p><strong>Stage Name:</strong> ${enquiry.stageName || 'N/A'}</p>
+//           <p><strong>Email:</strong> ${enquiry.email}</p>
+//           <p><strong>Phone:</strong> ${enquiry.mobile}</p>
+//           <p><strong>Membership Type:</strong> ${enquiry.membershipType || 'N/A'}</p>
+//           <p><strong>Dance Style:</strong> ${enquiry.danceStyle || 'N/A'}</p>
+//           <p><strong>City:</strong> ${enquiry.city || 'N/A'}</p>
+//           <p><strong>Country:</strong> ${enquiry.country || 'N/A'}</p>
+//           ${enquiry.biography ? `<p><strong>Biography:</strong> ${enquiry.biography.substring(0, 200)}...</p>` : ''}
+//           <br/>
+//           <p>Login to admin panel to review the application.</p>
+//         `,
+//       });
+//     } catch (emailError) {
+//       console.error("Admin Email Error:", emailError.message);
+//     }
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Membership application submitted successfully",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     console.error("Create Enquiry Error:", error);
+
+//     // Handle validation errors
+//     if (error.code === 'P2002') {
+//       return res.status(400).json({
+//         success: false,
+//         message: "An application with this email already exists.",
+//       });
+//     }
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const update = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+    
+//     // Check if enquiry exists
+//     const existingEnquiry = await membershipEnquiryService.getById(id);
+//     if (!existingEnquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Membership enquiry not found",
+//       });
+//     }
+
+//     // Handle file upload if present
+//     const photo = req.file?.filename || existingEnquiry.photo;
+
+//     // Parse socialLinks if it's a string
+//     let socialLinks = req.body.socialLinks;
+//     if (typeof socialLinks === 'string') {
+//       try {
+//         socialLinks = JSON.parse(socialLinks);
+//       } catch (e) {
+//         socialLinks = existingEnquiry.socialLinks;
+//       }
+//     }
+
+//     // Handle dateOfBirth conversion
+//     const dateOfBirth = req.body.dateOfBirth 
+//       ? new Date(req.body.dateOfBirth) 
+//       : existingEnquiry.dateOfBirth;
+
+//     // Prepare update data
+//     const updateData = {
+//       fullName: req.body.fullName || existingEnquiry.fullName,
+//       stageName: req.body.stageName !== undefined ? req.body.stageName : existingEnquiry.stageName,
+//       email: req.body.email?.toLowerCase().trim() || existingEnquiry.email,
+//       mobile: req.body.mobile || existingEnquiry.mobile,
+//       gender: req.body.gender !== undefined ? req.body.gender : existingEnquiry.gender,
+//       dateOfBirth: dateOfBirth,
+//       occupation: req.body.occupation !== undefined ? req.body.occupation : existingEnquiry.occupation,
+//       biography: req.body.biography !== undefined ? req.body.biography : existingEnquiry.biography,
+//       membershipType: req.body.membershipType || existingEnquiry.membershipType,
+//       danceStyle: req.body.danceStyle !== undefined ? req.body.danceStyle : existingEnquiry.danceStyle,
+//       experience: req.body.experience !== undefined ? req.body.experience : existingEnquiry.experience,
+//       address: req.body.address !== undefined ? req.body.address : existingEnquiry.address,
+//       city: req.body.city || existingEnquiry.city,
+//       state: req.body.state !== undefined ? req.body.state : existingEnquiry.state,
+//       country: req.body.country || existingEnquiry.country,
+//       postalCode: req.body.postalCode !== undefined ? req.body.postalCode : existingEnquiry.postalCode,
+//       socialLinks: socialLinks,
+//       message: req.body.message !== undefined ? req.body.message : existingEnquiry.message,
+//       photo: photo,
+//     };
+
+//     const enquiry = await membershipEnquiryService.update(id, updateData);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Membership enquiry updated successfully",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     console.error("Update Enquiry Error:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const updateStatus = async (req, res) => {
+//   try {
+//     const enquiry = await membershipEnquiryService.updateStatus(
+//       req.params.id,
+//       req.body.status,
+//       req.body.remarks || null
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Status updated successfully",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const approve = async (req, res) => {
+//   try {
+//     const member = await membershipEnquiryService.approve(req.params.id);
+
+//     // Send approval email
+//     await sendEmail({
+//       to: member.email,
+//       subject: "Congratulations! Your Membership Has Been Approved",
+//       html: memberApprovedEmail(member.fullName, member.memberId),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved successfully",
+//       data: member,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const remove = async (req, res) => {
+//   try {
+//     await membershipEnquiryService.remove(req.params.id);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Membership enquiry deleted successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ FIXED: startReview - Uses proper service method
+// export const startReview = async (req, res) => {
+//   try {
+//     const enquiry = await membershipEnquiryService.startReview(req.params.id);
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Your Membership Application is Under Review",
+//       html: underReviewEmail(enquiry.fullName),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Application moved to Under Review.",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ FIXED: sendRegistrationForm - Uses proper service method with token
+// export const sendRegistrationForm = async (req, res) => {
+//   try {
+//     const token = uuidv4();
+//     const expiry = new Date();
+//     expiry.setDate(expiry.getDate() + 7);
+
+//     const enquiry = await membershipEnquiryService.sendRegistration(
+//       req.params.id,
+//       token,
+//       expiry
+//     );
+
+//     const registrationLink = `${process.env.CLIENT_URL}/member-registration/${token}`;
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Complete Your Membership Registration",
+//       html: registrationInvitationEmail(enquiry.fullName, registrationLink),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Registration invitation sent.",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ FIXED: requestChanges - Uses proper service method
+// export const requestChanges = async (req, res) => {
+//   try {
+//     const { remarks } = req.body;
+
+//     const enquiry = await membershipEnquiryService.requestChanges(
+//       req.params.id,
+//       remarks
+//     );
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Changes Required for Your Membership Application",
+//       html: changesRequestedEmail(enquiry.fullName, remarks),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Change request sent.",
+//       data: enquiry,
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message
+//     });
+//   }
+// };
+
+// // ✅ FIXED: approveMember - Uses proper service method
+// export const approveMember = async (req, res) => {
+//   try {
+//     const member = await membershipEnquiryService.approve(req.params.id);
+
+//     await sendEmail({
+//       to: member.email,
+//       subject: "Congratulations! Your Membership Has Been Approved",
+//       html: memberApprovedEmail(member.fullName, member.memberId),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved successfully.",
+//       data: member
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message
+//     });
+//   }
+// };
+
+// // ✅ FIXED: submitRegistration - Added token expiry check and emails
+// export const submitRegistration = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+
+//     const enquiry = await membershipEnquiryService.getByToken(token);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Invalid registration link",
+//       });
+//     }
+
+//     // ✅ Token expiry check
+//     if (
+//       enquiry.tokenExpiry &&
+//       new Date(enquiry.tokenExpiry) < new Date()
+//     ) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Registration link has expired.",
+//       });
+//     }
+
+//     // Handle file upload if present
+//     const documentFile = req.file?.filename || null;
+
+//     const registration = await memberRegistrationService.create({
+//       enquiryId: enquiry.id,
+
+//       fullName: req.body.fullName,
+//       gender: req.body.gender,
+//       dateOfBirth: req.body.dateOfBirth
+//         ? new Date(req.body.dateOfBirth)
+//         : null,
+
+//       address: req.body.address,
+//       city: req.body.city,
+//       state: req.body.state,
+//       country: req.body.country,
+//       postalCode: req.body.postalCode || null,
+
+//       danceStyle: req.body.danceStyle,
+//       guru: req.body.guru,
+//       experience: req.body.experience,
+      
+//       stageName: req.body.stageName || null,
+//       biography: req.body.biography || null,
+//       socialLinks: req.body.socialLinks || null,
+
+//       document: documentFile,
+//     });
+
+//     await membershipEnquiryService.registrationSubmitted(enquiry.id);
+
+//     // ✅ Send confirmation email to applicant
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Registration Submitted Successfully",
+//       html: registrationSubmittedEmail(enquiry.fullName),
+//     });
+
+//     // ✅ Send notification email to admin
+//     await sendEmail({
+//       to: process.env.ADMIN_EMAIL,
+//       subject: "New Membership Registration Received",
+//       html: adminRegistrationReceivedEmail(enquiry.fullName),
+//     });
+
+//     return res.status(201).json({
+//       success: true,
+//       data: registration,
+//     });
+
+//   } catch (error) {
+//     console.error("Registration Error:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ Token validation endpoint
+// export const validateRegistrationToken = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+
+//     const enquiry = await membershipEnquiryService.getByToken(token);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Invalid registration link.",
+//       });
+//     }
+
+//     if (
+//       enquiry.tokenExpiry &&
+//       new Date(enquiry.tokenExpiry) < new Date()
+//     ) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Registration link has expired.",
+//       });
+//     }
+
+//     return res.status(200).json({
+//       success: true,
+//       data: enquiry,
+//     });
+
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ Get enquiry by token
+// export const getByToken = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+
+//     const enquiry = await membershipEnquiryService.getByToken(token);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Invalid token.",
+//       });
+//     }
+
+//     return res.status(200).json({
+//       success: true,
+//       data: enquiry,
+//     });
+
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// membershipEnquiry.controller.js
+
 import { v4 as uuidv4 } from "uuid";
 import * as membershipEnquiryService from "../services/membershipEnquiry.service.js";
 import { sendEmail } from "../services/email.service.js";
 import membershipEmail from "../templates/membershipEmail.js";
 import underReviewEmail from "../templates/underReviewEmail.js";
-import registrationInvitationEmail from "../templates/registrationInvitationEmail.js";
-import registrationSubmittedEmail from "../templates/registrationSubmittedEmail.js";
+import sepaConsentEmail from "../templates/sepaConsentEmail.js";
+import sepaConsentReceivedEmail from "../templates/sepaConsentReceivedEmail.js";
 import changesRequestedEmail from "../templates/changesRequestedEmail.js";
 import memberApprovedEmail from "../templates/memberApprovedEmail.js";
-import adminRegistrationReceivedEmail from "../templates/adminRegistrationReceivedEmail.js";
-import * as memberRegistrationService from "../services/memberRegistration.service.js";
-
+import * as membershipService from "../services/membership.service.js"; 
+// ============================================
+// GET ALL
+// ============================================
 export const getAll = async (req, res) => {
   try {
     const enquiries = await membershipEnquiryService.getAll();
-
     res.status(200).json({
       success: true,
       data: enquiries,
@@ -909,6 +1460,9 @@ export const getAll = async (req, res) => {
   }
 };
 
+// ============================================
+// GET BY ID
+// ============================================
 export const getById = async (req, res) => {
   try {
     const enquiry = await membershipEnquiryService.getById(req.params.id);
@@ -932,14 +1486,17 @@ export const getById = async (req, res) => {
   }
 };
 
+// ============================================
+// CREATE (Public - Membership Application)
+// ============================================
 export const create = async (req, res) => {
   try {
-    // Handle file upload if present
+    // Handle file upload
     const photo = req.file?.filename || null;
 
-    // Parse socialLinks if it's a string (from FormData)
+    // Parse socialLinks if string (from FormData)
     let socialLinks = req.body.socialLinks;
-    if (typeof socialLinks === 'string') {
+    if (typeof socialLinks === "string") {
       try {
         socialLinks = JSON.parse(socialLinks);
       } catch (e) {
@@ -947,73 +1504,77 @@ export const create = async (req, res) => {
       }
     }
 
-    // Handle dateOfBirth conversion
-    const dateOfBirth = req.body.dateOfBirth 
-      ? new Date(req.body.dateOfBirth) 
+    // Handle dateOfBirth
+    const dateOfBirth = req.body.dateOfBirth
+      ? new Date(req.body.dateOfBirth)
       : null;
 
-    // Prepare enquiry data with all new fields
     const enquiryData = {
-      fullName: req.body.fullName,
-      stageName: req.body.stageName || null,
+      fullName: req.body.fullName?.trim(),
+      stageName: req.body.stageName?.trim() || null,
       email: req.body.email?.toLowerCase().trim(),
-      mobile: req.body.mobile,
+      mobile: req.body.mobile?.trim(),
       gender: req.body.gender || null,
       dateOfBirth: dateOfBirth,
-      occupation: req.body.occupation || null,
-      biography: req.body.biography || null,
+      occupation: req.body.occupation?.trim() || null,
+      biography: req.body.biography?.trim() || null,
       membershipType: req.body.membershipType || null,
       danceStyle: req.body.danceStyle || null,
-      experience: req.body.experience || null,
-      address: req.body.address || null,
-      city: req.body.city || null,
-      state: req.body.state || null,
-      country: req.body.country || null,
-      postalCode: req.body.postalCode || null,
+      experience: req.body.experience?.trim() || null,
+      address: req.body.address?.trim() || null,
+      city: req.body.city?.trim() || null,
+      state: req.body.state?.trim() || null,
+      country: req.body.country || "Germany",
+      postalCode: req.body.postalCode?.trim() || null,
       socialLinks: socialLinks,
-      message: req.body.message || null,
+      message: req.body.message?.trim() || null,
       photo: photo,
     };
 
     // Save enquiry
     const enquiry = await membershipEnquiryService.create(enquiryData);
 
-    // Send confirmation email
+    // Send confirmation email to applicant
     try {
       await sendEmail({
         to: enquiry.email,
         subject: "Membership Application Received - KITD Germany",
         html: membershipEmail(enquiry.fullName),
       });
-
-      console.log("Membership confirmation email sent.");
+      console.log("✅ Confirmation email sent to:", enquiry.email);
     } catch (emailError) {
-      console.error("Email Error:", emailError.message);
-      // Continue even if email fails
+      console.error("❌ Applicant Email Error:", emailError.message);
     }
 
     // Send notification to admin
     try {
-      await sendEmail({
-        to: process.env.ADMIN_EMAIL,
-        subject: `New Membership Application - ${enquiry.fullName}`,
-        html: `
-          <h2>New Membership Application Received</h2>
-          <p><strong>Name:</strong> ${enquiry.fullName}</p>
-          <p><strong>Stage Name:</strong> ${enquiry.stageName || 'N/A'}</p>
-          <p><strong>Email:</strong> ${enquiry.email}</p>
-          <p><strong>Phone:</strong> ${enquiry.mobile}</p>
-          <p><strong>Membership Type:</strong> ${enquiry.membershipType || 'N/A'}</p>
-          <p><strong>Dance Style:</strong> ${enquiry.danceStyle || 'N/A'}</p>
-          <p><strong>City:</strong> ${enquiry.city || 'N/A'}</p>
-          <p><strong>Country:</strong> ${enquiry.country || 'N/A'}</p>
-          ${enquiry.biography ? `<p><strong>Biography:</strong> ${enquiry.biography.substring(0, 200)}...</p>` : ''}
-          <br/>
-          <p>Login to admin panel to review the application.</p>
-        `,
-      });
+      if (process.env.ADMIN_EMAIL) {
+        await sendEmail({
+          to: process.env.ADMIN_EMAIL,
+          subject: `New Membership Application - ${enquiry.fullName}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px;">
+              <h2 style="color: #8B1E3F;">New Membership Application</h2>
+              <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                <p><strong>Name:</strong> ${enquiry.fullName}</p>
+                <p><strong>Stage Name:</strong> ${enquiry.stageName || 'N/A'}</p>
+                <p><strong>Email:</strong> ${enquiry.email}</p>
+                <p><strong>Phone:</strong> ${enquiry.mobile}</p>
+                <p><strong>Membership Type:</strong> ${enquiry.membershipType || 'N/A'}</p>
+                <p><strong>Dance Style:</strong> ${enquiry.danceStyle || 'N/A'}</p>
+                <p><strong>City:</strong> ${enquiry.city || 'N/A'}</p>
+                <p><strong>Country:</strong> ${enquiry.country || 'N/A'}</p>
+                ${enquiry.biography ? `<p><strong>Biography:</strong> ${enquiry.biography.substring(0, 200)}...</p>` : ''}
+              </div>
+              <br/>
+              <p style="color: #666;">Login to admin panel to review this application.</p>
+            </div>
+          `,
+        });
+        console.log("✅ Admin notification sent");
+      }
     } catch (emailError) {
-      console.error("Admin Email Error:", emailError.message);
+      console.error("❌ Admin Email Error:", emailError.message);
     }
 
     res.status(201).json({
@@ -1022,10 +1583,9 @@ export const create = async (req, res) => {
       data: enquiry,
     });
   } catch (error) {
-    console.error("Create Enquiry Error:", error);
+    console.error("❌ Create Enquiry Error:", error);
 
-    // Handle validation errors
-    if (error.code === 'P2002') {
+    if (error.code === "P2002") {
       return res.status(400).json({
         success: false,
         message: "An application with this email already exists.",
@@ -1039,11 +1599,13 @@ export const create = async (req, res) => {
   }
 };
 
+// ============================================
+// UPDATE
+// ============================================
 export const update = async (req, res) => {
   try {
     const { id } = req.params;
-    
-    // Check if enquiry exists
+
     const existingEnquiry = await membershipEnquiryService.getById(id);
     if (!existingEnquiry) {
       return res.status(404).json({
@@ -1052,12 +1614,10 @@ export const update = async (req, res) => {
       });
     }
 
-    // Handle file upload if present
     const photo = req.file?.filename || existingEnquiry.photo;
 
-    // Parse socialLinks if it's a string
     let socialLinks = req.body.socialLinks;
-    if (typeof socialLinks === 'string') {
+    if (typeof socialLinks === "string") {
       try {
         socialLinks = JSON.parse(socialLinks);
       } catch (e) {
@@ -1065,31 +1625,29 @@ export const update = async (req, res) => {
       }
     }
 
-    // Handle dateOfBirth conversion
-    const dateOfBirth = req.body.dateOfBirth 
-      ? new Date(req.body.dateOfBirth) 
+    const dateOfBirth = req.body.dateOfBirth
+      ? new Date(req.body.dateOfBirth)
       : existingEnquiry.dateOfBirth;
 
-    // Prepare update data
     const updateData = {
-      fullName: req.body.fullName || existingEnquiry.fullName,
-      stageName: req.body.stageName !== undefined ? req.body.stageName : existingEnquiry.stageName,
+      fullName: req.body.fullName?.trim() || existingEnquiry.fullName,
+      stageName: req.body.stageName !== undefined ? req.body.stageName?.trim() : existingEnquiry.stageName,
       email: req.body.email?.toLowerCase().trim() || existingEnquiry.email,
-      mobile: req.body.mobile || existingEnquiry.mobile,
+      mobile: req.body.mobile?.trim() || existingEnquiry.mobile,
       gender: req.body.gender !== undefined ? req.body.gender : existingEnquiry.gender,
       dateOfBirth: dateOfBirth,
-      occupation: req.body.occupation !== undefined ? req.body.occupation : existingEnquiry.occupation,
-      biography: req.body.biography !== undefined ? req.body.biography : existingEnquiry.biography,
+      occupation: req.body.occupation !== undefined ? req.body.occupation?.trim() : existingEnquiry.occupation,
+      biography: req.body.biography !== undefined ? req.body.biography?.trim() : existingEnquiry.biography,
       membershipType: req.body.membershipType || existingEnquiry.membershipType,
       danceStyle: req.body.danceStyle !== undefined ? req.body.danceStyle : existingEnquiry.danceStyle,
-      experience: req.body.experience !== undefined ? req.body.experience : existingEnquiry.experience,
-      address: req.body.address !== undefined ? req.body.address : existingEnquiry.address,
-      city: req.body.city || existingEnquiry.city,
-      state: req.body.state !== undefined ? req.body.state : existingEnquiry.state,
+      experience: req.body.experience !== undefined ? req.body.experience?.trim() : existingEnquiry.experience,
+      address: req.body.address !== undefined ? req.body.address?.trim() : existingEnquiry.address,
+      city: req.body.city?.trim() || existingEnquiry.city,
+      state: req.body.state !== undefined ? req.body.state?.trim() : existingEnquiry.state,
       country: req.body.country || existingEnquiry.country,
-      postalCode: req.body.postalCode !== undefined ? req.body.postalCode : existingEnquiry.postalCode,
+      postalCode: req.body.postalCode !== undefined ? req.body.postalCode?.trim() : existingEnquiry.postalCode,
       socialLinks: socialLinks,
-      message: req.body.message !== undefined ? req.body.message : existingEnquiry.message,
+      message: req.body.message !== undefined ? req.body.message?.trim() : existingEnquiry.message,
       photo: photo,
     };
 
@@ -1101,7 +1659,7 @@ export const update = async (req, res) => {
       data: enquiry,
     });
   } catch (error) {
-    console.error("Update Enquiry Error:", error);
+    console.error("❌ Update Error:", error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -1109,6 +1667,9 @@ export const update = async (req, res) => {
   }
 };
 
+// ============================================
+// UPDATE STATUS (Manual - No Email)
+// ============================================
 export const updateStatus = async (req, res) => {
   try {
     const enquiry = await membershipEnquiryService.updateStatus(
@@ -1130,21 +1691,23 @@ export const updateStatus = async (req, res) => {
   }
 };
 
-export const approve = async (req, res) => {
+// ============================================
+// STEP 1: START REVIEW → UNDER_REVIEW
+// ============================================
+export const startReview = async (req, res) => {
   try {
-    const member = await membershipEnquiryService.approve(req.params.id);
+    const enquiry = await membershipEnquiryService.startReview(req.params.id);
 
-    // Send approval email
     await sendEmail({
-      to: member.email,
-      subject: "Congratulations! Your Membership Has Been Approved",
-      html: memberApprovedEmail(member.fullName, member.memberId),
+      to: enquiry.email,
+      subject: "Your Membership Application is Under Review - KITD Germany",
+      html: underReviewEmail(enquiry.fullName),
     });
 
     res.status(200).json({
       success: true,
-      message: "Member approved successfully",
-      data: member,
+      message: "Application moved to Under Review. Email sent to applicant.",
+      data: enquiry,
     });
   } catch (error) {
     res.status(500).json({
@@ -1154,6 +1717,481 @@ export const approve = async (req, res) => {
   }
 };
 
+// ============================================
+// STEP 2: SEND SEPA CONSENT → SEPA_CONSENT_SENT
+// ============================================
+// export const sendSepaConsent = async (req, res) => {
+//   try {
+//     const token = uuidv4();
+//     const expiry = new Date();
+//     expiry.setDate(expiry.getDate() + 14); // 14 days validity
+
+//     const enquiry = await membershipEnquiryService.sendSepaConsent(
+//       req.params.id,
+//       token,
+//       expiry
+//     );
+
+//     const sepaLink = `${process.env.CLIENT_URL}/sepa-consent/${token}`;
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Complete Your SEPA Direct Debit Mandate - KITD Germany",
+//       html: sepaConsentEmail(enquiry.fullName, sepaLink),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "SEPA consent form sent to member.",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// ✅ STEP 2: SEND SEPA CONSENT → SEPA_CONSENT_SENT
+export const sendSepaConsent = async (req, res) => {
+  try {
+    const token = uuidv4();
+    const expiry = new Date();
+    expiry.setDate(expiry.getDate() + 14); // 14 days validity
+
+    const enquiry = await membershipEnquiryService.sendSepaConsent(
+      req.params.id,
+      token,
+      expiry
+    );
+
+    // ✅ Use CLIENT_URL from environment variables
+    const sepaLink = `${process.env.CLIENT_URL}/sepa-consent/${token}`;
+
+    await sendEmail({
+      to: enquiry.email,
+      subject: "Complete Your SEPA Direct Debit Mandate - KITD Germany",
+      html: sepaConsentEmail(enquiry.fullName, sepaLink),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "SEPA consent form sent to member.",
+      data: enquiry,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ============================================
+// STEP 3: SUBMIT SEPA CONSENT (Public - Member)
+// ============================================
+export const submitSepaConsent = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const enquiry = await membershipEnquiryService.getBySepaToken(token);
+
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: "Invalid SEPA consent link.",
+      });
+    }
+
+    if (enquiry.sepaTokenExpiry && new Date(enquiry.sepaTokenExpiry) < new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: "SEPA consent link has expired. Please contact KITD.",
+      });
+    }
+
+    const sepaConsentFile = req.file?.filename || null;
+
+    const updatedEnquiry = await membershipEnquiryService.sepaConsentReceived(
+      enquiry.id,
+      {
+        sepaConsentFile,
+        iban: req.body.iban?.trim(),
+        accountHolder: req.body.accountHolder?.trim(),
+        bankName: req.body.bankName?.trim() || null,
+      }
+    );
+
+    // Send confirmation to member
+    await sendEmail({
+      to: enquiry.email,
+      subject: "SEPA Mandate Received - KITD Germany",
+      html: sepaConsentReceivedEmail(enquiry.fullName),
+    });
+
+    // Notify admin
+    if (process.env.ADMIN_EMAIL) {
+      await sendEmail({
+        to: process.env.ADMIN_EMAIL,
+        subject: `SEPA Consent Received - ${enquiry.fullName}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <h2 style="color: #0d9488;">SEPA Mandate Received</h2>
+            <div style="background: #f0fdfa; padding: 20px; border-radius: 8px; border: 1px solid #99f6e4;">
+              <p><strong>Member:</strong> ${enquiry.fullName}</p>
+              <p><strong>Email:</strong> ${enquiry.email}</p>
+              <p><strong>IBAN:</strong> ${req.body.iban}</p>
+              <p><strong>Account Holder:</strong> ${req.body.accountHolder}</p>
+              <p><strong>Bank:</strong> ${req.body.bankName || 'N/A'}</p>
+            </div>
+            <br/>
+            <p style="color: #666;">Status updated to SEPA_CONSENT_RECEIVED. Ready for final approval.</p>
+          </div>
+        `,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "SEPA consent submitted successfully! You will receive final approval soon.",
+      data: updatedEnquiry,
+    });
+  } catch (error) {
+    console.error("❌ SEPA Consent Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ============================================
+// STEP 4: APPROVE MEMBER → APPROVED
+// ============================================
+// export const approveMember = async (req, res) => {
+//   try {
+//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
+
+//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
+
+//     const memberExpiry = new Date();
+//     memberExpiry.setFullYear(memberExpiry.getFullYear() + 1);
+
+//     await sendEmail({
+//       to: member.email,
+//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
+//       html: memberApprovedEmail(
+//         member.fullName,
+//         memberId,
+//         memberExpiry.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+//       ),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved successfully! 🎉",
+//       data: member,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// membershipEnquiry.controller.js
+
+// import * as membershipService from "../services/membership.service.js";
+
+// ✅ Step 4: Final Approve Member → Creates Membership record
+// export const approveMember = async (req, res) => {
+//   try {
+//     // Generate Member ID
+//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
+
+//     // Approve the enquiry
+//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
+
+//     // Calculate membership dates
+//     const joinedDate = new Date();
+//     const expiryDate = new Date();
+//     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+//     // Create Membership record
+//     const membershipData = {
+//       memberId: memberId,
+//       fullName: member.fullName,
+//       email: member.email,
+//       mobile: member.mobile,
+//       gender: member.gender || "",
+//       membershipType: member.membershipType || "active",
+//       city: member.city || null,
+//       state: member.state || null,
+//       country: member.country || "Germany",
+//       joinedDate: joinedDate,
+//       expiryDate: expiryDate,
+//       isActive: true,
+//     };
+
+//     const membership = await membershipService.create(membershipData);
+//     console.log("✅ Membership created:", membership.memberId);
+
+//     // Send approval email
+//     await sendEmail({
+//       to: member.email,
+//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
+//       html: memberApprovedEmail(
+//         member.fullName,
+//         memberId,
+//         expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+//       ),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved and added to Members list!",
+//       data: {
+//         enquiry: member,
+//         membership: membership,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Approval Error:", error);
+    
+//     // Handle duplicate member ID or email
+//     if (error.code === 'P2002') {
+//       return res.status(400).json({
+//         success: false,
+//         message: "A member with this email or ID already exists.",
+//       });
+//     }
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
+// export const approveMember = async (req, res) => {
+//   try {
+//     // Generate Member ID
+//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
+
+//     // Approve the enquiry
+//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
+
+//     // Calculate membership dates
+//     const joinedDate = new Date();
+//     const expiryDate = new Date();
+//     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+//     // ✅ Create Membership record automatically
+//     const membershipData = {
+//       memberId: memberId,
+//       fullName: member.fullName,
+//       email: member.email,
+//       mobile: member.mobile,
+//       gender: member.gender || "",
+//       membershipType: member.membershipType || "active",
+//       city: member.city || null,
+//       state: member.state || null,
+//       country: member.country || "Germany",
+//       joinedDate: joinedDate,
+//       expiryDate: expiryDate,
+//       isActive: true,
+//     };
+
+//     const membership = await membershipService.create(membershipData);
+//     console.log("✅ Membership created:", membership.memberId);
+
+//     // Send approval email
+//     await sendEmail({
+//       to: member.email,
+//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
+//       html: memberApprovedEmail(
+//         member.fullName,
+//         memberId,
+//         expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+//       ),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved and added to Members list!",
+//       data: {
+//         enquiry: member,
+//         membership: membership,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Approval Error:", error);
+    
+//     // Handle duplicate member ID or email
+//     if (error.code === 'P2002') {
+//       return res.status(400).json({
+//         success: false,
+//         message: "A member with this email or Member ID already exists.",
+//       });
+//     }
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
+export const approveMember = async (req, res) => {
+  try {
+    // Generate Member ID
+    const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
+
+    // Approve the enquiry
+    const member = await membershipEnquiryService.approve(req.params.id, memberId);
+
+    // Calculate membership dates
+    const joinedDate = new Date();
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+    // Determine annual fee based on membership type
+    const feeMap = {
+      active: 50,
+      supporting: 75,
+      youth: 25,
+    };
+    const annualFee = feeMap[member.membershipType] || 50;
+
+    // Payment day (day of month when annual fee is collected)
+    const paymentDay = new Date().getDate();
+
+    // ✅ Create Membership record with ALL fields from enquiry
+    const membershipData = {
+      // Personal Info
+      memberId: memberId,
+      fullName: member.fullName,
+      stageName: member.stageName || null,
+      email: member.email,
+      mobile: member.mobile,
+      gender: member.gender || null,
+      dateOfBirth: member.dateOfBirth || null,
+      occupation: member.occupation || null,
+      biography: member.biography || null,
+      
+      // Dance Info
+      membershipType: member.membershipType || null,
+      danceStyle: member.danceStyle || null,
+      experience: member.experience || null,
+      
+      // Address
+      address: member.address || null,
+      city: member.city || null,
+      state: member.state || null,
+      country: member.country || "Germany",
+      postalCode: member.postalCode || null,
+      
+      // Social & Additional
+      socialLinks: member.socialLinks || null,
+      message: member.message || null,
+      photo: member.photo || null,
+      
+      // SEPA Payment Details
+      iban: member.iban || null,
+      accountHolder: member.accountHolder || null,
+      bankName: member.bankName || null,
+      sepaMandateFile: member.sepaConsentFile || null,
+      sepaMandateReference: `SEPA-${memberId}`,
+      paymentStatus: "ACTIVE",
+      
+      // Membership Details
+      joinedDate: joinedDate,
+      expiryDate: expiryDate,
+      annualFee: annualFee,
+      paymentDay: paymentDay,
+      
+      isActive: true,
+    };
+
+    const membership = await membershipService.create(membershipData);
+    console.log("✅ Membership created with all fields:", membership.memberId);
+
+    // Send approval email
+    await sendEmail({
+      to: member.email,
+      subject: "🎉 Congratulations! Your KITD Membership is Approved!",
+      html: memberApprovedEmail(
+        member.fullName,
+        memberId,
+        expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+      ),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Member approved and added to Members list with all details!",
+      data: {
+        enquiry: member,
+        membership: membership,
+      },
+    });
+  } catch (error) {
+    console.error("Approval Error:", error);
+    
+    // Handle duplicate member ID or email
+    if (error.code === 'P2002') {
+      return res.status(400).json({
+        success: false,
+        message: "A member with this email or Member ID already exists.",
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+// ============================================
+// REQUEST CHANGES (Any Stage)
+// ============================================
+export const requestChanges = async (req, res) => {
+  try {
+    const { remarks } = req.body;
+
+    const enquiry = await membershipEnquiryService.requestChanges(
+      req.params.id,
+      remarks
+    );
+
+    await sendEmail({
+      to: enquiry.email,
+      subject: "Changes Required - KITD Membership Application",
+      html: changesRequestedEmail(enquiry.fullName, remarks),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Change request sent to applicant.",
+      data: enquiry,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ============================================
+// DELETE
+// ============================================
 export const remove = async (req, res) => {
   try {
     await membershipEnquiryService.remove(req.params.id);
@@ -1170,223 +2208,26 @@ export const remove = async (req, res) => {
   }
 };
 
-// ✅ FIXED: startReview - Uses proper service method
-export const startReview = async (req, res) => {
-  try {
-    const enquiry = await membershipEnquiryService.startReview(req.params.id);
-
-    await sendEmail({
-      to: enquiry.email,
-      subject: "Your Membership Application is Under Review",
-      html: underReviewEmail(enquiry.fullName),
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Application moved to Under Review.",
-      data: enquiry,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ✅ FIXED: sendRegistrationForm - Uses proper service method with token
-export const sendRegistrationForm = async (req, res) => {
-  try {
-    const token = uuidv4();
-    const expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7);
-
-    const enquiry = await membershipEnquiryService.sendRegistration(
-      req.params.id,
-      token,
-      expiry
-    );
-
-    const registrationLink = `${process.env.CLIENT_URL}/member-registration/${token}`;
-
-    await sendEmail({
-      to: enquiry.email,
-      subject: "Complete Your Membership Registration",
-      html: registrationInvitationEmail(enquiry.fullName, registrationLink),
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Registration invitation sent.",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ✅ FIXED: requestChanges - Uses proper service method
-export const requestChanges = async (req, res) => {
-  try {
-    const { remarks } = req.body;
-
-    const enquiry = await membershipEnquiryService.requestChanges(
-      req.params.id,
-      remarks
-    );
-
-    await sendEmail({
-      to: enquiry.email,
-      subject: "Changes Required for Your Membership Application",
-      html: changesRequestedEmail(enquiry.fullName, remarks),
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Change request sent.",
-      data: enquiry,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
-
-// ✅ FIXED: approveMember - Uses proper service method
-export const approveMember = async (req, res) => {
-  try {
-    const member = await membershipEnquiryService.approve(req.params.id);
-
-    await sendEmail({
-      to: member.email,
-      subject: "Congratulations! Your Membership Has Been Approved",
-      html: memberApprovedEmail(member.fullName, member.memberId),
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Member approved successfully.",
-      data: member
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
-
-// ✅ FIXED: submitRegistration - Added token expiry check and emails
-export const submitRegistration = async (req, res) => {
+// ============================================
+// VALIDATE SEPA TOKEN (Public)
+// ============================================
+export const validateSepaToken = async (req, res) => {
   try {
     const { token } = req.params;
 
-    const enquiry = await membershipEnquiryService.getByToken(token);
+    const enquiry = await membershipEnquiryService.getBySepaToken(token);
 
     if (!enquiry) {
       return res.status(404).json({
         success: false,
-        message: "Invalid registration link",
+        message: "Invalid SEPA consent link.",
       });
     }
 
-    // ✅ Token expiry check
-    if (
-      enquiry.tokenExpiry &&
-      new Date(enquiry.tokenExpiry) < new Date()
-    ) {
+    if (enquiry.sepaTokenExpiry && new Date(enquiry.sepaTokenExpiry) < new Date()) {
       return res.status(400).json({
         success: false,
-        message: "Registration link has expired.",
-      });
-    }
-
-    // Handle file upload if present
-    const documentFile = req.file?.filename || null;
-
-    const registration = await memberRegistrationService.create({
-      enquiryId: enquiry.id,
-
-      fullName: req.body.fullName,
-      gender: req.body.gender,
-      dateOfBirth: req.body.dateOfBirth
-        ? new Date(req.body.dateOfBirth)
-        : null,
-
-      address: req.body.address,
-      city: req.body.city,
-      state: req.body.state,
-      country: req.body.country,
-      postalCode: req.body.postalCode || null,
-
-      danceStyle: req.body.danceStyle,
-      guru: req.body.guru,
-      experience: req.body.experience,
-      
-      stageName: req.body.stageName || null,
-      biography: req.body.biography || null,
-      socialLinks: req.body.socialLinks || null,
-
-      document: documentFile,
-    });
-
-    await membershipEnquiryService.registrationSubmitted(enquiry.id);
-
-    // ✅ Send confirmation email to applicant
-    await sendEmail({
-      to: enquiry.email,
-      subject: "Registration Submitted Successfully",
-      html: registrationSubmittedEmail(enquiry.fullName),
-    });
-
-    // ✅ Send notification email to admin
-    await sendEmail({
-      to: process.env.ADMIN_EMAIL,
-      subject: "New Membership Registration Received",
-      html: adminRegistrationReceivedEmail(enquiry.fullName),
-    });
-
-    return res.status(201).json({
-      success: true,
-      data: registration,
-    });
-
-  } catch (error) {
-    console.error("Registration Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ✅ Token validation endpoint
-export const validateRegistrationToken = async (req, res) => {
-  try {
-    const { token } = req.params;
-
-    const enquiry = await membershipEnquiryService.getByToken(token);
-
-    if (!enquiry) {
-      return res.status(404).json({
-        success: false,
-        message: "Invalid registration link.",
-      });
-    }
-
-    if (
-      enquiry.tokenExpiry &&
-      new Date(enquiry.tokenExpiry) < new Date()
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Registration link has expired.",
+        message: "SEPA consent link has expired.",
       });
     }
 
@@ -1394,34 +2235,6 @@ export const validateRegistrationToken = async (req, res) => {
       success: true,
       data: enquiry,
     });
-
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ✅ Get enquiry by token
-export const getByToken = async (req, res) => {
-  try {
-    const { token } = req.params;
-
-    const enquiry = await membershipEnquiryService.getByToken(token);
-
-    if (!enquiry) {
-      return res.status(404).json({
-        success: false,
-        message: "Invalid token.",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      data: enquiry,
-    });
-
   } catch (error) {
     return res.status(500).json({
       success: false,

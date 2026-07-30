@@ -1,0 +1,425 @@
+/* SEPAConsent.css */
+
+.sepa-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 50%, #f0fdfa 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.sepa-form-wrapper {
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Loading State */
+.sepa-loading {
+  text-align: center;
+  padding: 60px 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sepa-loading svg {
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.sepa-loading h2 {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.sepa-loading p {
+  color: #666;
+}
+
+/* Header */
+.sepa-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.sepa-icon-wrapper {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: white;
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
+}
+
+.sepa-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.sepa-header p {
+  color: #666;
+  font-size: 1.05rem;
+}
+
+.sepa-welcome {
+  margin-top: 12px;
+  padding: 8px 20px;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  border-radius: 50px;
+  color: #0d9488;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+/* Card */
+.sepa-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sepa-error-card,
+.sepa-success-card {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.sepa-error-card h2,
+.sepa-success-card h2 {
+  font-size: 1.75rem;
+  margin: 16px 0 12px;
+  color: #1a1a1a;
+}
+
+.sepa-error-card p,
+.sepa-success-card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.sepa-help-text {
+  color: #999;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.sepa-help-text a {
+  color: #0d9488;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.sepa-help-text a:hover {
+  text-decoration: underline;
+}
+
+/* Form Groups */
+.sepa-form-group {
+  margin-bottom: 24px;
+}
+
+.sepa-form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.optional {
+  color: #999;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+/* Inputs */
+.sepa-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+  font-family: inherit;
+}
+
+.sepa-input:focus {
+  outline: none;
+  border-color: #0d9488;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+}
+
+.sepa-input::placeholder {
+  color: #b0b7c3;
+}
+
+.sepa-input:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.sepa-input-error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.sepa-input-error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.sepa-error {
+  display: block;
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* File Upload */
+.sepa-upload-area {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.sepa-upload-area:hover {
+  border-color: #0d9488;
+  background: #f0fdfa;
+}
+
+.sepa-file-input {
+  display: none;
+}
+
+.sepa-upload-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+}
+
+.sepa-upload-label svg {
+  color: #9ca3af;
+}
+
+.sepa-upload-label span {
+  font-weight: 500;
+  color: #333;
+}
+
+.sepa-upload-label small {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.sepa-file-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #f0fdfa;
+  border: 2px solid #99f6e4;
+  border-radius: 10px;
+  color: #0d9488;
+}
+
+.sepa-file-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.sepa-file-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.sepa-file-remove:hover {
+  background: #fef2f2;
+}
+
+/* Info Boxes */
+.sepa-info-box {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.sepa-security-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.sepa-security-box svg {
+  color: #2563eb;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sepa-security-box h4 {
+  color: #1e40af;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.sepa-security-box p {
+  color: #3b82f6;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.sepa-fees-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.sepa-fees-box svg {
+  color: #0d9488;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sepa-fees-box h4 {
+  color: #333;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.sepa-fees-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sepa-fees-box li {
+  color: #666;
+  font-size: 0.85rem;
+  padding: 2px 0;
+}
+
+/* Buttons */
+.sepa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.sepa-btn-primary {
+  background: #0d9488;
+  color: white;
+}
+
+.sepa-btn-primary:hover {
+  background: #0f766e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+}
+
+.sepa-btn-submit {
+  width: 100%;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: white;
+  padding: 16px 32px;
+  font-size: 1.05rem;
+}
+
+.sepa-btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0f766e, #0d9488);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.4);
+}
+
+.sepa-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .sepa-container {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .sepa-card {
+    padding: 24px;
+  }
+
+  .sepa-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .sepa-icon-wrapper {
+    width: 56px;
+    height: 56px;
+  }
+
+  .sepa-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .sepa-input {
+    padding: 12px 14px;
+  }
+
+  .sepa-upload-area {
+    padding: 24px 16px;
+  }
+}
