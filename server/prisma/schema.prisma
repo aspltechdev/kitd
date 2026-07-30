@@ -23,15 +23,31 @@ model Banner {
 }
 
 model Team {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
-  designation String
+  designation String       // e.g., "President", "Vice President", "Member"
   biography   String?
   image       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  email       String?
+  
+  // Hierarchy
+  level       String    @default("MEMBER")  // "BOARD" or "MEMBER"
+  sortOrder   Int       @default(0)
+  
+  // Visibility
+  isPublic    Boolean   @default(false)
+  
+  // Additional info
+  stageName   String?
+  mobile      String?
+  danceForm   String?
+  city        String?
+  country     String?
+  socialLinks Json?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
-
 
 model Activity {
   id               Int       @id @default(autoincrement())
@@ -59,14 +75,25 @@ model Event {
 }
 
 model Artist {
-  id        Int      @id @default(autoincrement())
-  name      String
-  biography String?
-  danceForm String
-  city      String
-  image     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int       @id @default(autoincrement())
+  name        String
+  stageName   String?
+  email       String?
+  mobile      String?
+  biography   String?
+  danceForm   String?
+  experience  String?
+  city        String?
+  state       String?
+  country     String?
+  image       String?
+  socialLinks Json?
+  
+  // ✅ Visibility control
+  isPublic    Boolean   @default(false)  // false = hidden, true = visible on website
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Gallery {
