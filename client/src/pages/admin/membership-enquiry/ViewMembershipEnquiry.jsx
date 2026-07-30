@@ -1,3 +1,825 @@
+// // // src/pages/admin/membership-enquiry/ViewMembershipEnquiry.jsx
+
+// // import { useEffect, useState } from "react";
+// // import { useNavigate, useParams } from "react-router-dom";
+// // import toast from "react-hot-toast";
+// // import {
+// //   ArrowLeft,
+// //   CheckCircle,
+// //   Trash2,
+// // } from "lucide-react";
+
+// // import {
+// //   getMembershipEnquiryById,
+// //   updateMembershipEnquiryStatus,
+// //   approveMembershipEnquiry,
+// //   deleteMembershipEnquiry,
+// // } from "../../../api/membershipEnquiry.api";
+
+// // const ViewMembershipEnquiry = () => {
+// //   const { id } = useParams();
+// //   const navigate = useNavigate();
+
+// //   const [loading, setLoading] = useState(true);
+// //   const [enquiry, setEnquiry] = useState(null);
+
+// //   const fetchEnquiry = async () => {
+// //     try {
+// //       setLoading(true);
+
+// //       const res = await getMembershipEnquiryById(id);
+
+// //       const data =
+// //         res.data?.data?.membershipEnquiry ||
+// //         res.data?.data ||
+// //         res.data?.membershipEnquiry;
+
+// //       setEnquiry(data);
+// //     } catch (error) {
+// //       toast.error(
+// //         error.response?.data?.message ||
+// //           "Failed to fetch enquiry."
+// //       );
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   useEffect(() => {
+// //     fetchEnquiry();
+// //   }, [id]);
+
+// //   const handleStatus = async (status) => {
+// //     try {
+// //       await updateMembershipEnquiryStatus(id, {
+// //         status,
+// //       });
+
+// //       toast.success("Status updated.");
+
+// //       fetchEnquiry();
+// //     } catch (error) {
+// //       toast.error(
+// //         error.response?.data?.message ||
+// //           "Unable to update status."
+// //       );
+// //     }
+// //   };
+
+// //   const handleApprove = async () => {
+// //     if (
+// //       !window.confirm(
+// //         "Approve this membership application?"
+// //       )
+// //     )
+// //       return;
+
+// //     try {
+// //       await approveMembershipEnquiry(id);
+
+// //       toast.success(
+// //         "Member approved successfully."
+// //       );
+
+// //       fetchEnquiry();
+// //     } catch (error) {
+// //       toast.error(
+// //         error.response?.data?.message ||
+// //           "Approval failed."
+// //       );
+// //     }
+// //   };
+
+// //   const handleDelete = async () => {
+// //     if (
+// //       !window.confirm(
+// //         "Delete this enquiry?"
+// //       )
+// //     )
+// //       return;
+
+// //     try {
+// //       await deleteMembershipEnquiry(id);
+
+// //       toast.success("Deleted successfully.");
+
+// //       navigate("/admin/membership-enquiries");
+// //     } catch (error) {
+// //       toast.error(
+// //         error.response?.data?.message ||
+// //           "Delete failed."
+// //       );
+// //     }
+// //   };
+
+// //   if (loading) {
+// //     return (
+// //       <div className="p-6">
+// //         Loading...
+// //       </div>
+// //     );
+// //   }
+
+// //   if (!enquiry) {
+// //     return (
+// //       <div className="p-6">
+// //         No Membership Enquiry Found.
+// //       </div>
+// //     );
+// //   }
+
+// //   return (
+// //     <div className="p-6">
+
+// //       {/* Header */}
+
+// //       <div className="flex justify-between items-center mb-6">
+
+// //         <button
+// //           onClick={() =>
+// //             navigate(-1)
+// //           }
+// //           className="flex items-center gap-2 text-blue-600"
+// //         >
+// //           <ArrowLeft size={18} />
+// //           Back
+// //         </button>
+
+// //         <div className="flex gap-3">
+
+// //           {enquiry.status !==
+// //             "APPROVED" && (
+// //             <button
+// //               onClick={handleApprove}
+// //               className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+// //             >
+// //               <CheckCircle size={18} />
+// //               Approve
+// //             </button>
+// //           )}
+
+// //           <button
+// //             onClick={handleDelete}
+// //             className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+// //           >
+// //             <Trash2 size={18} />
+// //             Delete
+// //           </button>
+
+// //         </div>
+// //       </div>
+
+// //       {/* Card */}
+
+// //       <div className="bg-white rounded-xl shadow p-6">
+
+// //         <div className="flex items-center gap-6 mb-8">
+
+// //           <img
+// //             src={
+// //               enquiry.photo
+// //                 ? `${import.meta.env.VITE_API_BASE_URL.replace(
+// //                     "/api",
+// //                     ""
+// //                   )}/uploads/membership/${enquiry.photo}`
+// //                 : "https://placehold.co/140x140"
+// //             }
+// //             alt={enquiry.fullName}
+// //             className="w-36 h-36 rounded-full object-cover border"
+// //           />
+
+// //           <div>
+
+// //             <h2 className="text-2xl font-bold">
+// //               {enquiry.fullName}
+// //             </h2>
+
+// //             <p className="text-gray-500">
+// //               {enquiry.email}
+// //             </p>
+
+// //             <p className="text-gray-500">
+// //               {enquiry.mobile}
+// //             </p>
+
+// //           </div>
+
+// //         </div>
+
+// //         {/* Status */}
+
+// //         <div className="mb-8">
+
+// //           <label className="font-semibold block mb-2">
+// //             Status
+// //           </label>
+
+// //           <select
+// //             value={enquiry.status}
+// //             onChange={(e) =>
+// //               handleStatus(e.target.value)
+// //             }
+// //             className="border rounded-lg px-4 py-2"
+// //           >
+// //             <option value="NEW">
+// //               NEW
+// //             </option>
+
+// //             <option value="UNDER_REVIEW">
+// //               UNDER REVIEW
+// //             </option>
+
+// //             <option value="APPROVED">
+// //               APPROVED
+// //             </option>
+
+// //             <option value="REJECTED">
+// //               REJECTED
+// //             </option>
+// //           </select>
+
+// //         </div>
+
+// //         {/* Details */}
+
+// //         <div className="grid md:grid-cols-2 gap-6">
+
+// //           <Info
+// //             label="Gender"
+// //             value={enquiry.gender}
+// //           />
+
+// //           <Info
+// //             label="Date of Birth"
+// //             value={
+// //               enquiry.dateOfBirth
+// //                 ? new Date(
+// //                     enquiry.dateOfBirth
+// //                   ).toLocaleDateString()
+// //                 : "-"
+// //             }
+// //           />
+
+// //           <Info
+// //             label="Occupation"
+// //             value={enquiry.occupation}
+// //           />
+
+// //           <Info
+// //             label="Membership Type"
+// //             value={
+// //               enquiry.membershipType
+// //             }
+// //           />
+
+// //           <Info
+// //             label="Dance Style"
+// //             value={enquiry.danceStyle}
+// //           />
+
+// //           <Info
+// //             label="Experience"
+// //             value={enquiry.experience}
+// //           />
+
+// //           <Info
+// //             label="Address"
+// //             value={enquiry.address}
+// //           />
+
+// //           <Info
+// //             label="City"
+// //             value={enquiry.city}
+// //           />
+
+// //           <Info
+// //             label="State"
+// //             value={enquiry.state}
+// //           />
+
+// //           <Info
+// //             label="Country"
+// //             value={enquiry.country}
+// //           />
+
+// //         </div>
+
+// //         {/* Message */}
+
+// //         <div className="mt-8">
+
+// //           <h3 className="font-semibold mb-2">
+// //             Message
+// //           </h3>
+
+// //           <div className="border rounded-lg p-4 bg-gray-50">
+// //             {enquiry.message ||
+// //               "No message provided."}
+// //           </div>
+
+// //         </div>
+
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // const Info = ({
+// //   label,
+// //   value,
+// // }) => (
+// //   <div>
+// //     <p className="text-sm text-gray-500">
+// //       {label}
+// //     </p>
+
+// //     <p className="font-medium">
+// //       {value || "-"}
+// //     </p>
+// //   </div>
+// // );
+
+// // export default ViewMembershipEnquiry;
+
+// // src/pages/admin/membership-enquiry/ViewMembershipEnquiry.jsx
+
+// import { useEffect, useState } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import toast from "react-hot-toast";
+// import {
+//   ArrowLeft,
+//   CheckCircle,
+//   Trash2,
+//   Eye,
+//   Send,
+//   AlertCircle,
+//   UserCheck,
+//   FileText,
+//   Clock,
+//   Ban,
+// } from "lucide-react";
+
+// import {
+//   getMembershipEnquiryById,
+//   updateMembershipEnquiryStatus,
+//   approveMembershipEnquiry,
+//   deleteMembershipEnquiry,
+//   startReviewEnquiry,
+//   requestChangesEnquiry,
+//   sendRegistrationFormEnquiry,
+//   approveMemberEnquiry,
+// } from "../../../api/membershipEnquiry.api";
+
+// const ViewMembershipEnquiry = () => {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+
+//   const [loading, setLoading] = useState(true);
+//   const [enquiry, setEnquiry] = useState(null);
+//   const [remarks, setRemarks] = useState("");
+//   const [showRemarksInput, setShowRemarksInput] = useState(false);
+//   const [processing, setProcessing] = useState(false);
+
+//   const fetchEnquiry = async () => {
+//     try {
+//       setLoading(true);
+
+//       const res = await getMembershipEnquiryById(id);
+
+//       const data =
+//         res.data?.data?.membershipEnquiry ||
+//         res.data?.data ||
+//         res.data?.membershipEnquiry;
+
+//       setEnquiry(data);
+//     } catch (error) {
+//       toast.error(
+//         error.response?.data?.message || "Failed to fetch enquiry."
+//       );
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchEnquiry();
+//   }, [id]);
+
+//   // ✅ Start Review - Sends "Under Review" email
+//   const handleStartReview = async () => {
+//     if (!window.confirm("Move this application to 'Under Review'? An email will be sent to the applicant."))
+//       return;
+
+//     try {
+//       setProcessing(true);
+//       await startReviewEnquiry(id);
+//       toast.success("Application moved to Under Review. Email sent to applicant.");
+//       fetchEnquiry();
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Failed to start review.");
+//     } finally {
+//       setProcessing(false);
+//     }
+//   };
+
+//   // ✅ Request Changes - Sends "Changes Required" email
+//   const handleRequestChanges = async () => {
+//     if (!remarks.trim()) {
+//       toast.error("Please enter remarks for the changes required.");
+//       return;
+//     }
+
+//     if (!window.confirm("Send change request to applicant?"))
+//       return;
+
+//     try {
+//       setProcessing(true);
+//       await requestChangesEnquiry(id, { remarks });
+//       toast.success("Change request sent to applicant.");
+//       setRemarks("");
+//       setShowRemarksInput(false);
+//       fetchEnquiry();
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Failed to request changes.");
+//     } finally {
+//       setProcessing(false);
+//     }
+//   };
+
+//   // ✅ Send Registration Form - Sends registration invitation email
+//   const handleSendRegistration = async () => {
+//     if (!window.confirm("Send registration form invitation to applicant?"))
+//       return;
+
+//     try {
+//       setProcessing(true);
+//       await sendRegistrationFormEnquiry(id);
+//       toast.success("Registration invitation sent to applicant.");
+//       fetchEnquiry();
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Failed to send registration form.");
+//     } finally {
+//       setProcessing(false);
+//     }
+//   };
+
+//   // ✅ Approve Member - Sends approval email
+//   const handleApprove = async () => {
+//     if (!window.confirm("Approve this member? A congratulatory email will be sent."))
+//       return;
+
+//     try {
+//       setProcessing(true);
+//       await approveMemberEnquiry(id);
+//       toast.success("Member approved successfully. Approval email sent.");
+//       fetchEnquiry();
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Approval failed.");
+//     } finally {
+//       setProcessing(false);
+//     }
+//   };
+
+//   // Simple status update (no email) - For manual status changes
+//   const handleStatusUpdate = async (newStatus) => {
+//     if (!window.confirm(`Change status to "${newStatus}"? Note: No email will be sent for manual status changes.`))
+//       return;
+
+//     try {
+//       setProcessing(true);
+//       await updateMembershipEnquiryStatus(id, { status: newStatus });
+//       toast.success(`Status updated to ${newStatus}.`);
+//       fetchEnquiry();
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Unable to update status.");
+//     } finally {
+//       setProcessing(false);
+//     }
+//   };
+
+//   const handleDelete = async () => {
+//     if (!window.confirm("Delete this enquiry? This action cannot be undone."))
+//       return;
+
+//     try {
+//       await deleteMembershipEnquiry(id);
+//       toast.success("Deleted successfully.");
+//       navigate("/admin/membership-enquiries");
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || "Delete failed.");
+//     }
+//   };
+
+//   if (loading) {
+//     return (
+//       <div className="p-6 flex justify-center items-center min-h-screen">
+//         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+//       </div>
+//     );
+//   }
+
+//   if (!enquiry) {
+//     return (
+//       <div className="p-6">
+//         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+//           <p className="text-yellow-800">No Membership Enquiry Found.</p>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   const statusColors = {
+//     NEW: "bg-blue-100 text-blue-800",
+//     UNDER_REVIEW: "bg-yellow-100 text-yellow-800",
+//     REGISTRATION_SENT: "bg-purple-100 text-purple-800",
+//     REGISTRATION_SUBMITTED: "bg-indigo-100 text-indigo-800",
+//     CHANGES_REQUESTED: "bg-orange-100 text-orange-800",
+//     APPROVED: "bg-green-100 text-green-800",
+//     REJECTED: "bg-red-100 text-red-800",
+//   };
+
+//   return (
+//     <div className="p-6 max-w-7xl mx-auto">
+//       {/* Header */}
+//       <div className="flex justify-between items-center mb-6">
+//         <button
+//           onClick={() => navigate("/admin/membership-enquiries")}
+//           className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+//         >
+//           <ArrowLeft size={18} />
+//           Back to Enquiries
+//         </button>
+
+//         <div className="flex gap-3">
+//           <button
+//             onClick={handleDelete}
+//             className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-red-700 transition"
+//             disabled={processing}
+//           >
+//             <Trash2 size={18} />
+//             Delete
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Action Buttons - Each triggers specific email */}
+//       <div className="bg-white rounded-xl shadow p-6 mb-6">
+//         <h3 className="text-lg font-semibold mb-4">Actions (Each sends corresponding email)</h3>
+        
+//         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+//           {/* Start Review - Sends "Under Review" email */}
+//           <button
+//             onClick={handleStartReview}
+//             disabled={processing || enquiry.status === "UNDER_REVIEW"}
+//             className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition ${
+//               enquiry.status === "UNDER_REVIEW"
+//                 ? "bg-gray-300 cursor-not-allowed"
+//                 : "bg-yellow-500 text-white hover:bg-yellow-600"
+//             }`}
+//           >
+//             <Eye size={18} />
+//             Start Review
+//           </button>
+
+//           {/* Request Changes - Sends "Changes Required" email */}
+//           <button
+//             onClick={() => setShowRemarksInput(!showRemarksInput)}
+//             disabled={processing}
+//             className="flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
+//           >
+//             <AlertCircle size={18} />
+//             Request Changes
+//           </button>
+
+//           {/* Send Registration - Sends registration link email */}
+//           <button
+//             onClick={handleSendRegistration}
+//             disabled={processing || enquiry.status === "REGISTRATION_SENT"}
+//             className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition ${
+//               enquiry.status === "REGISTRATION_SENT"
+//                 ? "bg-gray-300 cursor-not-allowed"
+//                 : "bg-purple-500 text-white hover:bg-purple-600"
+//             }`}
+//           >
+//             <Send size={18} />
+//             Send Registration
+//           </button>
+
+//           {/* Approve Member - Sends approval email */}
+//           <button
+//             onClick={handleApprove}
+//             disabled={processing || enquiry.status === "APPROVED"}
+//             className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition ${
+//               enquiry.status === "APPROVED"
+//                 ? "bg-gray-300 cursor-not-allowed"
+//                 : "bg-green-500 text-white hover:bg-green-600"
+//             }`}
+//           >
+//             <UserCheck size={18} />
+//             Approve Member
+//           </button>
+//         </div>
+
+//         {/* Remarks Input for Change Request */}
+//         {showRemarksInput && (
+//           <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+//             <label className="block text-sm font-semibold mb-2">
+//               Remarks for Changes Required:
+//             </label>
+//             <textarea
+//               value={remarks}
+//               onChange={(e) => setRemarks(e.target.value)}
+//               placeholder="Describe what changes are needed..."
+//               rows="3"
+//               className="w-full border rounded-lg p-3 mb-3"
+//             />
+//             <div className="flex gap-2">
+//               <button
+//                 onClick={handleRequestChanges}
+//                 disabled={processing || !remarks.trim()}
+//                 className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 disabled:bg-gray-300"
+//               >
+//                 Send Change Request
+//               </button>
+//               <button
+//                 onClick={() => {
+//                   setShowRemarksInput(false);
+//                   setRemarks("");
+//                 }}
+//                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+//               >
+//                 Cancel
+//               </button>
+//             </div>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Main Card */}
+//       <div className="bg-white rounded-xl shadow p-6">
+//         {/* Profile Section */}
+//         <div className="flex items-center gap-6 mb-8 pb-6 border-b">
+//           <img
+//             src={
+//               enquiry.photo
+//                 ? `${import.meta.env.VITE_API_BASE_URL?.replace("/api", "")}/uploads/membership-photos/${enquiry.photo}`
+//                 : "https://placehold.co/140x140"
+//             }
+//             alt={enquiry.fullName}
+//             className="w-36 h-36 rounded-full object-cover border-4 border-gray-200"
+//           />
+
+//           <div className="flex-grow">
+//             <div className="flex items-center gap-3 mb-2">
+//               <h2 className="text-2xl font-bold">{enquiry.fullName}</h2>
+//               <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColors[enquiry.status] || "bg-gray-100"}`}>
+//                 {enquiry.status?.replace("_", " ") || "NEW"}
+//               </span>
+//             </div>
+
+//             {enquiry.stageName && (
+//               <p className="text-purple-600 font-medium mb-2">
+//                 Stage Name: {enquiry.stageName}
+//               </p>
+//             )}
+
+//             <p className="text-gray-500">{enquiry.email}</p>
+//             <p className="text-gray-500">{enquiry.mobile}</p>
+            
+//             {enquiry.registrationToken && (
+//               <div className="mt-2 p-2 bg-blue-50 rounded-lg">
+//                 <p className="text-sm text-blue-800">
+//                   <strong>Registration Token:</strong> {enquiry.registrationToken}
+//                 </p>
+//                 <p className="text-sm text-blue-600">
+//                   <strong>Expires:</strong> {enquiry.tokenExpiry ? new Date(enquiry.tokenExpiry).toLocaleDateString() : "N/A"}
+//                 </p>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+
+//         {/* Status Dropdown (Manual - No Email) */}
+//         <div className="mb-8 p-4 bg-gray-50 rounded-lg">
+//           <label className="font-semibold block mb-2 text-gray-700">
+//             Manual Status Update (No email sent)
+//           </label>
+//           <select
+//             value={enquiry.status}
+//             onChange={(e) => handleStatusUpdate(e.target.value)}
+//             className="border rounded-lg px-4 py-2 w-64"
+//             disabled={processing}
+//           >
+//             <option value="NEW">NEW</option>
+//             <option value="UNDER_REVIEW">UNDER REVIEW</option>
+//             <option value="REGISTRATION_SENT">REGISTRATION SENT</option>
+//             <option value="REGISTRATION_SUBMITTED">REGISTRATION SUBMITTED</option>
+//             <option value="CHANGES_REQUESTED">CHANGES REQUESTED</option>
+//             <option value="APPROVED">APPROVED</option>
+//             <option value="REJECTED">REJECTED</option>
+//           </select>
+//           <p className="text-sm text-gray-500 mt-2">
+//             ⚠️ Use action buttons above to send emails. Manual status changes don't trigger emails.
+//           </p>
+//         </div>
+
+//         {/* Details Grid */}
+//         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+//           <Info label="Gender" value={enquiry.gender} />
+//           <Info label="Date of Birth" value={enquiry.dateOfBirth ? new Date(enquiry.dateOfBirth).toLocaleDateString() : "-"} />
+//           <Info label="Occupation" value={enquiry.occupation} />
+//           <Info label="Membership Type" value={enquiry.membershipType} />
+//           <Info label="Dance Style" value={enquiry.danceStyle} />
+//           <Info label="Experience" value={enquiry.experience} />
+//           <Info label="Address" value={enquiry.address} />
+//           <Info label="City" value={enquiry.city} />
+//           <Info label="State" value={enquiry.state} />
+//           <Info label="Country" value={enquiry.country} />
+//           <Info label="Postal Code" value={enquiry.postalCode} />
+//         </div>
+
+//         {/* Social Links */}
+//         {enquiry.socialLinks && (
+//           <div className="mb-8">
+//             <h3 className="font-semibold mb-3 text-lg">Social Links</h3>
+//             <div className="grid md:grid-cols-2 gap-4">
+//               {enquiry.socialLinks.instagram && (
+//                 <div className="flex items-center gap-2 p-3 bg-pink-50 rounded-lg">
+//                   <span className="font-medium">Instagram:</span>
+//                   <span className="text-gray-600">{enquiry.socialLinks.instagram}</span>
+//                 </div>
+//               )}
+//               {enquiry.socialLinks.youtube && (
+//                 <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg">
+//                   <span className="font-medium">YouTube:</span>
+//                   <span className="text-gray-600">{enquiry.socialLinks.youtube}</span>
+//                 </div>
+//               )}
+//               {enquiry.socialLinks.facebook && (
+//                 <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+//                   <span className="font-medium">Facebook:</span>
+//                   <span className="text-gray-600">{enquiry.socialLinks.facebook}</span>
+//                 </div>
+//               )}
+//               {enquiry.socialLinks.twitter && (
+//                 <div className="flex items-center gap-2 p-3 bg-sky-50 rounded-lg">
+//                   <span className="font-medium">Twitter/X:</span>
+//                   <span className="text-gray-600">{enquiry.socialLinks.twitter}</span>
+//                 </div>
+//               )}
+//               {enquiry.socialLinks.website && (
+//                 <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+//                   <span className="font-medium">Website:</span>
+//                   <a href={enquiry.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+//                     {enquiry.socialLinks.website}
+//                   </a>
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Biography */}
+//         {enquiry.biography && (
+//           <div className="mb-8">
+//             <h3 className="font-semibold mb-2 text-lg">Biography</h3>
+//             <div className="border rounded-lg p-4 bg-gray-50 whitespace-pre-wrap">
+//               {enquiry.biography}
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Remarks */}
+//         {enquiry.remarks && (
+//           <div className="mb-8">
+//             <h3 className="font-semibold mb-2 text-lg text-orange-600">Remarks</h3>
+//             <div className="border border-orange-200 rounded-lg p-4 bg-orange-50">
+//               {enquiry.remarks}
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Message */}
+//         <div className="mt-8">
+//           <h3 className="font-semibold mb-2 text-lg">Message</h3>
+//           <div className="border rounded-lg p-4 bg-gray-50 whitespace-pre-wrap">
+//             {enquiry.message || "No message provided."}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// const Info = ({ label, value }) => (
+//   <div>
+//     <p className="text-sm text-gray-500 font-medium">{label}</p>
+//     <p className="font-medium text-gray-800">{value || "-"}</p>
+//   </div>
+// );
+
+// export default ViewMembershipEnquiry;
+
 // src/pages/admin/membership-enquiry/ViewMembershipEnquiry.jsx
 
 import { useEffect, useState } from "react";
@@ -7,6 +829,14 @@ import {
   ArrowLeft,
   CheckCircle,
   Trash2,
+  Eye,
+  Send,
+  AlertCircle,
+  UserCheck,
+  FileText,
+  Clock,
+  Ban,
+  Loader,
 } from "lucide-react";
 
 import {
@@ -14,6 +844,10 @@ import {
   updateMembershipEnquiryStatus,
   approveMembershipEnquiry,
   deleteMembershipEnquiry,
+  startMembershipReview,
+  requestMembershipChanges,
+  sendMembershipRegistration,
+  approveMembershipMember,
 } from "../../../api/membershipEnquiry.api";
 
 const ViewMembershipEnquiry = () => {
@@ -22,6 +856,9 @@ const ViewMembershipEnquiry = () => {
 
   const [loading, setLoading] = useState(true);
   const [enquiry, setEnquiry] = useState(null);
+  const [remarks, setRemarks] = useState("");
+  const [showRemarksInput, setShowRemarksInput] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const fetchEnquiry = async () => {
     try {
@@ -37,8 +874,7 @@ const ViewMembershipEnquiry = () => {
       setEnquiry(data);
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-          "Failed to fetch enquiry."
+        error.response?.data?.message || "Failed to fetch enquiry."
       );
     } finally {
       setLoading(false);
@@ -49,73 +885,147 @@ const ViewMembershipEnquiry = () => {
     fetchEnquiry();
   }, [id]);
 
-  const handleStatus = async (status) => {
-    try {
-      await updateMembershipEnquiryStatus(id, {
-        status,
-      });
-
-      toast.success("Status updated.");
-
-      fetchEnquiry();
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Unable to update status."
-      );
-    }
-  };
-
-  const handleApprove = async () => {
+  // ✅ Start Review - Sends "Under Review" email
+  const handleStartReview = async () => {
     if (
       !window.confirm(
-        "Approve this membership application?"
+        "Move this application to 'Under Review'? An email will be sent to the applicant."
       )
     )
       return;
 
     try {
-      await approveMembershipEnquiry(id);
-
-      toast.success(
-        "Member approved successfully."
-      );
-
+      setProcessing(true);
+      await startMembershipReview(id);
+      toast.success("Application moved to Under Review. Email sent to applicant.");
       fetchEnquiry();
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-          "Approval failed."
+        error.response?.data?.message || "Failed to start review."
       );
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  // ✅ Request Changes - Sends "Changes Required" email
+  const handleRequestChanges = async () => {
+    if (!remarks.trim()) {
+      toast.error("Please enter remarks for the changes required.");
+      return;
+    }
+
+    if (!window.confirm("Send change request to applicant?")) return;
+
+    try {
+      setProcessing(true);
+      await requestMembershipChanges(id, { remarks });
+      toast.success("Change request sent to applicant.");
+      setRemarks("");
+      setShowRemarksInput(false);
+      fetchEnquiry();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to request changes."
+      );
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  // ✅ Send Registration Form - Sends registration invitation email
+  const handleSendRegistration = async () => {
+    if (
+      !window.confirm("Send registration form invitation to applicant?")
+    )
+      return;
+
+    try {
+      setProcessing(true);
+      await sendMembershipRegistration(id);
+      toast.success("Registration invitation sent to applicant.");
+      fetchEnquiry();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to send registration form."
+      );
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  // ✅ Approve Member - Sends approval email
+  const handleApprove = async () => {
+    if (
+      !window.confirm(
+        "Approve this member? A congratulatory email will be sent."
+      )
+    )
+      return;
+
+    try {
+      setProcessing(true);
+      await approveMembershipMember(id);
+      toast.success("Member approved successfully. Approval email sent.");
+      fetchEnquiry();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Approval failed."
+      );
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  // Simple status update (no email) - For manual status changes
+  const handleStatusUpdate = async (newStatus) => {
+    if (
+      !window.confirm(
+        `Change status to "${newStatus}"? Note: No email will be sent for manual status changes.`
+      )
+    )
+      return;
+
+    try {
+      setProcessing(true);
+      await updateMembershipEnquiryStatus(id, { status: newStatus });
+      toast.success(`Status updated to ${newStatus}.`);
+      fetchEnquiry();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Unable to update status."
+      );
+    } finally {
+      setProcessing(false);
     }
   };
 
   const handleDelete = async () => {
     if (
       !window.confirm(
-        "Delete this enquiry?"
+        "Delete this enquiry? This action cannot be undone."
       )
     )
       return;
 
     try {
       await deleteMembershipEnquiry(id);
-
       toast.success("Deleted successfully.");
-
       navigate("/admin/membership-enquiries");
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-          "Delete failed."
+        error.response?.data?.message || "Delete failed."
       );
     }
   };
 
   if (loading) {
     return (
-      <div className="p-6">
-        Loading...
+      <div className="p-6 flex justify-center items-center min-h-screen">
+        <div className="text-center">
+          <Loader size={40} className="animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-gray-600">Loading enquiry details...</p>
+        </div>
       </div>
     );
   }
@@ -123,219 +1033,397 @@ const ViewMembershipEnquiry = () => {
   if (!enquiry) {
     return (
       <div className="p-6">
-        No Membership Enquiry Found.
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+          <AlertCircle size={48} className="mx-auto mb-4 text-yellow-600" />
+          <h3 className="text-lg font-semibold text-yellow-800 mb-2">No Enquiry Found</h3>
+          <p className="text-yellow-600 mb-4">The membership enquiry you're looking for doesn't exist.</p>
+          <button
+            onClick={() => navigate("/admin/membership-enquiries")}
+            className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700"
+          >
+            Back to Enquiries
+          </button>
+        </div>
       </div>
     );
   }
 
+  const statusColors = {
+    NEW: "bg-blue-100 text-blue-800 border-blue-300",
+    UNDER_REVIEW: "bg-yellow-100 text-yellow-800 border-yellow-300",
+    REGISTRATION_SENT: "bg-purple-100 text-purple-800 border-purple-300",
+    REGISTRATION_SUBMITTED: "bg-indigo-100 text-indigo-800 border-indigo-300",
+    CHANGES_REQUESTED: "bg-orange-100 text-orange-800 border-orange-300",
+    APPROVED: "bg-green-100 text-green-800 border-green-300",
+    REJECTED: "bg-red-100 text-red-800 border-red-300",
+  };
+
   return (
-    <div className="p-6">
-
+    <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
-
-      <div className="flex justify-between items-center mb-6">
-
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <button
-          onClick={() =>
-            navigate(-1)
-          }
-          className="flex items-center gap-2 text-blue-600"
+          onClick={() => navigate("/admin/membership-enquiries")}
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
         >
           <ArrowLeft size={18} />
-          Back
+          Back to Enquiries
         </button>
 
-        <div className="flex gap-3">
-
-          {enquiry.status !==
-            "APPROVED" && (
-            <button
-              onClick={handleApprove}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            >
-              <CheckCircle size={18} />
-              Approve
-            </button>
-          )}
-
-          <button
-            onClick={handleDelete}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-          >
-            <Trash2 size={18} />
-            Delete
-          </button>
-
-        </div>
+        <button
+          onClick={handleDelete}
+          className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-red-700 transition"
+          disabled={processing}
+        >
+          <Trash2 size={18} />
+          Delete Enquiry
+        </button>
       </div>
 
-      {/* Card */}
+      {/* Action Buttons - Each triggers specific email */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-6 border border-gray-200">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Send size={20} className="text-blue-600" />
+          Workflow Actions (Each sends corresponding email)
+        </h3>
 
-      <div className="bg-white rounded-xl shadow p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Start Review - Sends "Under Review" email */}
+          <button
+            onClick={handleStartReview}
+            disabled={
+              processing ||
+              enquiry.status === "UNDER_REVIEW" ||
+              enquiry.status === "REGISTRATION_SENT" ||
+              enquiry.status === "REGISTRATION_SUBMITTED" ||
+              enquiry.status === "APPROVED"
+            }
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition font-medium ${
+              enquiry.status === "UNDER_REVIEW" ||
+              enquiry.status === "REGISTRATION_SENT" ||
+              enquiry.status === "REGISTRATION_SUBMITTED" ||
+              enquiry.status === "APPROVED"
+                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-yellow-500 text-white hover:bg-yellow-600 shadow-sm"
+            }`}
+          >
+            <Eye size={18} />
+            Start Review
+          </button>
 
-        <div className="flex items-center gap-6 mb-8">
+          {/* Request Changes - Sends "Changes Required" email */}
+          <button
+            onClick={() => setShowRemarksInput(!showRemarksInput)}
+            disabled={processing || enquiry.status === "APPROVED"}
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition font-medium ${
+              enquiry.status === "APPROVED"
+                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
+            }`}
+          >
+            <AlertCircle size={18} />
+            Request Changes
+          </button>
 
+          {/* Send Registration - Sends registration link email */}
+          <button
+            onClick={handleSendRegistration}
+            disabled={
+              processing ||
+              enquiry.status === "NEW" ||
+              enquiry.status === "REGISTRATION_SENT" ||
+              enquiry.status === "REGISTRATION_SUBMITTED" ||
+              enquiry.status === "APPROVED"
+            }
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition font-medium ${
+              enquiry.status === "NEW" ||
+              enquiry.status === "REGISTRATION_SENT" ||
+              enquiry.status === "REGISTRATION_SUBMITTED" ||
+              enquiry.status === "APPROVED"
+                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-purple-500 text-white hover:bg-purple-600 shadow-sm"
+            }`}
+          >
+            <Send size={18} />
+            Send Registration
+          </button>
+
+          {/* Approve Member - Sends approval email */}
+          <button
+            onClick={handleApprove}
+            disabled={
+              processing ||
+              enquiry.status === "APPROVED" ||
+              enquiry.status === "NEW" ||
+              enquiry.status === "UNDER_REVIEW"
+            }
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition font-medium ${
+              enquiry.status === "APPROVED" ||
+              enquiry.status === "NEW" ||
+              enquiry.status === "UNDER_REVIEW"
+                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-green-500 text-white hover:bg-green-600 shadow-sm"
+            }`}
+          >
+            <UserCheck size={18} />
+            Approve Member
+          </button>
+        </div>
+
+        {/* Remarks Input for Change Request */}
+        {showRemarksInput && (
+          <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+            <label className="block text-sm font-semibold mb-2 text-orange-800">
+              Remarks for Changes Required:
+            </label>
+            <textarea
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              placeholder="Describe what changes are needed for the applicant..."
+              rows="3"
+              className="w-full border border-orange-300 rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={handleRequestChanges}
+                disabled={processing || !remarks.trim()}
+                className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+              >
+                {processing ? (
+                  <span className="flex items-center gap-2">
+                    <Loader size={16} className="animate-spin" />
+                    Sending...
+                  </span>
+                ) : (
+                  "Send Change Request"
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  setShowRemarksInput(false);
+                  setRemarks("");
+                }}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Main Card */}
+      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+        {/* Profile Section */}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 pb-6 border-b">
           <img
             src={
               enquiry.photo
-                ? `${import.meta.env.VITE_API_BASE_URL.replace(
-                    "/api",
-                    ""
-                  )}/uploads/membership/${enquiry.photo}`
-                : "https://placehold.co/140x140"
+                ? `${import.meta.env.VITE_API_BASE_URL?.replace("/api", "")}/uploads/membership-photos/${enquiry.photo}`
+                : "https://placehold.co/200x200"
             }
             alt={enquiry.fullName}
-            className="w-36 h-36 rounded-full object-cover border"
+            className="w-36 h-36 rounded-full object-cover border-4 border-gray-200 shadow-md"
+            onError={(e) => {
+              e.target.src = "https://placehold.co/200x200";
+            }}
           />
 
-          <div>
+          <div className="flex-grow text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center gap-3 mb-2">
+              <h2 className="text-2xl font-bold text-gray-900">{enquiry.fullName}</h2>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-semibold border ${
+                  statusColors[enquiry.status] || "bg-gray-100 text-gray-800 border-gray-300"
+                }`}
+              >
+                {enquiry.status?.replace(/_/g, " ") || "NEW"}
+              </span>
+            </div>
 
-            <h2 className="text-2xl font-bold">
-              {enquiry.fullName}
-            </h2>
+            {enquiry.stageName && (
+              <p className="text-purple-600 font-medium mb-2 flex items-center justify-center md:justify-start gap-2">
+                <FileText size={16} />
+                Stage Name: {enquiry.stageName}
+              </p>
+            )}
 
-            <p className="text-gray-500">
-              {enquiry.email}
+            <p className="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+              ✉️ {enquiry.email}
+            </p>
+            <p className="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+              📱 {enquiry.mobile}
+            </p>
+            <p className="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+              📍 {enquiry.city}, {enquiry.country}
             </p>
 
-            <p className="text-gray-500">
-              {enquiry.mobile}
-            </p>
-
+            {enquiry.registrationToken && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg inline-block">
+                <p className="text-sm text-blue-800">
+                  <strong>Registration Token:</strong>{" "}
+                  <code className="bg-blue-100 px-2 py-1 rounded">{enquiry.registrationToken}</code>
+                </p>
+                <p className="text-sm text-blue-600 mt-1">
+                  <strong>Expires:</strong>{" "}
+                  {enquiry.tokenExpiry
+                    ? new Date(enquiry.tokenExpiry).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "N/A"}
+                </p>
+              </div>
+            )}
           </div>
-
         </div>
 
-        {/* Status */}
-
-        <div className="mb-8">
-
-          <label className="font-semibold block mb-2">
-            Status
+        {/* Manual Status Update */}
+        <div className="mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <label className="font-semibold block mb-2 text-gray-700 flex items-center gap-2">
+            <Clock size={18} />
+            Manual Status Update (No email sent)
           </label>
-
           <select
             value={enquiry.status}
-            onChange={(e) =>
-              handleStatus(e.target.value)
-            }
-            className="border rounded-lg px-4 py-2"
+            onChange={(e) => handleStatusUpdate(e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={processing}
           >
-            <option value="NEW">
-              NEW
-            </option>
-
-            <option value="UNDER_REVIEW">
-              UNDER REVIEW
-            </option>
-
-            <option value="APPROVED">
-              APPROVED
-            </option>
-
-            <option value="REJECTED">
-              REJECTED
-            </option>
+            <option value="NEW">NEW</option>
+            <option value="UNDER_REVIEW">UNDER REVIEW</option>
+            <option value="REGISTRATION_SENT">REGISTRATION SENT</option>
+            <option value="REGISTRATION_SUBMITTED">REGISTRATION SUBMITTED</option>
+            <option value="CHANGES_REQUESTED">CHANGES REQUESTED</option>
+            <option value="APPROVED">APPROVED</option>
+            <option value="REJECTED">REJECTED</option>
           </select>
-
+          <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
+            <AlertCircle size={14} />
+            Use action buttons above to send emails. Manual status changes don't trigger emails.
+          </p>
         </div>
 
-        {/* Details */}
-
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <Info
-            label="Gender"
-            value={enquiry.gender}
-          />
-
-          <Info
-            label="Date of Birth"
-            value={
-              enquiry.dateOfBirth
-                ? new Date(
-                    enquiry.dateOfBirth
-                  ).toLocaleDateString()
-                : "-"
-            }
-          />
-
-          <Info
-            label="Occupation"
-            value={enquiry.occupation}
-          />
-
-          <Info
-            label="Membership Type"
-            value={
-              enquiry.membershipType
-            }
-          />
-
-          <Info
-            label="Dance Style"
-            value={enquiry.danceStyle}
-          />
-
-          <Info
-            label="Experience"
-            value={enquiry.experience}
-          />
-
-          <Info
-            label="Address"
-            value={enquiry.address}
-          />
-
-          <Info
-            label="City"
-            value={enquiry.city}
-          />
-
-          <Info
-            label="State"
-            value={enquiry.state}
-          />
-
-          <Info
-            label="Country"
-            value={enquiry.country}
-          />
-
+        {/* Details Grid */}
+        <div className="mb-8">
+          <h3 className="font-semibold text-lg mb-4 text-gray-900">Personal Information</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Info label="Gender" value={enquiry.gender} />
+            <Info
+              label="Date of Birth"
+              value={
+                enquiry.dateOfBirth
+                  ? new Date(enquiry.dateOfBirth).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : "-"
+              }
+            />
+            <Info label="Occupation" value={enquiry.occupation} />
+            <Info label="Membership Type" value={enquiry.membershipType} />
+            <Info label="Dance Style" value={enquiry.danceStyle} />
+            <Info label="Experience" value={enquiry.experience} />
+            <Info label="Address" value={enquiry.address} />
+            <Info label="City" value={enquiry.city} />
+            <Info label="State" value={enquiry.state} />
+            <Info label="Country" value={enquiry.country} />
+            <Info label="Postal Code" value={enquiry.postalCode} />
+          </div>
         </div>
+
+        {/* Social Links */}
+        {enquiry.socialLinks && 
+         (enquiry.socialLinks.instagram || 
+          enquiry.socialLinks.youtube || 
+          enquiry.socialLinks.facebook || 
+          enquiry.socialLinks.twitter || 
+          enquiry.socialLinks.website) && (
+          <div className="mb-8">
+            <h3 className="font-semibold text-lg mb-4 text-gray-900">Social Links & Online Presence</h3>
+            <div className="grid md:grid-cols-2 gap-3">
+              {enquiry.socialLinks.instagram && (
+                <div className="flex items-center gap-3 p-3 bg-pink-50 border border-pink-200 rounded-lg">
+                  <span className="font-medium text-pink-700">Instagram:</span>
+                  <span className="text-gray-600">{enquiry.socialLinks.instagram}</span>
+                </div>
+              )}
+              {enquiry.socialLinks.youtube && (
+                <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <span className="font-medium text-red-700">YouTube:</span>
+                  <span className="text-gray-600">{enquiry.socialLinks.youtube}</span>
+                </div>
+              )}
+              {enquiry.socialLinks.facebook && (
+                <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <span className="font-medium text-blue-700">Facebook:</span>
+                  <span className="text-gray-600">{enquiry.socialLinks.facebook}</span>
+                </div>
+              )}
+              {enquiry.socialLinks.twitter && (
+                <div className="flex items-center gap-3 p-3 bg-sky-50 border border-sky-200 rounded-lg">
+                  <span className="font-medium text-sky-700">Twitter/X:</span>
+                  <span className="text-gray-600">{enquiry.socialLinks.twitter}</span>
+                </div>
+              )}
+              {enquiry.socialLinks.website && (
+                <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <span className="font-medium text-gray-700">Website:</span>
+                  <a
+                    href={enquiry.socialLinks.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline truncate"
+                  >
+                    {enquiry.socialLinks.website}
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Biography */}
+        {enquiry.biography && (
+          <div className="mb-8">
+            <h3 className="font-semibold text-lg mb-2 text-gray-900">Biography</h3>
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 whitespace-pre-wrap text-gray-700 leading-relaxed">
+              {enquiry.biography}
+            </div>
+          </div>
+        )}
+
+        {/* Remarks */}
+        {enquiry.remarks && (
+          <div className="mb-8">
+            <h3 className="font-semibold text-lg mb-2 text-orange-600 flex items-center gap-2">
+              <AlertCircle size={20} />
+              Remarks
+            </h3>
+            <div className="border border-orange-200 rounded-lg p-4 bg-orange-50 text-gray-700">
+              {enquiry.remarks}
+            </div>
+          </div>
+        )}
 
         {/* Message */}
-
-        <div className="mt-8">
-
-          <h3 className="font-semibold mb-2">
-            Message
-          </h3>
-
-          <div className="border rounded-lg p-4 bg-gray-50">
-            {enquiry.message ||
-              "No message provided."}
+        <div>
+          <h3 className="font-semibold text-lg mb-2 text-gray-900">Message from Applicant</h3>
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 whitespace-pre-wrap text-gray-700 leading-relaxed">
+            {enquiry.message || "No message provided."}
           </div>
-
         </div>
-
       </div>
     </div>
   );
 };
 
-const Info = ({
-  label,
-  value,
-}) => (
-  <div>
-    <p className="text-sm text-gray-500">
-      {label}
-    </p>
-
-    <p className="font-medium">
-      {value || "-"}
-    </p>
+const Info = ({ label, value }) => (
+  <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
+    <p className="text-sm text-gray-500 font-medium mb-1">{label}</p>
+    <p className="font-medium text-gray-800">{value || "-"}</p>
   </div>
 );
 
