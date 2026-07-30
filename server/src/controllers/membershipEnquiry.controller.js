@@ -511,6 +511,376 @@
 
 
 
+// import { v4 as uuidv4 } from "uuid";
+// import * as membershipEnquiryService from "../services/membershipEnquiry.service.js";
+// import { sendEmail } from "../services/email.service.js";
+// import membershipEmail from "../templates/membershipEmail.js";
+// import underReviewEmail from "../templates/underReviewEmail.js";
+// import registrationInvitationEmail from "../templates/registrationInvitationEmail.js";
+// import registrationSubmittedEmail from "../templates/registrationSubmittedEmail.js";
+// import changesRequestedEmail from "../templates/changesRequestedEmail.js";
+// import memberApprovedEmail from "../templates/memberApprovedEmail.js";
+// import adminRegistrationReceivedEmail from "../templates/adminRegistrationReceivedEmail.js";
+// import * as memberRegistrationService from "../services/memberRegistration.service.js";
+
+// export const getAll = async (req, res) => {
+//   try {
+//     const enquiries = await membershipEnquiryService.getAll();
+
+//     res.status(200).json({
+//       success: true,
+//       data: enquiries,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const getById = async (req, res) => {
+//   try {
+//     const enquiry = await membershipEnquiryService.getById(req.params.id);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Membership enquiry not found",
+//       });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const create = async (req, res) => {
+//   try {
+//     // Save enquiry
+//     const enquiry = await membershipEnquiryService.create(req.body);
+
+//     // Send confirmation email
+//     try {
+//       await sendEmail({
+//         to: enquiry.email,
+//         subject: "Membership Application Received - KITD Germany",
+//         html: membershipEmail(enquiry.fullName),
+//       });
+
+//       console.log("Membership confirmation email sent.");
+//     } catch (emailError) {
+//       console.error("Email Error:", emailError.message);
+//       // Continue even if email fails
+//     }
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Membership application submitted successfully",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     console.error(error);
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const updateStatus = async (req, res) => {
+//   try {
+//     const enquiry = await membershipEnquiryService.updateStatus(
+//       req.params.id,
+//       req.body.status
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Status updated successfully",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const approve = async (req, res) => {
+//   try {
+//     const member = await membershipEnquiryService.approve(req.params.id);
+
+//     // Send approval email
+//     await sendEmail({
+//       to: member.email,
+//       subject: "Congratulations! Your Membership Has Been Approved",
+//       html: memberApprovedEmail(member.fullName, member.memberId),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved successfully",
+//       data: member,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// export const remove = async (req, res) => {
+//   try {
+//     await membershipEnquiryService.remove(req.params.id);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Membership enquiry deleted successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ FIXED: startReview - Uses proper service method
+// export const startReview = async (req, res) => {
+//   try {
+//     const enquiry = await membershipEnquiryService.startReview(req.params.id);
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Your Membership Application is Under Review",
+//       html: underReviewEmail(enquiry.fullName),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Application moved to Under Review.",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ FIXED: sendRegistrationForm - Uses proper service method with token
+// export const sendRegistrationForm = async (req, res) => {
+//   try {
+//     const token = uuidv4();
+//     const expiry = new Date();
+//     expiry.setDate(expiry.getDate() + 7);
+
+//     const enquiry = await membershipEnquiryService.sendRegistration(
+//       req.params.id,
+//       token,
+//       expiry
+//     );
+
+//     const registrationLink = `${process.env.CLIENT_URL}/member-registration/${token}`;
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Complete Your Membership Registration",
+//       html: registrationInvitationEmail(enquiry.fullName, registrationLink),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Registration invitation sent.",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ FIXED: requestChanges - Uses proper service method
+// export const requestChanges = async (req, res) => {
+//   try {
+//     const { remarks } = req.body;
+
+//     const enquiry = await membershipEnquiryService.requestChanges(
+//       req.params.id,
+//       remarks
+//     );
+
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Changes Required for Your Membership Application",
+//       html: changesRequestedEmail(enquiry.fullName, remarks),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Change request sent.",
+//       data: enquiry,
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message
+//     });
+//   }
+// };
+
+// // ✅ FIXED: approveMember - Uses proper service method
+// export const approveMember = async (req, res) => {
+//   try {
+//     const member = await membershipEnquiryService.approve(req.params.id);
+
+//     await sendEmail({
+//       to: member.email,
+//       subject: "Congratulations! Your Membership Has Been Approved",
+//       html: memberApprovedEmail(member.fullName, member.memberId),
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Member approved successfully.",
+//       data: member
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message
+//     });
+//   }
+// };
+
+// // ✅ FIXED: submitRegistration - Added token expiry check and emails
+// export const submitRegistration = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+
+//     const enquiry = await membershipEnquiryService.getByToken(token);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Invalid registration link",
+//       });
+//     }
+
+//     // ✅ Token expiry check
+//     if (
+//       enquiry.tokenExpiry &&
+//       new Date(enquiry.tokenExpiry) < new Date()
+//     ) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Registration link has expired.",
+//       });
+//     }
+
+//     const registration = await memberRegistrationService.create({
+//       enquiryId: enquiry.id,
+
+//       fullName: req.body.fullName,
+//       gender: req.body.gender,
+//       dateOfBirth: req.body.dateOfBirth
+//         ? new Date(req.body.dateOfBirth)
+//         : null,
+
+//       address: req.body.address,
+//       city: req.body.city,
+//       state: req.body.state,
+//       country: req.body.country,
+
+//       danceStyle: req.body.danceStyle,
+//       guru: req.body.guru,
+//       experience: req.body.experience,
+
+//       document: req.file?.filename || null,
+//     });
+
+//     await membershipEnquiryService.registrationSubmitted(enquiry.id);
+
+//     // ✅ Send confirmation email to applicant
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Registration Submitted Successfully",
+//       html: registrationSubmittedEmail(enquiry.fullName),
+//     });
+
+//     // ✅ Send notification email to admin
+//     await sendEmail({
+//       to: process.env.ADMIN_EMAIL,
+//       subject: "New Membership Registration Received",
+//       html: adminRegistrationReceivedEmail(enquiry.fullName),
+//     });
+
+//     return res.status(201).json({
+//       success: true,
+//       data: registration,
+//     });
+
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// // ✅ Token validation endpoint
+// export const validateRegistrationToken = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+
+//     const enquiry = await membershipEnquiryService.getByToken(token);
+
+//     if (!enquiry) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Invalid registration link.",
+//       });
+//     }
+
+//     if (
+//       enquiry.tokenExpiry &&
+//       new Date(enquiry.tokenExpiry) < new Date()
+//     ) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Registration link has expired.",
+//       });
+//     }
+
+//     return res.status(200).json({
+//       success: true,
+//       data: enquiry,
+//     });
+
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
 import { v4 as uuidv4 } from "uuid";
 import * as membershipEnquiryService from "../services/membershipEnquiry.service.js";
 import { sendEmail } from "../services/email.service.js";
@@ -564,8 +934,49 @@ export const getById = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+    // Handle file upload if present
+    const photo = req.file?.filename || null;
+
+    // Parse socialLinks if it's a string (from FormData)
+    let socialLinks = req.body.socialLinks;
+    if (typeof socialLinks === 'string') {
+      try {
+        socialLinks = JSON.parse(socialLinks);
+      } catch (e) {
+        socialLinks = null;
+      }
+    }
+
+    // Handle dateOfBirth conversion
+    const dateOfBirth = req.body.dateOfBirth 
+      ? new Date(req.body.dateOfBirth) 
+      : null;
+
+    // Prepare enquiry data with all new fields
+    const enquiryData = {
+      fullName: req.body.fullName,
+      stageName: req.body.stageName || null,
+      email: req.body.email?.toLowerCase().trim(),
+      mobile: req.body.mobile,
+      gender: req.body.gender || null,
+      dateOfBirth: dateOfBirth,
+      occupation: req.body.occupation || null,
+      biography: req.body.biography || null,
+      membershipType: req.body.membershipType || null,
+      danceStyle: req.body.danceStyle || null,
+      experience: req.body.experience || null,
+      address: req.body.address || null,
+      city: req.body.city || null,
+      state: req.body.state || null,
+      country: req.body.country || null,
+      postalCode: req.body.postalCode || null,
+      socialLinks: socialLinks,
+      message: req.body.message || null,
+      photo: photo,
+    };
+
     // Save enquiry
-    const enquiry = await membershipEnquiryService.create(req.body);
+    const enquiry = await membershipEnquiryService.create(enquiryData);
 
     // Send confirmation email
     try {
@@ -581,14 +992,116 @@ export const create = async (req, res) => {
       // Continue even if email fails
     }
 
+    // Send notification to admin
+    try {
+      await sendEmail({
+        to: process.env.ADMIN_EMAIL,
+        subject: `New Membership Application - ${enquiry.fullName}`,
+        html: `
+          <h2>New Membership Application Received</h2>
+          <p><strong>Name:</strong> ${enquiry.fullName}</p>
+          <p><strong>Stage Name:</strong> ${enquiry.stageName || 'N/A'}</p>
+          <p><strong>Email:</strong> ${enquiry.email}</p>
+          <p><strong>Phone:</strong> ${enquiry.mobile}</p>
+          <p><strong>Membership Type:</strong> ${enquiry.membershipType || 'N/A'}</p>
+          <p><strong>Dance Style:</strong> ${enquiry.danceStyle || 'N/A'}</p>
+          <p><strong>City:</strong> ${enquiry.city || 'N/A'}</p>
+          <p><strong>Country:</strong> ${enquiry.country || 'N/A'}</p>
+          ${enquiry.biography ? `<p><strong>Biography:</strong> ${enquiry.biography.substring(0, 200)}...</p>` : ''}
+          <br/>
+          <p>Login to admin panel to review the application.</p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Admin Email Error:", emailError.message);
+    }
+
     res.status(201).json({
       success: true,
       message: "Membership application submitted successfully",
       data: enquiry,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Create Enquiry Error:", error);
 
+    // Handle validation errors
+    if (error.code === 'P2002') {
+      return res.status(400).json({
+        success: false,
+        message: "An application with this email already exists.",
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Check if enquiry exists
+    const existingEnquiry = await membershipEnquiryService.getById(id);
+    if (!existingEnquiry) {
+      return res.status(404).json({
+        success: false,
+        message: "Membership enquiry not found",
+      });
+    }
+
+    // Handle file upload if present
+    const photo = req.file?.filename || existingEnquiry.photo;
+
+    // Parse socialLinks if it's a string
+    let socialLinks = req.body.socialLinks;
+    if (typeof socialLinks === 'string') {
+      try {
+        socialLinks = JSON.parse(socialLinks);
+      } catch (e) {
+        socialLinks = existingEnquiry.socialLinks;
+      }
+    }
+
+    // Handle dateOfBirth conversion
+    const dateOfBirth = req.body.dateOfBirth 
+      ? new Date(req.body.dateOfBirth) 
+      : existingEnquiry.dateOfBirth;
+
+    // Prepare update data
+    const updateData = {
+      fullName: req.body.fullName || existingEnquiry.fullName,
+      stageName: req.body.stageName !== undefined ? req.body.stageName : existingEnquiry.stageName,
+      email: req.body.email?.toLowerCase().trim() || existingEnquiry.email,
+      mobile: req.body.mobile || existingEnquiry.mobile,
+      gender: req.body.gender !== undefined ? req.body.gender : existingEnquiry.gender,
+      dateOfBirth: dateOfBirth,
+      occupation: req.body.occupation !== undefined ? req.body.occupation : existingEnquiry.occupation,
+      biography: req.body.biography !== undefined ? req.body.biography : existingEnquiry.biography,
+      membershipType: req.body.membershipType || existingEnquiry.membershipType,
+      danceStyle: req.body.danceStyle !== undefined ? req.body.danceStyle : existingEnquiry.danceStyle,
+      experience: req.body.experience !== undefined ? req.body.experience : existingEnquiry.experience,
+      address: req.body.address !== undefined ? req.body.address : existingEnquiry.address,
+      city: req.body.city || existingEnquiry.city,
+      state: req.body.state !== undefined ? req.body.state : existingEnquiry.state,
+      country: req.body.country || existingEnquiry.country,
+      postalCode: req.body.postalCode !== undefined ? req.body.postalCode : existingEnquiry.postalCode,
+      socialLinks: socialLinks,
+      message: req.body.message !== undefined ? req.body.message : existingEnquiry.message,
+      photo: photo,
+    };
+
+    const enquiry = await membershipEnquiryService.update(id, updateData);
+
+    res.status(200).json({
+      success: true,
+      message: "Membership enquiry updated successfully",
+      data: enquiry,
+    });
+  } catch (error) {
+    console.error("Update Enquiry Error:", error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -600,7 +1113,8 @@ export const updateStatus = async (req, res) => {
   try {
     const enquiry = await membershipEnquiryService.updateStatus(
       req.params.id,
-      req.body.status
+      req.body.status,
+      req.body.remarks || null
     );
 
     res.status(200).json({
@@ -793,6 +1307,9 @@ export const submitRegistration = async (req, res) => {
       });
     }
 
+    // Handle file upload if present
+    const documentFile = req.file?.filename || null;
+
     const registration = await memberRegistrationService.create({
       enquiryId: enquiry.id,
 
@@ -806,12 +1323,17 @@ export const submitRegistration = async (req, res) => {
       city: req.body.city,
       state: req.body.state,
       country: req.body.country,
+      postalCode: req.body.postalCode || null,
 
       danceStyle: req.body.danceStyle,
       guru: req.body.guru,
       experience: req.body.experience,
+      
+      stageName: req.body.stageName || null,
+      biography: req.body.biography || null,
+      socialLinks: req.body.socialLinks || null,
 
-      document: req.file?.filename || null,
+      document: documentFile,
     });
 
     await membershipEnquiryService.registrationSubmitted(enquiry.id);
@@ -836,6 +1358,7 @@ export const submitRegistration = async (req, res) => {
     });
 
   } catch (error) {
+    console.error("Registration Error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -864,6 +1387,33 @@ export const validateRegistrationToken = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Registration link has expired.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: enquiry,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ✅ Get enquiry by token
+export const getByToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const enquiry = await membershipEnquiryService.getByToken(token);
+
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: "Invalid token.",
       });
     }
 
