@@ -1,0 +1,131 @@
+  /* ============================================ */
+/* SPANDA PAGE                                    */
+/* ============================================ */
+
+.spanda-page { overflow-x: hidden; background: #fafafa; }
+.spanda-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* HERO */
+.spanda-hero { position: relative; min-height: 80vh; display: flex; align-items: center; overflow: hidden; }
+.spanda-hero__bg { position: absolute; inset: 0; }
+.spanda-hero__bg img { width: 100%; height: 100%; object-fit: cover; animation: spandaZoom 30s ease-in-out infinite alternate; }
+@keyframes spandaZoom { 0% { transform: scale(1); } 100% { transform: scale(1.06); } }
+.spanda-hero__overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+.spanda-hero__gradient { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(139,30,63,0.6) 0%, rgba(30,12,20,0.5) 50%, rgba(0,0,0,0.4) 100%); }
+.spanda-hero__container { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+.spanda-hero__content { max-width: 650px; color: #fff; }
+.spanda-hero__badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: rgba(255,255,255,0.15); border-radius: 50px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+.spanda-hero__title { font-size: 80px; font-weight: 900; line-height: 1; margin: 0 0 12px; letter-spacing: 4px; }
+.spanda-hero__subtitle { font-size: 20px; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; margin: 0 0 20px; opacity: 0.9; }
+.spanda-hero__description { font-size: 18px; line-height: 1.8; opacity: 0.85; margin: 0 0 32px; }
+.spanda-hero__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.spanda-hero__btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; border-radius: 50px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; }
+.spanda-hero__btn--primary { background: #8B1E3F; color: #fff; box-shadow: 0 4px 20px rgba(139,30,63,0.4); }
+.spanda-hero__btn--primary:hover { background: #a12347; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(139,30,63,0.5); }
+.spanda-hero__btn--secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+.spanda-hero__btn--secondary:hover { background: rgba(255,255,255,0.2); }
+
+/* BREADCRUMB */
+.spanda-breadcrumb { padding: 14px 0; background: #fff; border-bottom: 1px solid #e5e7eb; }
+.spanda-breadcrumb .spanda-container { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.spanda-breadcrumb a { color: #8B1E3F; text-decoration: none; }
+.spanda-breadcrumb span { color: #1a1a1a; font-weight: 500; }
+
+/* ABOUT */
+.spanda-about { padding: 100px 0; background: #fff; }
+.spanda-about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.spanda-about__grid.visible { opacity: 1; transform: translateY(0); }
+.spanda-about__eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.spanda-about__eyebrow-line { width: 40px; height: 2px; background: #8B1E3F; }
+.spanda-about__eyebrow-text { font-size: 12px; font-weight: 600; color: #8B1E3F; text-transform: uppercase; letter-spacing: 2px; }
+.spanda-about__title { font-size: 42px; font-weight: 800; color: #1a1a1a; margin: 0 0 24px; }
+.spanda-about__title-accent { color: #8B1E3F; }
+.spanda-about__text { font-size: 16px; color: #4b5563; line-height: 1.8; margin: 0 0 16px; }
+.spanda-about__quote { display: flex; gap: 16px; padding: 24px; background: #fdf2f4; border-left: 4px solid #8B1E3F; border-radius: 8px; margin-top: 24px; }
+.spanda-about__quote svg { color: #8B1E3F; flex-shrink: 0; }
+.spanda-about__quote p { font-size: 15px; color: #6b1832; font-style: italic; line-height: 1.7; margin: 0; }
+.spanda-about__visual { position: relative; }
+.spanda-about__image { position: relative; border-radius: 20px; overflow: hidden; }
+.spanda-about__image img { width: 100%; height: 500px; object-fit: cover; border-radius: 20px; }
+.spanda-about__image-accent { position: absolute; bottom: -20px; right: -20px; width: 150px; height: 150px; background: rgba(139,30,63,0.1); border-radius: 50%; z-index: -1; }
+
+/* BENEFITS */
+.spanda-benefits { padding: 80px 0; background: #faf8f9; }
+.spanda-benefits__header { text-align: center; margin-bottom: 50px; }
+.spanda-benefits__eyebrow { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.spanda-benefits__eyebrow-line { width: 30px; height: 2px; background: #8B1E3F; }
+.spanda-benefits__eyebrow-text { font-size: 12px; font-weight: 600; color: #8B1E3F; text-transform: uppercase; letter-spacing: 2px; }
+.spanda-benefits__title { font-size: 36px; font-weight: 800; color: #1a1a1a; margin: 0; }
+.spanda-benefits__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.spanda-benefits__grid.visible { opacity: 1; transform: translateY(0); }
+.spanda-benefits__card { background: #fff; padding: 32px 24px; border-radius: 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: all 0.3s ease; }
+.spanda-benefits__card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.spanda-benefits__icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(139,30,63,0.08); color: #8B1E3F; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.spanda-benefits__card h3 { font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0 0 8px; }
+.spanda-benefits__card p { font-size: 14px; color: #6b7280; line-height: 1.6; margin: 0; }
+
+/* SESSIONS */
+.spanda-sessions { padding: 80px 0; background: #fff; }
+.spanda-sessions__header { text-align: center; margin-bottom: 50px; }
+.spanda-sessions__eyebrow { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.spanda-sessions__eyebrow-line { width: 30px; height: 2px; background: #8B1E3F; }
+.spanda-sessions__eyebrow-text { font-size: 12px; font-weight: 600; color: #8B1E3F; text-transform: uppercase; letter-spacing: 2px; }
+.spanda-sessions__title { font-size: 36px; font-weight: 800; color: #1a1a1a; margin: 0; }
+.spanda-sessions__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.spanda-sessions__grid.visible { opacity: 1; transform: translateY(0); }
+.spanda-sessions__card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; transition: all 0.3s ease; }
+.spanda-sessions__card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.spanda-sessions__card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.spanda-sessions__card-header h3 { font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0; flex: 1; }
+.spanda-sessions__status { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.spanda-sessions__status--open { background: #f0fdf4; color: #16a34a; }
+.spanda-sessions__status--coming-soon { background: #fef3c7; color: #d97706; }
+.spanda-sessions__card-body { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.spanda-sessions__info { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6b7280; }
+.spanda-sessions__btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: #8B1E3F; color: #fff; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
+.spanda-sessions__btn:hover { background: #6d1832; }
+
+/* TESTIMONIALS */
+.spanda-testimonials { padding: 80px 0; background: #faf8f9; }
+.spanda-testimonials__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.spanda-testimonials__grid.visible { opacity: 1; transform: translateY(0); }
+.spanda-testimonials__card { background: #fff; padding: 32px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.spanda-testimonials__quote-icon { color: #8B1E3F; opacity: 0.3; margin-bottom: 16px; }
+.spanda-testimonials__text { font-size: 15px; color: #4b5563; line-height: 1.7; margin: 0 0 20px; font-style: italic; }
+.spanda-testimonials__author strong { display: block; font-size: 15px; color: #1a1a1a; }
+.spanda-testimonials__author span { font-size: 13px; color: #8B1E3F; }
+
+/* CONTACT */
+.spanda-contact { position: relative; padding: 100px 0; overflow: hidden; }
+.spanda-contact__bg { position: absolute; inset: 0; }
+.spanda-contact__bg img { width: 100%; height: 100%; object-fit: cover; }
+.spanda-contact__overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,5,8,0.92) 0%, rgba(30,12,20,0.88) 100%); }
+.spanda-contact__wrapper { position: relative; z-index: 1; text-align: center; max-width: 600px; margin: 0 auto; color: #fff; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.spanda-contact__wrapper.visible { opacity: 1; transform: translateY(0); }
+.spanda-contact__header svg { color: #e85d75; margin-bottom: 16px; }
+.spanda-contact__header h2 { font-size: 36px; font-weight: 800; margin: 0 0 16px; }
+.spanda-contact__header p { font-size: 17px; opacity: 0.85; line-height: 1.7; margin: 0 0 32px; }
+.spanda-contact__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.spanda-contact__btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; border-radius: 50px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; }
+.spanda-contact__btn--primary { background: #8B1E3F; color: #fff; }
+.spanda-contact__btn--primary:hover { background: #a12347; transform: translateY(-2px); }
+.spanda-contact__btn--secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.spanda-contact__btn--secondary:hover { background: rgba(255,255,255,0.2); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .spanda-hero__title { font-size: 56px; }
+  .spanda-about__grid { grid-template-columns: 1fr; }
+  .spanda-benefits__grid { grid-template-columns: repeat(2, 1fr); }
+  .spanda-sessions__grid { grid-template-columns: repeat(2, 1fr); }
+  .spanda-testimonials__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .spanda-hero__title { font-size: 40px; }
+  .spanda-hero__subtitle { font-size: 14px; letter-spacing: 3px; }
+  .spanda-about { padding: 60px 0; }
+  .spanda-about__title { font-size: 30px; }
+  .spanda-benefits__grid { grid-template-columns: 1fr; }
+  .spanda-sessions__grid { grid-template-columns: 1fr; }
+  .spanda-contact__header h2 { font-size: 28px; }
+}

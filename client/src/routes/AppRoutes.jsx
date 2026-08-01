@@ -63,101 +63,114 @@ import MembershipFAQ from "../pages/Membership/MembershipFAQ";
 import VolunteerPage from "../pages/Volunteer/VolunteerPage";
 import ContactPage from "../pages/Contact/ContactPage";
 import SEPAConsent from "../pages/Sepa/SEPAConsent";
+import ActivityDetail from "../pages/Activities/ActivityDetail";
+import SpandaPage from "../pages/Activities/SpandaPage";
+import EventDetail from "../pages/Events/EventDetail";
+import ArtistDetail from "../pages/Artists/ArtistDetail";
+import NewsDetail from "../pages/News/NewsDetails";
+import TestimonialsPage from "../pages/Testimonials/TestimonialPage";
 // import MemberRegistration from "../pages/member-registration/MemberRegistration";
 
 const AppRoutes = () => {
     return (
         <Routes>
-     {/* <Route path="/" element={<Home />} /> */}
+            {/* <Route path="/" element={<Home />} /> */}
 
 
-{/* Public Website */}
+            {/* Public Website */}
 
-<Route element={<PublicLayout />}>
+            <Route element={<PublicLayout />}>
 
-    <Route
-        path="/"
-        element={<Home />}
-
-
-    />
-
-     <Route
-        path="/about"
-        element={<AboutPage />}
-    />
+                <Route
+                    path="/"
+                    element={<Home />}
 
 
- <Route
-        path="/about/mission-vision"
-        element={<MissionPage />}
-    />
+                />
 
-    
-
- <Route
-        path="/about/executive-committee"
-        element={<ExecutiveCommitteePage />}
-    />
+                <Route
+                    path="/about"
+                    element={<AboutPage />}
+                />
 
 
- <Route
-        path="/activities"
-        element={<ActivitiesPage />}
-    />
-    <Route
-        path="/events"
-        element={<EventsPage />}
-    />
-
-       <Route
-        path="/artists"
-        element={<ArtistsPage />}
-    />
-  <Route
-        path="/gallery"
-        element={<GalleryPage />}
+                <Route
+                    path="/about/mission-vision"
+                    element={<MissionPage />}
+                />
 
 
-    />
 
-      {/* <Route
+                <Route
+                    path="/about/executive-committee"
+                    element={<ExecutiveCommitteePage />}
+                />
+
+
+<Route path="/artists/:id" element={<ArtistDetail />} />
+<Route path="/news/:id" element={<NewsDetail />} />
+                <Route
+                    path="/activities"
+                    element={<ActivitiesPage />}
+                />
+                <Route
+                    path="/events"
+                    element={<EventsPage />}
+                />
+
+                <Route
+                    path="/artists"
+                    element={<ArtistsPage />}
+                />
+                <Route
+                    path="/gallery"
+                    element={<GalleryPage />}
+
+
+                />
+
+                {/* <Route
         path="/gallery"
         element={<GalleryPage />}
     /> */}
 
-    <Route
-        path="/news"
-        element={<NewsPage/>}
-    />
+                <Route
+                    path="/news"
+                    element={<NewsPage />}
+                />
 
-      <Route path="/news/:slug" element={<NewsDetails />} />
+                <Route path="/news/:slug" element={<NewsDetails />} />
 
-       <Route
-        path="/membership"
-        element={<MembershipPage />}
-    />
+                <Route
+                    path="/membership"
+                    element={<MembershipPage />}
+                />
 
-          <Route
-        path="/membership/benefits"
-        element={<MembershipBenefits />}
-    />
+                <Route
+                    path="/membership/benefits"
+                    element={<MembershipBenefits />}
+                />
+<Route path="/activities/:id" element={<ActivityDetail />} />
+<Route path="/activities/spanda" element={<SpandaPage />} />
 
-           <Route
-        path="/membership/faq"
-        element={<MembershipFAQ />}
-    />
-    <Route
-        path="/volunteer"
-        element={<VolunteerPage />}
-    />
+<Route path="/events/:id" element={<EventDetail />} />
 
- <Route
-        path="/contact"
-        element={<ContactPage />}
-    /> 
 
-{/* 
+                <Route
+                    path="/membership/faq"
+                    element={<MembershipFAQ />}
+                />
+                <Route
+                    path="/volunteer"
+                    element={<VolunteerPage />}
+                />
+
+                <Route
+                    path="/contact"
+                    element={<ContactPage />}
+                />
+
+                {/* 
    
 
    
@@ -183,8 +196,8 @@ const AppRoutes = () => {
         element={<ContactPage />}
     /> */}
 
-</Route>
-
+            </Route>
+<Route path="/testimonials" element={<TestimonialsPage />} />
 
             {/* Public */}
             <Route path="/login" element={<Login />} />
@@ -291,40 +304,40 @@ const AppRoutes = () => {
 
             <Route element={<AdminLayout />}>
 
-<Route path="/admin/artists" element={<Artists />} />
+                <Route path="/admin/artists" element={<Artists />} />
 
-<Route
-  path="/admin/artists/create"
-  element={<AddArtist />}
-/>
+                <Route
+                    path="/admin/artists/create"
+                    element={<AddArtist />}
+                />
 
-<Route
-  path="/admin/artists/edit/:id"
-  element={<EditArtist />}
-/>
+                <Route
+                    path="/admin/artists/edit/:id"
+                    element={<EditArtist />}
+                />
 
-</Route>
+            </Route>
 
 
 
- <Route element={<AdminLayout />}>
-<Route path="/admin/events" element={<Events />} />
+            <Route element={<AdminLayout />}>
+                <Route path="/admin/events" element={<Events />} />
 
-<Route
-  path="/admin/events/create"
-  element={<AddEvent />}
-/>
+                <Route
+                    path="/admin/events/create"
+                    element={<AddEvent />}
+                />
 
-<Route
-  path="/admin/events/edit/:id"
-  element={<EditEvent />}
-/>
+                <Route
+                    path="/admin/events/edit/:id"
+                    element={<EditEvent />}
+                />
 
 
 
 
 
- </Route>
+            </Route>
 
 
 
@@ -340,58 +353,58 @@ const AppRoutes = () => {
 
 
 
- <Route element={<AdminLayout />}>
+            <Route element={<AdminLayout />}>
 
 
- <Route
-  path="/admin/testimonials"
-  element={<Testimonials />}
-/>
+                <Route
+                    path="/admin/testimonials"
+                    element={<Testimonials />}
+                />
 
-<Route
-  path="/admin/testimonials/create"
-  element={<AddTestimonial />}
-/>
+                <Route
+                    path="/admin/testimonials/create"
+                    element={<AddTestimonial />}
+                />
 
-<Route
-  path="/admin/testimonials/edit/:id"
-  element={<EditTestimonial />}
-/>
+                <Route
+                    path="/admin/testimonials/edit/:id"
+                    element={<EditTestimonial />}
+                />
 
-</Route>
+            </Route>
 
- <Route element={<AdminLayout />}>
+            <Route element={<AdminLayout />}>
 
-<Route
-  path="/admin/newsletter"
-  element={<Newsletter/>}
-/>
+                <Route
+                    path="/admin/newsletter"
+                    element={<Newsletter />}
+                />
 
-<Route
-  path="/admin/newsletter/create"
-  element={<AddNewsletter />}
-/>
+                <Route
+                    path="/admin/newsletter/create"
+                    element={<AddNewsletter />}
+                />
 
-<Route
-  path="/admin/newsletter/edit/:id"
-  element={<EditNewsletter />}
-/>
+                <Route
+                    path="/admin/newsletter/edit/:id"
+                    element={<EditNewsletter />}
+                />
 
-</Route>
+            </Route>
 
 
-<Route element={<AdminLayout />}>
-<Route
-  path="/admin/contact"
-  element={<Contact />}
-/>
+            <Route element={<AdminLayout />}>
+                <Route
+                    path="/admin/contact"
+                    element={<Contact />}
+                />
 
-<Route
-  path="/admin/contact/view/:id"
-  element={<ViewContact />}
-/>
+                <Route
+                    path="/admin/contact/view/:id"
+                    element={<ViewContact />}
+                />
 
-</Route> 
+            </Route>
 
 
 
@@ -399,22 +412,22 @@ const AppRoutes = () => {
 
 
 
-<Route element={<AdminLayout />}>
+            <Route element={<AdminLayout />}>
 
-<Route
-  path="/admin/partners"
-  element={<Partners />}
-/>
+                <Route
+                    path="/admin/partners"
+                    element={<Partners />}
+                />
 
-<Route
-  path="/admin/partners/create"
-  element={<AddPartner />}
-/>
+                <Route
+                    path="/admin/partners/create"
+                    element={<AddPartner />}
+                />
 
-<Route
-  path="/admin/partners/edit/:id"
-  element={<EditPartner />}
-/>
+                <Route
+                    path="/admin/partners/edit/:id"
+                    element={<EditPartner />}
+                />
 
 
 
@@ -434,29 +447,29 @@ const AppRoutes = () => {
 
 
 
-</Route>
+            </Route>
 
-<Route element={<AdminLayout />}>
+            <Route element={<AdminLayout />}>
 
 
-<Route
-  path="/admin/news"
-  element={<News />}
-/>
+                <Route
+                    path="/admin/news"
+                    element={<News />}
+                />
 
-<Route
-  path="/admin/news/create"
-  element={<AddNews />}
-/>
+                <Route
+                    path="/admin/news/create"
+                    element={<AddNews />}
+                />
 
-<Route
-  path="/admin/news/edit/:id"
-  element={<EditNews />}
-/>
+                <Route
+                    path="/admin/news/edit/:id"
+                    element={<EditNews />}
+                />
 
 
 
-</Route>
+            </Route>
 
 
 
@@ -470,7 +483,7 @@ const AppRoutes = () => {
 
 
 
-{/* <Route
+            {/* <Route
   path="/member-registration/:token"
   element={<MemberRegistration />}
 /> */}
@@ -479,41 +492,43 @@ const AppRoutes = () => {
 
 
 
-<Route element={<AdminLayout />}>
+            <Route element={<AdminLayout />}>
 
 
 
-<Route
-  path="/admin/membership-enquiries"
-  element={<MembershipEnquiries />}
-/>
+                <Route
+                    path="/admin/membership-enquiries"
+                    element={<MembershipEnquiries />}
+                />
 
-<Route
-  path="/admin/membership-enquiries/view/:id"
-  element={<ViewMembershipEnquiry />}
-/>
-
-
+                <Route
+                    path="/admin/membership-enquiries/view/:id"
+                    element={<ViewMembershipEnquiry />}
+                />
 
 
-</Route>
-
-<Route element={<AdminLayout />}>
-
-<Route
-  path="/admin/volunteer-registrations"
-  element={<VolunteerRegistrations />}
-/>
-
-<Route
-  path="/admin/volunteer-registrations/view/:id"
-  element={<ViewVolunteerRegistration />}
-/>
-
-</Route>
 
 
-<Route path="/sepa-consent/:token" element={<SEPAConsent />} />
+            </Route>
+
+            <Route element={<AdminLayout />}>
+
+                <Route
+                    path="/admin/volunteer-registrations"
+                    element={<VolunteerRegistrations />}
+                />
+
+                <Route
+                    path="/admin/volunteer-registrations/view/:id"
+                    element={<ViewVolunteerRegistration />}
+                />
+
+            </Route>
+
+
+            <Route path="/sepa-consent/:token" element={<SEPAConsent />} />
+
+
 
 
             {/* Default */}

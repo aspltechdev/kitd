@@ -536,3 +536,74 @@
   outline: 2px solid #8B1E3F;
   outline-offset: 2px;
 }
+
+
+
+/* Visibility Section */
+.visibility-section {
+  background: linear-gradient(135deg, #f0fdf4, #f8fafc);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.form-section__desc {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.visibility-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border: 2px solid;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.visibility-toggle-btn.public {
+  border-color: #22c55e;
+  color: #166534;
+}
+
+.visibility-toggle-btn.public:hover {
+  background: #f0fdf4;
+}
+
+.visibility-toggle-btn.hidden {
+  border-color: #d1d5db;
+  color: #6b7280;
+}
+
+.visibility-toggle-btn.hidden:hover {
+  background: #f9fafb;
+}
+
+.visibility-toggle-btn span {
+  flex: 1;
+  text-align: left;
+}
+
+/* Social Icons Colors */
+.social-icon.instagram { color: #e4405f; }
+.social-icon.youtube { color: #ff0000; }
+.social-icon.facebook { color: #1877f2; }
+.social-icon.twitter { color: #1da1f2; }
+
+.social-links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.social-links-grid .full-width {
+  grid-column: 1 / -1;
+}

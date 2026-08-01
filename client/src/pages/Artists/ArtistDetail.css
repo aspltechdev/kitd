@@ -1,0 +1,88 @@
+/* ArtistDetail.css */
+
+.artist-detail { background: #fafafa; }
+.artist-detail__container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* Loading */
+.artist-detail__loading { text-align: center; padding: 100px 20px; }
+.artist-detail__loading .spinner { width: 40px; height: 40px; border: 3px solid #e5e7eb; border-top-color: #8B1E3F; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Error */
+.artist-detail__error { text-align: center; padding: 100px 20px; }
+.artist-detail__error h2 { font-size: 24px; color: #1a1a1a; margin-bottom: 8px; }
+.artist-detail__error p { color: #6b7280; margin-bottom: 24px; }
+.artist-detail__back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: #8B1E3F; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 500; }
+
+/* Breadcrumb */
+.artist-detail__breadcrumb { padding: 14px 0; background: #fff; border-bottom: 1px solid #e5e7eb; }
+.artist-detail__breadcrumb .artist-detail__container { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.artist-detail__breadcrumb a { color: #8B1E3F; text-decoration: none; }
+.artist-detail__breadcrumb span { color: #1a1a1a; font-weight: 500; }
+
+/* Hero */
+.artist-detail__hero { padding: 60px 0; background: #fff; }
+.artist-detail__hero-grid { display: grid; grid-template-columns: 380px 1fr; gap: 50px; align-items: start; }
+.artist-detail__hero-image { border-radius: 20px; overflow: hidden; aspect-ratio: 1/1; background: #f7fafc; }
+.artist-detail__hero-image img { width: 100%; height: 100%; object-fit: cover; }
+.artist-detail__hero-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg, #f3f4f6, #e5e7eb); color: #9ca3af; }
+.artist-detail__hero-placeholder span { font-size: 2.5rem; font-weight: 700; color: #6b7280; }
+
+.artist-detail__hero-info { }
+.artist-detail__back-link { display: inline-flex; align-items: center; gap: 8px; color: #6b7280; text-decoration: none; font-size: 14px; margin-bottom: 20px; }
+.artist-detail__back-link:hover { color: #8B1E3F; }
+.artist-detail__badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(139,30,63,0.08); color: #8B1E3F; border-radius: 50px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+.artist-detail__name { font-size: 42px; font-weight: 800; color: #1a1a1a; margin: 0 0 4px; }
+.artist-detail__stage-name { font-size: 16px; color: #7c3aed; font-weight: 500; margin: 0 0 16px; }
+.artist-detail__meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+.artist-detail__meta-item { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #6b7280; }
+.artist-detail__meta-item svg { color: #8B1E3F; }
+
+.artist-detail__contact { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.artist-detail__contact-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #4b5563; text-decoration: none; }
+.artist-detail__contact-item:hover { color: #8B1E3F; }
+
+.artist-detail__social { display: flex; gap: 10px; }
+.artist-detail__social-link { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.3s ease; text-decoration: none; }
+.artist-detail__social-link.instagram { background: #e4405f; }
+.artist-detail__social-link.youtube { background: #ff0000; }
+.artist-detail__social-link.facebook { background: #1877f2; }
+.artist-detail__social-link.twitter { background: #1da1f2; }
+.artist-detail__social-link.website { background: #6b7280; }
+.artist-detail__social-link:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+/* Bio */
+.artist-detail__bio { padding: 60px 0; background: #faf8f9; }
+.artist-detail__bio-grid { display: grid; grid-template-columns: 1fr 320px; gap: 50px; }
+.artist-detail__bio-main h2 { font-size: 28px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px; }
+.artist-detail__bio-main p { font-size: 16px; color: #4b5563; line-height: 1.8; }
+
+.artist-detail__info-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.artist-detail__info-card h3 { font-size: 18px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px; }
+.artist-detail__info-card ul { list-style: none; padding: 0; margin: 0; }
+.artist-detail__info-card li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+.artist-detail__info-card li:last-child { border-bottom: none; }
+.artist-detail__info-card li svg { color: #8B1E3F; flex-shrink: 0; margin-top: 2px; }
+.artist-detail__info-card li strong { display: block; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.artist-detail__info-card li span { font-size: 14px; color: #374151; }
+
+/* CTA */
+.artist-detail__cta { padding: 60px 0; background: #fff; text-align: center; }
+.artist-detail__cta-wrapper { max-width: 600px; margin: 0 auto; }
+.artist-detail__cta-wrapper svg { color: #8B1E3F; margin-bottom: 12px; }
+.artist-detail__cta-wrapper h2 { font-size: 28px; font-weight: 800; color: #1a1a1a; margin: 0 0 12px; }
+.artist-detail__cta-wrapper p { font-size: 16px; color: #6b7280; margin: 0 0 24px; }
+.artist-detail__cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.artist-detail__cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; }
+.artist-detail__cta-btn--primary { background: #8B1E3F; color: #fff; }
+.artist-detail__cta-btn--primary:hover { background: #6d1832; }
+.artist-detail__cta-btn--secondary { background: #fff; color: #8B1E3F; border: 2px solid #8B1E3F; }
+.artist-detail__cta-btn--secondary:hover { background: #fdf2f4; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .artist-detail__hero-grid { grid-template-columns: 1fr; gap: 30px; }
+  .artist-detail__hero-image { max-width: 300px; margin: 0 auto; }
+  .artist-detail__name { font-size: 30px; }
+  .artist-detail__bio-grid { grid-template-columns: 1fr; }
+}

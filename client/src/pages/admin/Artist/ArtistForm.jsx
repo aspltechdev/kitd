@@ -1553,10 +1553,590 @@
 
 // src/pages/admin/Artists/ArtistForm.jsx
 
+// import { useEffect, useState } from "react";
+// import { useForm } from "react-hook-form";
+
+// // Lucide icons for UI elements
+// import {
+//   User,
+//   Mail,
+//   Phone,
+//   Calendar,
+//   MapPin,
+//   Globe,
+//   Award,
+//   Upload,
+//   X,
+//   Image as ImageIcon,
+//   ToggleRight,
+//   ToggleLeft,
+//   Check,
+//   Users,
+//   Music,
+//   BookOpen,
+//   Hash,
+//   Briefcase,
+//   Star,
+//   Link as LinkIcon,
+// } from "lucide-react";
+
+// // React Icons for social media
+// import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+
+// import "./ArtistForm.css";
+
+// const ArtistForm = ({
+//   initialValues = {},
+//   onSubmit,
+//   loading = false,
+//   isEdit = false,
+// }) => {
+//   const {
+//     register,
+//     handleSubmit,
+//     watch,
+//     reset,
+//     setValue,
+//     formState: { errors },
+//   } = useForm({
+//     defaultValues: {
+//       fullName: "",
+//       stageName: "",
+//       email: "",
+//       mobile: "",
+//       gender: "",
+//       dateOfBirth: "",
+//       danceStyle: "",
+//       experience: "",
+//       qualification: "",
+//       biography: "",
+//       city: "",
+//       state: "",
+//       country: "",
+//       website: "",
+//       facebook: "",
+//       instagram: "",
+//       youtube: "",
+//       displayOrder: 1,
+//       isActive: true,
+//     },
+//   });
+
+//   const photo = watch("photo");
+//   const isActive = watch("isActive", true);
+
+//   const [preview, setPreview] = useState(null);
+//   const [fileName, setFileName] = useState("");
+//   const [dragOver, setDragOver] = useState(false);
+
+//   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050/api';
+//   const IMAGE_BASE_URL = API_BASE_URL.replace('/api', '');
+
+//   useEffect(() => {
+//     if (initialValues && Object.keys(initialValues).length > 0) {
+//       reset({
+//         fullName: initialValues.fullName || "",
+//         stageName: initialValues.stageName || "",
+//         email: initialValues.email || "",
+//         mobile: initialValues.mobile || "",
+//         gender: initialValues.gender || "",
+//         dateOfBirth: initialValues.dateOfBirth ? initialValues.dateOfBirth.substring(0, 10) : "",
+//         danceStyle: initialValues.danceStyle || "",
+//         experience: initialValues.experience || "",
+//         qualification: initialValues.qualification || "",
+//         biography: initialValues.biography || "",
+//         city: initialValues.city || "",
+//         state: initialValues.state || "",
+//         country: initialValues.country || "",
+//         website: initialValues.website || "",
+//         facebook: initialValues.facebook || "",
+//         instagram: initialValues.instagram || "",
+//         youtube: initialValues.youtube || "",
+//         displayOrder: initialValues.displayOrder || 1,
+//         isActive: initialValues.isActive !== undefined ? initialValues.isActive : true,
+//       });
+
+//       if (initialValues.photo) {
+//         setPreview(`${IMAGE_BASE_URL}/uploads/artists/${initialValues.photo}`);
+//         setFileName(initialValues.photo);
+//       }
+//     }
+//   }, [initialValues, reset]);
+
+//   useEffect(() => {
+//     if (photo && photo.length > 0) {
+//       const file = photo[0];
+//       setPreview(URL.createObjectURL(file));
+//       setFileName(file.name);
+//     }
+//   }, [photo]);
+
+//   const handleDragOver = (e) => {
+//     e.preventDefault();
+//     setDragOver(true);
+//   };
+
+//   const handleDragLeave = (e) => {
+//     e.preventDefault();
+//     setDragOver(false);
+//   };
+
+//   const handleDrop = (e) => {
+//     e.preventDefault();
+//     setDragOver(false);
+//     const files = e.dataTransfer.files;
+//     if (files.length > 0) {
+//       setValue("photo", files);
+//     }
+//   };
+
+//   const clearFile = () => {
+//     setPreview(null);
+//     setFileName("");
+//     setValue("photo", []);
+//   };
+
+//   const danceStyles = [
+//     { value: "BHARATANATYAM", label: "Bharatanatyam" },
+//     { value: "KATHAK", label: "Kathak" },
+//     { value: "KUCHIPUDI", label: "Kuchipudi" },
+//     { value: "ODISSI", label: "Odissi" },
+//     { value: "MOHINIYATTAM", label: "Mohiniyattam" },
+//     { value: "KATHAKALI", label: "Kathakali" },
+//     { value: "MANIPURI", label: "Manipuri" },
+//     { value: "SATTRIYA", label: "Sattriya" },
+//     { value: "OTHER", label: "Other" },
+//   ];
+
+//   return (
+//     <form
+//       onSubmit={handleSubmit(onSubmit)}
+//       className="artist-form"
+//     >
+//       <div className="artist-form__grid">
+//         {/* Left Column - Main Fields */}
+//         <div className="artist-form__main">
+//           {/* Full Name */}
+//           <div className="form-group">
+//             <label className="form-group__label">
+//               Full Name <span className="required">*</span>
+//             </label>
+//             <div className="form-group__input-wrapper">
+//               <User size={18} className="input-icon" />
+//               <input
+//                 {...register("fullName", {
+//                   required: "Full Name is required",
+//                 })}
+//                 className={`form-group__input ${errors.fullName ? "error" : ""}`}
+//                 placeholder="Enter full name"
+//                 disabled={loading}
+//               />
+//             </div>
+//             {errors.fullName && (
+//               <p className="form-group__error">{errors.fullName.message}</p>
+//             )}
+//           </div>
+
+//           {/* Stage Name */}
+//           <div className="form-group">
+//             <label className="form-group__label">Stage Name</label>
+//             <div className="form-group__input-wrapper">
+//               <Star size={18} className="input-icon" />
+//               <input
+//                 {...register("stageName")}
+//                 className="form-group__input"
+//                 placeholder="Enter stage name (optional)"
+//                 disabled={loading}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Email & Mobile */}
+//           <div className="form-group form-group--inline">
+//             <div className="form-group__half">
+//               <label className="form-group__label">
+//                 Email <span className="required">*</span>
+//               </label>
+//               <div className="form-group__input-wrapper">
+//                 <Mail size={18} className="input-icon" />
+//                 <input
+//                   type="email"
+//                   {...register("email", {
+//                     required: "Email is required",
+//                     pattern: {
+//                       value: /^\S+@\S+$/i,
+//                       message: "Invalid email format",
+//                     },
+//                   })}
+//                   className={`form-group__input ${errors.email ? "error" : ""}`}
+//                   placeholder="Enter email address"
+//                   disabled={loading}
+//                 />
+//               </div>
+//               {errors.email && (
+//                 <p className="form-group__error">{errors.email.message}</p>
+//               )}
+//             </div>
+//             <div className="form-group__half">
+//               <label className="form-group__label">
+//                 Mobile <span className="required">*</span>
+//               </label>
+//               <div className="form-group__input-wrapper">
+//                 <Phone size={18} className="input-icon" />
+//                 <input
+//                   {...register("mobile", {
+//                     required: "Mobile Number is required",
+//                   })}
+//                   className={`form-group__input ${errors.mobile ? "error" : ""}`}
+//                   placeholder="Enter mobile number"
+//                   disabled={loading}
+//                 />
+//               </div>
+//               {errors.mobile && (
+//                 <p className="form-group__error">{errors.mobile.message}</p>
+//               )}
+//             </div>
+//           </div>
+
+//           {/* Gender & DOB */}
+//           <div className="form-group form-group--inline">
+//             <div className="form-group__half">
+//               <label className="form-group__label">Gender</label>
+//               <div className="form-group__input-wrapper">
+//                 <Users size={18} className="input-icon" />
+//                 <select
+//                   {...register("gender")}
+//                   className="form-group__input form-group__select"
+//                   disabled={loading}
+//                 >
+//                   <option value="">Select Gender</option>
+//                   <option value="MALE">Male</option>
+//                   <option value="FEMALE">Female</option>
+//                   <option value="OTHER">Other</option>
+//                 </select>
+//               </div>
+//             </div>
+//             <div className="form-group__half">
+//               <label className="form-group__label">Date of Birth</label>
+//               <div className="form-group__input-wrapper">
+//                 <Calendar size={18} className="input-icon" />
+//                 <input
+//                   type="date"
+//                   {...register("dateOfBirth")}
+//                   className="form-group__input"
+//                   disabled={loading}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Dance Style & Experience */}
+//           <div className="form-group form-group--inline">
+//             <div className="form-group__half">
+//               <label className="form-group__label">Dance Style</label>
+//               <div className="form-group__input-wrapper">
+//                 <Music size={18} className="input-icon" />
+//                 <select
+//                   {...register("danceStyle")}
+//                   className="form-group__input form-group__select"
+//                   disabled={loading}
+//                 >
+//                   <option value="">Select Dance Style</option>
+//                   {danceStyles.map((style) => (
+//                     <option key={style.value} value={style.value}>
+//                       {style.label}
+//                     </option>
+//                   ))}
+//                 </select>
+//               </div>
+//             </div>
+//             <div className="form-group__half">
+//               <label className="form-group__label">Experience (Years)</label>
+//               <div className="form-group__input-wrapper">
+//                 <Award size={18} className="input-icon" />
+//                 <input
+//                   type="number"
+//                   min="0"
+//                   {...register("experience")}
+//                   className="form-group__input"
+//                   placeholder="0"
+//                   disabled={loading}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Qualification */}
+//           <div className="form-group">
+//             <label className="form-group__label">Qualification</label>
+//             <div className="form-group__input-wrapper">
+//               <BookOpen size={18} className="input-icon" />
+//               <input
+//                 {...register("qualification")}
+//                 className="form-group__input"
+//                 placeholder="Enter qualification"
+//                 disabled={loading}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Biography */}
+//           <div className="form-group">
+//             <label className="form-group__label">Biography</label>
+//             <div className="form-group__input-wrapper">
+//               <Briefcase size={18} className="input-icon" />
+//               <textarea
+//                 rows={4}
+//                 {...register("biography")}
+//                 className="form-group__textarea"
+//                 placeholder="Write a brief biography about the artist..."
+//                 disabled={loading}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Address */}
+//           <div className="form-group form-group--section">
+//             <label className="form-group__section-label">Location</label>
+//             <div className="form-group--inline">
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <MapPin size={18} className="input-icon" />
+//                   <input
+//                     {...register("city")}
+//                     className="form-group__input"
+//                     placeholder="City"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <MapPin size={18} className="input-icon" />
+//                   <input
+//                     {...register("state")}
+//                     className="form-group__input"
+//                     placeholder="State"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <Globe size={18} className="input-icon" />
+//                   <input
+//                     {...register("country")}
+//                     className="form-group__input"
+//                     placeholder="Country"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Social Links */}
+//           <div className="form-group form-group--section">
+//             <label className="form-group__section-label">Social Links</label>
+//             <div className="form-group--inline">
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <Globe size={18} className="input-icon" />
+//                   <input
+//                     type="url"
+//                     {...register("website")}
+//                     className="form-group__input"
+//                     placeholder="Website URL"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <FaFacebookF size={18} className="input-icon social-icon" />
+//                   <input
+//                     type="url"
+//                     {...register("facebook")}
+//                     className="form-group__input"
+//                     placeholder="Facebook URL"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <FaInstagram size={18} className="input-icon social-icon" />
+//                   <input
+//                     type="url"
+//                     {...register("instagram")}
+//                     className="form-group__input"
+//                     placeholder="Instagram URL"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group__half">
+//                 <div className="form-group__input-wrapper">
+//                   <FaYoutube size={18} className="input-icon social-icon" />
+//                   <input
+//                     type="url"
+//                     {...register("youtube")}
+//                     className="form-group__input"
+//                     placeholder="YouTube URL"
+//                     disabled={loading}
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Display Order & Status */}
+//           <div className="form-group form-group--inline">
+//             <div className="form-group__half">
+//               <label className="form-group__label">Display Order</label>
+//               <div className="form-group__input-wrapper">
+//                 <Hash size={18} className="input-icon" />
+//                 <input
+//                   type="number"
+//                   {...register("displayOrder", {
+//                     min: {
+//                       value: 0,
+//                       message: "Order must be 0 or greater",
+//                     },
+//                   })}
+//                   className={`form-group__input ${errors.displayOrder ? "error" : ""}`}
+//                   placeholder="1"
+//                   disabled={loading}
+//                 />
+//               </div>
+//               {errors.displayOrder && (
+//                 <p className="form-group__error">{errors.displayOrder.message}</p>
+//               )}
+//             </div>
+//             <div className="form-group__half">
+//               <label className="form-group__label">Status</label>
+//               <button
+//                 type="button"
+//                 onClick={() => setValue("isActive", !isActive)}
+//                 className={`status-toggle-btn ${isActive ? "active" : "inactive"}`}
+//                 disabled={loading}
+//               >
+//                 {isActive ? (
+//                   <>
+//                     <ToggleRight size={24} />
+//                     <span>Active</span>
+//                   </>
+//                 ) : (
+//                   <>
+//                     <ToggleLeft size={24} />
+//                     <span>Inactive</span>
+//                   </>
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Right Column - Photo Upload */}
+//         <div className="artist-form__media">
+//           <div className="media-section">
+//             <div className="media-section__header">
+//               <div className="media-section__header-left">
+//                 <ImageIcon size={20} />
+//                 <h3>Profile Photo</h3>
+//               </div>
+//               <span className="media-section__badge">Recommended</span>
+//             </div>
+
+//             {/* Drop Zone */}
+//             <div
+//               className={`media-dropzone ${dragOver ? "drag-over" : ""} ${
+//                 preview ? "has-preview" : ""
+//               }`}
+//               onDragOver={handleDragOver}
+//               onDragLeave={handleDragLeave}
+//               onDrop={handleDrop}
+//             >
+//               {!preview ? (
+//                 <div className="media-dropzone__content">
+//                   <Upload size={40} className="dropzone-icon" />
+//                   <p className="dropzone-text">Drag & drop a photo here</p>
+//                   <span className="dropzone-hint">or click to browse</span>
+//                   <input
+//                     type="file"
+//                     accept="image/*"
+//                     {...register("photo")}
+//                     className="media-dropzone__input"
+//                     disabled={loading}
+//                     id="photo-upload"
+//                   />
+//                   <label htmlFor="photo-upload" className="dropzone-btn">
+//                     Choose Photo
+//                   </label>
+//                 </div>
+//               ) : (
+//                 <div className="media-preview">
+//                   <div className="media-preview__container">
+//                     <img
+//                       src={preview}
+//                       alt="Profile preview"
+//                       className="media-preview__image"
+//                     />
+//                     <div className="media-preview__overlay">
+//                       <button
+//                         type="button"
+//                         onClick={clearFile}
+//                         className="media-preview__remove"
+//                         disabled={loading}
+//                       >
+//                         <X size={18} />
+//                         Remove
+//                       </button>
+//                     </div>
+//                   </div>
+//                   {fileName && (
+//                     <p className="media-preview__filename">{fileName}</p>
+//                   )}
+//                 </div>
+//               )}
+//             </div>
+
+//             <p className="media-hint">
+//               Recommended: 400x400px square image, max 2MB
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Form Actions */}
+//       <div className="artist-form__actions">
+//         <button
+//           type="submit"
+//           disabled={loading}
+//           className="btn btn--primary btn--submit"
+//         >
+//           {loading ? (
+//             <>
+//               <span className="spinner-btn"></span>
+//               {isEdit ? "Updating..." : "Creating..."}
+//             </>
+//           ) : (
+//             <>
+//               <Check size={18} />
+//               {isEdit ? "Update Artist" : "Create Artist"}
+//             </>
+//           )}
+//         </button>
+//       </div>
+//     </form>
+//   );
+// };
+
+// export default ArtistForm;
+
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-// Lucide icons for UI elements
 import {
   User,
   Mail,
@@ -1577,11 +2157,11 @@ import {
   Hash,
   Briefcase,
   Star,
-  Link as LinkIcon,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
-// React Icons for social media
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube, FaTwitter } from "react-icons/fa";
 
 import "./ArtistForm.css";
 
@@ -1608,21 +2188,26 @@ const ArtistForm = ({
       dateOfBirth: "",
       danceStyle: "",
       experience: "",
-      qualification: "",
       biography: "",
       city: "",
       state: "",
       country: "",
-      website: "",
-      facebook: "",
-      instagram: "",
-      youtube: "",
+      postalCode: "",
+      socialLinks: {
+        instagram: "",
+        youtube: "",
+        facebook: "",
+        twitter: "",
+        website: "",
+      },
       displayOrder: 1,
+      isPublic: false,
       isActive: true,
     },
   });
 
   const photo = watch("photo");
+  const isPublic = watch("isPublic", false);
   const isActive = watch("isActive", true);
 
   const [preview, setPreview] = useState(null);
@@ -1635,30 +2220,35 @@ const ArtistForm = ({
   useEffect(() => {
     if (initialValues && Object.keys(initialValues).length > 0) {
       reset({
-        fullName: initialValues.fullName || "",
+        fullName: initialValues.fullName || initialValues.name || "",
         stageName: initialValues.stageName || "",
         email: initialValues.email || "",
         mobile: initialValues.mobile || "",
         gender: initialValues.gender || "",
         dateOfBirth: initialValues.dateOfBirth ? initialValues.dateOfBirth.substring(0, 10) : "",
-        danceStyle: initialValues.danceStyle || "",
+        danceStyle: initialValues.danceStyle || initialValues.danceForm || "",
         experience: initialValues.experience || "",
-        qualification: initialValues.qualification || "",
         biography: initialValues.biography || "",
         city: initialValues.city || "",
         state: initialValues.state || "",
         country: initialValues.country || "",
-        website: initialValues.website || "",
-        facebook: initialValues.facebook || "",
-        instagram: initialValues.instagram || "",
-        youtube: initialValues.youtube || "",
+        postalCode: initialValues.postalCode || "",
+        socialLinks: {
+          instagram: initialValues.socialLinks?.instagram || "",
+          youtube: initialValues.socialLinks?.youtube || "",
+          facebook: initialValues.socialLinks?.facebook || "",
+          twitter: initialValues.socialLinks?.twitter || "",
+          website: initialValues.socialLinks?.website || "",
+        },
         displayOrder: initialValues.displayOrder || 1,
+        isPublic: initialValues.isPublic !== undefined ? initialValues.isPublic : false,
         isActive: initialValues.isActive !== undefined ? initialValues.isActive : true,
       });
 
-      if (initialValues.photo) {
-        setPreview(`${IMAGE_BASE_URL}/uploads/artists/${initialValues.photo}`);
-        setFileName(initialValues.photo);
+      if (initialValues.photo || initialValues.image) {
+        const photoUrl = initialValues.photo || initialValues.image;
+        setPreview(`${IMAGE_BASE_URL}/uploads/artists/${photoUrl}`);
+        setFileName(photoUrl);
       }
     }
   }, [initialValues, reset]);
@@ -1697,342 +2287,209 @@ const ArtistForm = ({
   };
 
   const danceStyles = [
-    { value: "BHARATANATYAM", label: "Bharatanatyam" },
-    { value: "KATHAK", label: "Kathak" },
-    { value: "KUCHIPUDI", label: "Kuchipudi" },
-    { value: "ODISSI", label: "Odissi" },
-    { value: "MOHINIYATTAM", label: "Mohiniyattam" },
-    { value: "KATHAKALI", label: "Kathakali" },
-    { value: "MANIPURI", label: "Manipuri" },
-    { value: "SATTRIYA", label: "Sattriya" },
-    { value: "OTHER", label: "Other" },
+    "Bharatanatyam", "Kathak", "Kuchipudi", "Odissi",
+    "Mohiniyattam", "Kathakali", "Manipuri", "Sattriya", "Other"
   ];
 
+  const handleFormSubmit = (data) => {
+    const submitData = {
+      ...data,
+      socialLinks: JSON.stringify(data.socialLinks),
+    };
+    onSubmit(submitData);
+  };
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="artist-form"
-    >
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="artist-form">
       <div className="artist-form__grid">
+        
         {/* Left Column - Main Fields */}
         <div className="artist-form__main">
-          {/* Full Name */}
-          <div className="form-group">
-            <label className="form-group__label">
-              Full Name <span className="required">*</span>
-            </label>
-            <div className="form-group__input-wrapper">
-              <User size={18} className="input-icon" />
-              <input
-                {...register("fullName", {
-                  required: "Full Name is required",
-                })}
-                className={`form-group__input ${errors.fullName ? "error" : ""}`}
-                placeholder="Enter full name"
-                disabled={loading}
-              />
-            </div>
-            {errors.fullName && (
-              <p className="form-group__error">{errors.fullName.message}</p>
-            )}
-          </div>
-
-          {/* Stage Name */}
-          <div className="form-group">
-            <label className="form-group__label">Stage Name</label>
-            <div className="form-group__input-wrapper">
-              <Star size={18} className="input-icon" />
-              <input
-                {...register("stageName")}
-                className="form-group__input"
-                placeholder="Enter stage name (optional)"
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          {/* Email & Mobile */}
-          <div className="form-group form-group--inline">
-            <div className="form-group__half">
-              <label className="form-group__label">
-                Email <span className="required">*</span>
-              </label>
-              <div className="form-group__input-wrapper">
-                <Mail size={18} className="input-icon" />
-                <input
-                  type="email"
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: "Invalid email format",
-                    },
-                  })}
-                  className={`form-group__input ${errors.email ? "error" : ""}`}
-                  placeholder="Enter email address"
-                  disabled={loading}
-                />
-              </div>
-              {errors.email && (
-                <p className="form-group__error">{errors.email.message}</p>
+          
+          {/* ============ WEBSITE VISIBILITY TOGGLE ============ */}
+          <div className="form-section visibility-section">
+            <h3 className="form-section__title">
+              <Globe size={20} /> Website Visibility
+            </h3>
+            <p className="form-section__desc">
+              Control whether this artist appears on the public website.
+            </p>
+            <button
+              type="button"
+              onClick={() => setValue("isPublic", !isPublic)}
+              className={`visibility-toggle-btn ${isPublic ? "public" : "hidden"}`}
+              disabled={loading}
+            >
+              {isPublic ? (
+                <>
+                  <Eye size={20} />
+                  <span>Visible on Website</span>
+                  <ToggleRight size={22} />
+                </>
+              ) : (
+                <>
+                  <EyeOff size={20} />
+                  <span>Hidden from Website</span>
+                  <ToggleLeft size={22} />
+                </>
               )}
-            </div>
-            <div className="form-group__half">
-              <label className="form-group__label">
-                Mobile <span className="required">*</span>
-              </label>
-              <div className="form-group__input-wrapper">
-                <Phone size={18} className="input-icon" />
-                <input
-                  {...register("mobile", {
-                    required: "Mobile Number is required",
-                  })}
-                  className={`form-group__input ${errors.mobile ? "error" : ""}`}
-                  placeholder="Enter mobile number"
-                  disabled={loading}
-                />
+            </button>
+          </div>
+
+          {/* ============ PERSONAL INFORMATION ============ */}
+          <div className="form-section">
+            <h3 className="form-section__title">
+              <User size={20} /> Personal Information
+            </h3>
+
+            {/* Full Name & Stage Name */}
+            <div className="form-group form-group--inline">
+              <div className="form-group__half">
+                <label className="form-group__label">
+                  Full Name <span className="required">*</span>
+                </label>
+                <div className="form-group__input-wrapper">
+                  <User size={18} className="input-icon" />
+                  <input
+                    {...register("fullName", { required: "Full Name is required" })}
+                    className={`form-group__input ${errors.fullName ? "error" : ""}`}
+                    placeholder="Enter full name"
+                    disabled={loading}
+                  />
+                </div>
+                {errors.fullName && <p className="form-group__error">{errors.fullName.message}</p>}
               </div>
-              {errors.mobile && (
-                <p className="form-group__error">{errors.mobile.message}</p>
-              )}
+              <div className="form-group__half">
+                <label className="form-group__label">Stage Name</label>
+                <div className="form-group__input-wrapper">
+                  <Star size={18} className="input-icon" />
+                  <input {...register("stageName")} className="form-group__input" placeholder="Stage/performing name" disabled={loading} />
+                </div>
+              </div>
+            </div>
+
+            {/* Email & Mobile */}
+            <div className="form-group form-group--inline">
+              <div className="form-group__half">
+                <label className="form-group__label">
+                  Email <span className="required">*</span>
+                </label>
+                <div className="form-group__input-wrapper">
+                  <Mail size={18} className="input-icon" />
+                  <input
+                    type="email"
+                    {...register("email", { required: "Email is required", pattern: { value: /^\S+@\S+$/i, message: "Invalid email" } })}
+                    className={`form-group__input ${errors.email ? "error" : ""}`}
+                    placeholder="email@example.com"
+                    disabled={loading}
+                  />
+                </div>
+                {errors.email && <p className="form-group__error">{errors.email.message}</p>}
+              </div>
+              <div className="form-group__half">
+                <label className="form-group__label">Mobile</label>
+                <div className="form-group__input-wrapper">
+                  <Phone size={18} className="input-icon" />
+                  <input {...register("mobile")} className="form-group__input" placeholder="+49 XXX XXX XXXX" disabled={loading} />
+                </div>
+              </div>
+            </div>
+
+            {/* Dance Style & Experience */}
+            <div className="form-group form-group--inline">
+              <div className="form-group__half">
+                <label className="form-group__label">Dance Style</label>
+                <div className="form-group__input-wrapper">
+                  <Music size={18} className="input-icon" />
+                  <select {...register("danceStyle")} className="form-group__input form-group__select" disabled={loading}>
+                    <option value="">Select Dance Style</option>
+                    {danceStyles.map(style => (
+                      <option key={style} value={style}>{style}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="form-group__half">
+                <label className="form-group__label">Experience</label>
+                <div className="form-group__input-wrapper">
+                  <Award size={18} className="input-icon" />
+                  <input {...register("experience")} className="form-group__input" placeholder="Years of experience" disabled={loading} />
+                </div>
+              </div>
+            </div>
+
+            {/* Biography */}
+            <div className="form-group">
+              <label className="form-group__label">Biography</label>
+              <div className="form-group__input-wrapper">
+                <BookOpen size={18} className="input-icon" />
+                <textarea {...register("biography")} className="form-group__input form-group__textarea" placeholder="Write a brief biography..." rows={4} disabled={loading} />
+              </div>
             </div>
           </div>
 
-          {/* Gender & DOB */}
-          <div className="form-group form-group--inline">
-            <div className="form-group__half">
-              <label className="form-group__label">Gender</label>
+          {/* ============ ADDRESS ============ */}
+          <div className="form-section">
+            <h3 className="form-section__title"><MapPin size={20} /> Address</h3>
+            <div className="form-group form-group--inline">
+              <div className="form-group__half"><div className="form-group__input-wrapper"><MapPin size={18} className="input-icon" /><input {...register("city")} className="form-group__input" placeholder="City" disabled={loading} /></div></div>
+              <div className="form-group__half"><div className="form-group__input-wrapper"><MapPin size={18} className="input-icon" /><input {...register("state")} className="form-group__input" placeholder="State/Region" disabled={loading} /></div></div>
+            </div>
+            <div className="form-group form-group--inline">
+              <div className="form-group__half"><div className="form-group__input-wrapper"><Globe size={18} className="input-icon" /><input {...register("country")} className="form-group__input" placeholder="Country" disabled={loading} /></div></div>
+              <div className="form-group__half"><div className="form-group__input-wrapper"><Hash size={18} className="input-icon" /><input {...register("postalCode")} className="form-group__input" placeholder="Postal Code" disabled={loading} /></div></div>
+            </div>
+          </div>
+
+          {/* ============ SOCIAL LINKS ============ */}
+          <div className="form-section">
+            <h3 className="form-section__title"><Globe size={20} /> Social Links</h3>
+            <div className="social-links-grid">
               <div className="form-group__input-wrapper">
-                <Users size={18} className="input-icon" />
-                <select
-                  {...register("gender")}
-                  className="form-group__input form-group__select"
+                <FaInstagram size={18} className="input-icon social-icon instagram" />
+                <input {...register("socialLinks.instagram")} className="form-group__input" placeholder="Instagram URL" disabled={loading} />
+              </div>
+              <div className="form-group__input-wrapper">
+                <FaYoutube size={18} className="input-icon social-icon youtube" />
+                <input {...register("socialLinks.youtube")} className="form-group__input" placeholder="YouTube URL" disabled={loading} />
+              </div>
+              <div className="form-group__input-wrapper">
+                <FaFacebookF size={18} className="input-icon social-icon facebook" />
+                <input {...register("socialLinks.facebook")} className="form-group__input" placeholder="Facebook URL" disabled={loading} />
+              </div>
+              <div className="form-group__input-wrapper">
+                <FaTwitter size={18} className="input-icon social-icon twitter" />
+                <input {...register("socialLinks.twitter")} className="form-group__input" placeholder="Twitter/X URL" disabled={loading} />
+              </div>
+              <div className="form-group__input-wrapper full-width">
+                <Globe size={18} className="input-icon" />
+                <input {...register("socialLinks.website")} className="form-group__input" placeholder="Personal Website URL" disabled={loading} />
+              </div>
+            </div>
+          </div>
+
+          {/* Display Order */}
+          <div className="form-section">
+            <h3 className="form-section__title"><Hash size={20} /> Display Settings</h3>
+            <div className="form-group form-group--inline">
+              <div className="form-group__half">
+                <label className="form-group__label">Display Order</label>
+                <div className="form-group__input-wrapper">
+                  <Hash size={18} className="input-icon" />
+                  <input type="number" {...register("displayOrder")} className="form-group__input" placeholder="1" disabled={loading} />
+                </div>
+              </div>
+              <div className="form-group__half">
+                <label className="form-group__label">Status</label>
+                <button
+                  type="button"
+                  onClick={() => setValue("isActive", !isActive)}
+                  className={`status-toggle-btn ${isActive ? "active" : "inactive"}`}
                   disabled={loading}
                 >
-                  <option value="">Select Gender</option>
-                  <option value="MALE">Male</option>
-                  <option value="FEMALE">Female</option>
-                  <option value="OTHER">Other</option>
-                </select>
+                  {isActive ? <><ToggleRight size={24} /><span>Active</span></> : <><ToggleLeft size={24} /><span>Inactive</span></>}
+                </button>
               </div>
-            </div>
-            <div className="form-group__half">
-              <label className="form-group__label">Date of Birth</label>
-              <div className="form-group__input-wrapper">
-                <Calendar size={18} className="input-icon" />
-                <input
-                  type="date"
-                  {...register("dateOfBirth")}
-                  className="form-group__input"
-                  disabled={loading}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Dance Style & Experience */}
-          <div className="form-group form-group--inline">
-            <div className="form-group__half">
-              <label className="form-group__label">Dance Style</label>
-              <div className="form-group__input-wrapper">
-                <Music size={18} className="input-icon" />
-                <select
-                  {...register("danceStyle")}
-                  className="form-group__input form-group__select"
-                  disabled={loading}
-                >
-                  <option value="">Select Dance Style</option>
-                  {danceStyles.map((style) => (
-                    <option key={style.value} value={style.value}>
-                      {style.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="form-group__half">
-              <label className="form-group__label">Experience (Years)</label>
-              <div className="form-group__input-wrapper">
-                <Award size={18} className="input-icon" />
-                <input
-                  type="number"
-                  min="0"
-                  {...register("experience")}
-                  className="form-group__input"
-                  placeholder="0"
-                  disabled={loading}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Qualification */}
-          <div className="form-group">
-            <label className="form-group__label">Qualification</label>
-            <div className="form-group__input-wrapper">
-              <BookOpen size={18} className="input-icon" />
-              <input
-                {...register("qualification")}
-                className="form-group__input"
-                placeholder="Enter qualification"
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          {/* Biography */}
-          <div className="form-group">
-            <label className="form-group__label">Biography</label>
-            <div className="form-group__input-wrapper">
-              <Briefcase size={18} className="input-icon" />
-              <textarea
-                rows={4}
-                {...register("biography")}
-                className="form-group__textarea"
-                placeholder="Write a brief biography about the artist..."
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          {/* Address */}
-          <div className="form-group form-group--section">
-            <label className="form-group__section-label">Location</label>
-            <div className="form-group--inline">
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <MapPin size={18} className="input-icon" />
-                  <input
-                    {...register("city")}
-                    className="form-group__input"
-                    placeholder="City"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <MapPin size={18} className="input-icon" />
-                  <input
-                    {...register("state")}
-                    className="form-group__input"
-                    placeholder="State"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <Globe size={18} className="input-icon" />
-                  <input
-                    {...register("country")}
-                    className="form-group__input"
-                    placeholder="Country"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Social Links */}
-          <div className="form-group form-group--section">
-            <label className="form-group__section-label">Social Links</label>
-            <div className="form-group--inline">
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <Globe size={18} className="input-icon" />
-                  <input
-                    type="url"
-                    {...register("website")}
-                    className="form-group__input"
-                    placeholder="Website URL"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <FaFacebookF size={18} className="input-icon social-icon" />
-                  <input
-                    type="url"
-                    {...register("facebook")}
-                    className="form-group__input"
-                    placeholder="Facebook URL"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <FaInstagram size={18} className="input-icon social-icon" />
-                  <input
-                    type="url"
-                    {...register("instagram")}
-                    className="form-group__input"
-                    placeholder="Instagram URL"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-              <div className="form-group__half">
-                <div className="form-group__input-wrapper">
-                  <FaYoutube size={18} className="input-icon social-icon" />
-                  <input
-                    type="url"
-                    {...register("youtube")}
-                    className="form-group__input"
-                    placeholder="YouTube URL"
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Display Order & Status */}
-          <div className="form-group form-group--inline">
-            <div className="form-group__half">
-              <label className="form-group__label">Display Order</label>
-              <div className="form-group__input-wrapper">
-                <Hash size={18} className="input-icon" />
-                <input
-                  type="number"
-                  {...register("displayOrder", {
-                    min: {
-                      value: 0,
-                      message: "Order must be 0 or greater",
-                    },
-                  })}
-                  className={`form-group__input ${errors.displayOrder ? "error" : ""}`}
-                  placeholder="1"
-                  disabled={loading}
-                />
-              </div>
-              {errors.displayOrder && (
-                <p className="form-group__error">{errors.displayOrder.message}</p>
-              )}
-            </div>
-            <div className="form-group__half">
-              <label className="form-group__label">Status</label>
-              <button
-                type="button"
-                onClick={() => setValue("isActive", !isActive)}
-                className={`status-toggle-btn ${isActive ? "active" : "inactive"}`}
-                disabled={loading}
-              >
-                {isActive ? (
-                  <>
-                    <ToggleRight size={24} />
-                    <span>Active</span>
-                  </>
-                ) : (
-                  <>
-                    <ToggleLeft size={24} />
-                    <span>Inactive</span>
-                  </>
-                )}
-              </button>
             </div>
           </div>
         </div>
@@ -2041,91 +2498,38 @@ const ArtistForm = ({
         <div className="artist-form__media">
           <div className="media-section">
             <div className="media-section__header">
-              <div className="media-section__header-left">
-                <ImageIcon size={20} />
-                <h3>Profile Photo</h3>
-              </div>
-              <span className="media-section__badge">Recommended</span>
+              <div className="media-section__header-left"><ImageIcon size={20} /><h3>Profile Photo</h3></div>
+              <span className="media-section__badge">Optional</span>
             </div>
-
-            {/* Drop Zone */}
-            <div
-              className={`media-dropzone ${dragOver ? "drag-over" : ""} ${
-                preview ? "has-preview" : ""
-              }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
+            <div className={`media-dropzone ${dragOver ? "drag-over" : ""} ${preview ? "has-preview" : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
               {!preview ? (
                 <div className="media-dropzone__content">
                   <Upload size={40} className="dropzone-icon" />
                   <p className="dropzone-text">Drag & drop a photo here</p>
                   <span className="dropzone-hint">or click to browse</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    {...register("photo")}
-                    className="media-dropzone__input"
-                    disabled={loading}
-                    id="photo-upload"
-                  />
-                  <label htmlFor="photo-upload" className="dropzone-btn">
-                    Choose Photo
-                  </label>
+                  <input type="file" accept="image/*" {...register("photo")} className="media-dropzone__input" disabled={loading} id="photo-upload" />
+                  <label htmlFor="photo-upload" className="dropzone-btn">Choose Photo</label>
                 </div>
               ) : (
                 <div className="media-preview">
                   <div className="media-preview__container">
-                    <img
-                      src={preview}
-                      alt="Profile preview"
-                      className="media-preview__image"
-                    />
+                    <img src={preview} alt="Preview" className="media-preview__image" />
                     <div className="media-preview__overlay">
-                      <button
-                        type="button"
-                        onClick={clearFile}
-                        className="media-preview__remove"
-                        disabled={loading}
-                      >
-                        <X size={18} />
-                        Remove
-                      </button>
+                      <button type="button" onClick={clearFile} className="media-preview__remove" disabled={loading}><X size={18} /> Remove</button>
                     </div>
                   </div>
-                  {fileName && (
-                    <p className="media-preview__filename">{fileName}</p>
-                  )}
+                  {fileName && <p className="media-preview__filename">{fileName}</p>}
                 </div>
               )}
             </div>
-
-            <p className="media-hint">
-              Recommended: 400x400px square image, max 2MB
-            </p>
+            <p className="media-hint">Recommended: 400x400px, max 2MB</p>
           </div>
         </div>
       </div>
 
-      {/* Form Actions */}
       <div className="artist-form__actions">
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btn--primary btn--submit"
-        >
-          {loading ? (
-            <>
-              <span className="spinner-btn"></span>
-              {isEdit ? "Updating..." : "Creating..."}
-            </>
-          ) : (
-            <>
-              <Check size={18} />
-              {isEdit ? "Update Artist" : "Create Artist"}
-            </>
-          )}
+        <button type="submit" disabled={loading} className="btn btn--primary btn--submit">
+          {loading ? <><span className="spinner-btn"></span>{isEdit ? "Updating..." : "Creating..."}</> : <><Check size={18} />{isEdit ? "Update Artist" : "Create Artist"}</>}
         </button>
       </div>
     </form>
