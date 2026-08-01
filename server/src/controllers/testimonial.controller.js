@@ -39,16 +39,78 @@ export const getById = async (req, res) => {
   }
 };
 
+// export const create = async (req, res) => {
+//   try {
+//     const testimonial = await testimonialService.create(req.body);
+
+//     return res.status(201).json({
+//       success: true,
+//       message: "Testimonial created successfully",
+//       data: testimonial,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+// export const create = async (req, res) => {
+//   try {
+//     console.log("📦 req.body:", JSON.stringify(req.body));
+//     console.log("📦 typeof req.body:", typeof req.body);
+    
+//     // ✅ Create with explicit data object
+//     const data = {
+//       name: req.body?.name || "Unknown",
+//       email: req.body?.email || null,
+//       message: req.body?.message || "",
+//       rating: parseInt(req.body?.rating) || 5,
+//     };
+
+//     console.log("📦 Creating with:", data);
+
+//     const testimonial = await testimonialService.create(data);
+
+//     return res.status(201).json({
+//       success: true,
+//       message: "Testimonial created successfully",
+//       data: testimonial,
+//     });
+//   } catch (error) {
+//     console.error("❌ Error:", error.message);
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
 export const create = async (req, res) => {
   try {
-    const testimonial = await testimonialService.create(req.body);
+    console.log("📦 req.body:", req.body);
+    console.log("📦 req.file:", req.file);
+
+    // ✅ Build data object manually to avoid undefined errors
+    const data = {
+      name: req.body?.name || "",
+      email: req.body?.email || "",
+      message: req.body?.message || "",
+      rating: parseInt(req.body?.rating) || 5,
+      image: req.file?.filename || null,
+    };
+
+    console.log("📦 Creating with:", data);
+
+    const testimonial = await testimonialService.create(data);
 
     return res.status(201).json({
       success: true,
-      message: "Testimonial created successfully",
+      message: "Testimonial submitted successfully",
       data: testimonial,
     });
   } catch (error) {
+    console.error("❌ Error:", error.message);
     return res.status(500).json({
       success: false,
       message: error.message,

@@ -80,26 +80,88 @@ export const create = async (req, res) => {
   }
 };
 
+// export const update = async (req, res) => {
+//   try {
+//     const data = {
+//       memberId: req.body.memberId,
+//       fullName: req.body.fullName,
+//       email: req.body.email,
+//       mobile: req.body.mobile,
+//       gender: req.body.gender,
+//       membershipType: req.body.membershipType,
+//       city: req.body.city || null,
+//       state: req.body.state || null,
+//       country: req.body.country || null,
+//       joinedDate: req.body.joinedDate
+//         ? new Date(req.body.joinedDate)
+//         : null,
+//       expiryDate: req.body.expiryDate
+//         ? new Date(req.body.expiryDate)
+//         : null,
+//       isActive: req.body.isActive === "true",
+//     };
+
+//     const membership = await membershipService.update(req.params.id, data);
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Membership updated successfully",
+//       data: membership,
+//     });
+//   } catch (error) {
+//     console.error(error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+// controllers/membership.controller.js
+
 export const update = async (req, res) => {
   try {
+    // ✅ Make sure req.body exists
+    if (!req.body || !req.body.memberId) {
+      return res.status(400).json({
+        success: false,
+        message: "memberId is required",
+      });
+    }
+
     const data = {
       memberId: req.body.memberId,
       fullName: req.body.fullName,
+      stageName: req.body.stageName || null,
       email: req.body.email,
       mobile: req.body.mobile,
-      gender: req.body.gender,
-      membershipType: req.body.membershipType,
+      gender: req.body.gender || null,
+      dateOfBirth: req.body.dateOfBirth ? new Date(req.body.dateOfBirth) : null,
+      occupation: req.body.occupation || null,
+      biography: req.body.biography || null,
+      membershipType: req.body.membershipType || null,
+      danceStyle: req.body.danceStyle || null,
+      experience: req.body.experience || null,
+      address: req.body.address || null,
       city: req.body.city || null,
       state: req.body.state || null,
       country: req.body.country || null,
-      joinedDate: req.body.joinedDate
-        ? new Date(req.body.joinedDate)
-        : null,
-      expiryDate: req.body.expiryDate
-        ? new Date(req.body.expiryDate)
-        : null,
-      isActive: req.body.isActive === "true",
+      postalCode: req.body.postalCode || null,
+      iban: req.body.iban || null,
+      accountHolder: req.body.accountHolder || null,
+      bankName: req.body.bankName || null,
+      paymentStatus: req.body.paymentStatus || "ACTIVE",
+      joinedDate: req.body.joinedDate ? new Date(req.body.joinedDate) : null,
+      expiryDate: req.body.expiryDate ? new Date(req.body.expiryDate) : null,
+      annualFee: req.body.annualFee ? parseFloat(req.body.annualFee) : null,
+      paymentDay: req.body.paymentDay ? parseInt(req.body.paymentDay) : null,
+      isActive: req.body.isActive === "true" || req.body.isActive === true,
     };
+
+    if (req.file) {
+      data.image = req.file.filename;
+      data.photo = req.file.filename;
+    }
 
     const membership = await membershipService.update(req.params.id, data);
 
@@ -109,15 +171,13 @@ export const update = async (req, res) => {
       data: membership,
     });
   } catch (error) {
-    console.error(error);
-
+    console.error("Update Error:", error);
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Failed to update member",
     });
   }
 };
-
 export const remove = async (req, res) => {
   try {
     await membershipService.remove(req.params.id);
