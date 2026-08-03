@@ -2697,7 +2697,7 @@ import { FaLinkedinIn, FaFacebookF, FaInstagram, FaGlobe } from "react-icons/fa"
 
 import { getPublicTeam } from "../../api/team.api";
 import execta from "../../assets/execta.png";
-import executiveCommitteeImg from "../../assets/bannerc1.png"; // update the path and filename
+import executiveCommitteeImg from "../../assets/danb.jpg"; // update the path and filename
 import "./ExecutiveCommitteePage.css";
 
 const governancePrinciples = [
