@@ -1,0 +1,576 @@
+/* src/components/home/ContactCTA/ContactCTA.css */
+
+/* ============================================
+   CONTACT CTA - UNIQUE CLASSNAMES
+   Primary: #1A0236 | Secondary: #9AD3CB | Accent: #C8A24A
+   ============================================ */
+
+:root {
+  --kc-primary: #1A0236;
+  --kc-primary-dark: #120126;
+  --kc-primary-light: #3A2457;
+  --kc-secondary: #9AD3CB;
+  --kc-secondary-dark: #6DBFB2;
+  --kc-secondary-light: #CDEBE6;
+  --kc-accent: #C8A24A;
+  --kc-white: #FFFFFF;
+  --kc-black: #0A0A0A;
+  --kc-dark: #0D0D0D;
+  --kc-text-muted: #6A5A7D;
+}
+
+/* ============================================
+   SECTION
+   ============================================ */
+.kitd-contact {
+  padding: 70px 0;
+  position: relative;
+  overflow: hidden;
+  min-height: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   BACKGROUND IMAGE
+   ============================================ */
+.kitd-contact__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.kitd-contact__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: kcZoom 30s ease-in-out infinite alternate;
+}
+
+@keyframes kcZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+/* ============================================
+   OVERLAY - Updated with primary color
+   ============================================ */
+.kitd-contact__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+background: linear-gradient(
+  135deg,
+  rgba(45, 45, 45, 0.785) 0%,
+  rgba(55, 75, 73, 0.815) 35%,
+  rgba(51, 48, 53, 0.717) 70%,
+  rgba(26, 2, 54, 0.815) 100%
+);
+}
+
+/* ============================================
+   PATTERN - Updated with secondary color
+   ============================================ */
+.kitd-contact__pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.04;
+  background-image: 
+    radial-gradient(circle at 20% 50%, var(--kc-secondary) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, var(--kc-accent) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+  pointer-events: none;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.kitd-contact__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.kitd-contact__wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.kitd-contact__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.kitd-contact__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.kitd-contact__eyebrow-line {
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--kc-secondary));
+  border-radius: 2px;
+}
+
+.kitd-contact__eyebrow-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--kc-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: rgba(154, 211, 203, 0.15);
+  padding: 4px 16px;
+  border-radius: 50px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(154, 211, 203, 0.15);
+}
+
+.kitd-contact__title {
+  font-size: 34px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px;
+  line-height: 1.15;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+}
+
+.kitd-contact__title-accent {
+  color: var(--kc-secondary);
+  position: relative;
+}
+
+.kitd-contact__title-accent::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(154, 211, 203, 0.3);
+  border-radius: 2px;
+}
+
+.kitd-contact__desc {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   CONTACT CARDS
+   ============================================ */
+.kitd-contact__cards {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.kitd-contact__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(10px);
+  min-width: 160px;
+  flex: 1;
+  max-width: 220px;
+  justify-content: center;
+}
+
+.kitd-contact--visible .kitd-contact__card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kitd-contact__card--hovered {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(154, 211, 203, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.kitd-contact__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(154, 211, 203, 0.15);
+  color: var(--kc-secondary);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.kitd-contact__card--hovered .kitd-contact__card-icon {
+  background: var(--kc-secondary);
+  color: var(--kc-primary);
+}
+
+.kitd-contact__card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.kitd-contact__card-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.kitd-contact__card-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.kitd-contact__card-value:hover {
+  color: var(--kc-secondary);
+}
+
+/* ============================================
+   CTA BUTTONS
+   ============================================ */
+.kitd-contact__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.kitd-contact__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.kitd-contact__btn--primary {
+  background: linear-gradient(135deg, var(--kc-secondary), var(--kc-secondary-dark));
+  color: var(--kc-primary);
+  box-shadow: 0 4px 20px rgba(154, 211, 203, 0.3);
+  border: none;
+}
+
+.kitd-contact__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 35px rgba(154, 211, 203, 0.4);
+  gap: 14px;
+}
+
+.kitd-contact__btn--secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.kitd-contact__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+  gap: 14px;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   REASSURANCE MESSAGE
+   ============================================ */
+.kitd-contact__reassurance {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto 12px;
+}
+
+/* ============================================
+   TRUST BADGE
+   ============================================ */
+.kitd-contact__trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.kitd-contact__trust svg {
+  color: var(--kc-secondary);
+  opacity: 0.7;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .kitd-contact {
+    padding: 50px 0;
+  }
+
+  .kitd-contact__title {
+    font-size: 28px;
+  }
+
+  .kitd-contact__desc {
+    font-size: 14px;
+  }
+
+  .kitd-contact__cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .kitd-contact__card {
+    min-width: auto;
+    max-width: 280px;
+    width: 100%;
+    padding: 12px 20px;
+  }
+
+  .kitd-contact__actions {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .kitd-contact__btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  .kitd-contact__reassurance {
+    font-size: 12px;
+    padding: 0 16px;
+  }
+
+  .kitd-contact__trust {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kitd-contact {
+    padding: 40px 0;
+  }
+
+  .kitd-contact__title {
+    font-size: 24px;
+  }
+
+  .kitd-contact__desc {
+    font-size: 13px;
+  }
+
+  .kitd-contact__card {
+    max-width: 100%;
+    padding: 10px 16px;
+  }
+
+  .kitd-contact__card-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .kitd-contact__card-value {
+    font-size: 12px;
+  }
+
+  .kitd-contact__btn {
+    font-size: 13px;
+    padding: 10px 24px;
+    max-width: 100%;
+  }
+
+  .kitd-contact__eyebrow-text {
+    font-size: 10px;
+    padding: 3px 12px;
+  }
+
+  .kitd-contact__reassurance {
+    font-size: 11px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .kitd-contact__bg img {
+    animation: none !important;
+  }
+  
+  .kitd-contact__card,
+  .kitd-contact__card--hovered,
+  .kitd-contact__btn {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.kitd-contact__btn:focus-visible,
+.kitd-contact__card-value:focus-visible {
+  outline: 2px solid var(--kc-secondary);
+  outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  .kitd-contact__overlay {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  .kitd-contact__btn--primary {
+    border: 2px solid ButtonText;
+  }
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .kitd-contact__overlay {
+    background: linear-gradient(135deg, 
+      rgba(13, 13, 13, 0.92) 0%, 
+      rgba(13, 13, 13, 0.86) 30%,
+      rgba(13, 13, 13, 0.90) 60%,
+      rgba(13, 13, 13, 0.92) 100%
+    );
+  }
+
+  .kitd-contact__card {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .kitd-contact__card--hovered {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .kitd-contact__btn--secondary {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .kitd-contact__btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .kitd-contact {
+    padding: 40px 0;
+    background: white;
+  }
+
+  .kitd-contact__bg,
+  .kitd-contact__overlay,
+  .kitd-contact__pattern {
+    display: none !important;
+  }
+
+  .kitd-contact__title {
+    color: #1A0236 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-contact__title-accent {
+    color: #1A0236 !important;
+  }
+
+  .kitd-contact__desc {
+    color: #555 !important;
+  }
+
+  .kitd-contact__card {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .kitd-contact__card-value {
+    color: #1A0236 !important;
+  }
+
+  .kitd-contact__card-label {
+    color: #777 !important;
+  }
+
+  .kitd-contact__card-icon {
+    background: #e8e8e8 !important;
+    color: #1A0236 !important;
+  }
+
+  .kitd-contact__btn {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+    box-shadow: none !important;
+  }
+
+  .kitd-contact__btn--primary {
+    background: #1A0236 !important;
+    color: white !important;
+  }
+
+  .kitd-contact__eyebrow-text {
+    color: #1A0236 !important;
+  }
+
+  .kitd-contact__reassurance {
+    color: #555 !important;
+  }
+
+  .kitd-contact__trust {
+    color: #555 !important;
+  }
+}
