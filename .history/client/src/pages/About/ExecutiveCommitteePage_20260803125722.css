@@ -1,0 +1,925 @@
+/* src/pages/ExecutiveCommittee/ExecutiveCommitteePage.css */
+
+/* ============================================
+   EXECUTIVE COMMITTEE PAGE - PRODUCTION LEVEL
+   Primary: #1A0236 | Secondary: #9AD3CB
+   ============================================ */
+
+:root {
+  --ec-primary: #1A0236;
+  --ec-primary-dark: #120126;
+  --ec-primary-light: #3A2457;
+  --ec-secondary: #9AD3CB;
+  --ec-secondary-dark: #6DBFB2;
+  --ec-secondary-light: #CDEBE6;
+  --ec-white: #FFFFFF;
+  --ec-text-dark: #1A1A1A;
+  --ec-text-muted: #6A5A7D;
+  --ec-text-light: #8A7A9D;
+  --ec-border: #E6E8EB;
+  --ec-shadow: 0 4px 20px rgba(26, 2, 54, 0.06);
+  --ec-shadow-hover: 0 16px 50px rgba(26, 2, 54, 0.12);
+}
+
+/* ============================================
+   PAGE BASE
+   ============================================ */
+.ec-page {
+  overflow-x: hidden;
+  background: #ffffff;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.ec-page__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.ec-page__hero {
+  position: relative;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ec-page__hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.ec-page__hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ec-page__hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+ background: linear-gradient(
+  135deg,
+  rgba(45, 45, 45, 0.461) 0%,
+  rgba(55, 75, 73, 0.473) 35%,
+  rgba(51, 48, 53, 0.187) 70%,
+  rgba(26, 2, 54, 0.153) 100%
+);
+}
+
+.ec-page__hero-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(0deg, rgba(26, 2, 54, 0.95) 0%, transparent 100%);
+  z-index: 1;
+}
+
+.ec-page__hero-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.ec-page__hero-content {
+  max-width: 700px;
+  color: #fff;
+  padding: 40px 24px;
+}
+
+.ec-page__hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ec-page__hero-eyebrow-line {
+  width: 40px;
+  height: 2px;
+  background: var(--ec-secondary);
+  border-radius: 2px;
+}
+
+.ec-page__hero-eyebrow-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ec-secondary);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.ec-page__hero-title {
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  letter-spacing: -1px;
+}
+
+.ec-page__hero-title-accent {
+  color: var(--ec-secondary);
+  font-weight: 600;
+}
+
+.ec-page__hero-description {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+  margin: 0;
+  font-weight: 300;
+  max-width: 580px;
+}
+
+/* ============================================
+   BREADCRUMB
+   ============================================ */
+.ec-page__breadcrumb {
+  padding: 14px 0;
+  background: #faf8f9;
+  border-bottom: 1px solid var(--ec-border);
+}
+
+.ec-page__breadcrumb .ec-page__container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ec-text-light);
+}
+
+.ec-page__breadcrumb a {
+  color: var(--ec-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.ec-page__breadcrumb a:hover {
+  color: var(--ec-secondary-dark);
+}
+
+.ec-page__breadcrumb span {
+  color: var(--ec-text-light);
+}
+
+/* ============================================
+   COMMITTEE SECTION
+   ============================================ */
+.ec-page__committee {
+  padding: 60px 0;
+  background: #ffffff;
+}
+
+.ec-page__committee--members {
+  background: #faf8f9;
+}
+
+.ec-page__committee-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.ec-page__committee-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ec-page__committee-eyebrow-line {
+  width: 30px;
+  height: 2px;
+  background: var(--ec-secondary);
+  border-radius: 2px;
+}
+
+.ec-page__committee-eyebrow-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ec-primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ec-page__committee-title {
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--ec-primary);
+  margin: 0 0 8px;
+}
+
+.ec-page__committee-desc {
+  font-size: 16px;
+  color: var(--ec-text-muted);
+  max-width: 560px;
+  margin: 0 auto;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+/* ============================================
+   GRID
+   ============================================ */
+.ec-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.ec-page__grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   MEMBER CARD - Professional Design
+   ============================================ */
+.ec-page__card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ec-border);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.ec-page__grid.visible .ec-page__card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ec-page__card--hovered {
+  transform: translateY(-6px);
+  box-shadow: var(--ec-shadow-hover);
+  border-color: var(--ec-secondary);
+}
+
+.ec-page__card-image {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-primary-light));
+}
+
+.ec-page__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.ec-page__card--hovered .ec-page__card-image img {
+  transform: scale(1.05);
+}
+
+.ec-page__card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-primary-light));
+  color: var(--ec-white);
+  font-size: 42px;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.ec-page__card-placeholder-text {
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  opacity: 0.8;
+}
+
+.ec-page__card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(26, 2, 54, 0.7) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.ec-page__card-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: var(--ec-secondary);
+  color: var(--ec-primary);
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.ec-page__card-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ec-page__card-content {
+  padding: 20px 22px 22px;
+}
+
+.ec-page__card-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ec-primary);
+  margin: 0 0 2px;
+  letter-spacing: -0.2px;
+}
+
+.ec-page__card-designation {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ec-secondary-dark);
+  margin-bottom: 6px;
+}
+
+.ec-page__card-dance {
+  display: block;
+  font-size: 13px;
+  color: var(--ec-text-light);
+  margin-bottom: 2px;
+}
+
+.ec-page__card-location {
+  display: block;
+  font-size: 13px;
+  color: var(--ec-text-light);
+  margin-bottom: 8px;
+}
+
+.ec-page__card-bio {
+  font-size: 14px;
+  color: var(--ec-text-muted);
+  line-height: 1.6;
+  margin: 0 0 12px;
+  font-weight: 300;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ec-page__card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ec-border);
+}
+
+.ec-page__card-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ec-text-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.ec-page__card-email:hover {
+  color: var(--ec-primary);
+}
+
+.ec-page__card-email svg {
+  flex-shrink: 0;
+  color: var(--ec-secondary);
+}
+
+.ec-page__card-social {
+  display: flex;
+  gap: 6px;
+}
+
+.ec-page__social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #f5f3f4;
+  color: var(--ec-text-light);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+}
+
+.ec-page__social-link:hover {
+  background: var(--ec-secondary);
+  color: var(--ec-primary);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   LOADING
+   ============================================ */
+.ec-page__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 16px;
+}
+
+.ec-page__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(154, 211, 203, 0.1);
+  border-top-color: var(--ec-secondary);
+  border-radius: 50%;
+  animation: ecSpin 0.8s linear infinite;
+}
+
+@keyframes ecSpin {
+  to { transform: rotate(360deg); }
+}
+
+.ec-page__loading p {
+  color: var(--ec-text-muted);
+  font-size: 15px;
+  font-weight: 300;
+}
+
+/* ============================================
+   ERROR & EMPTY
+   ============================================ */
+.ec-page__error,
+.ec-page__empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.ec-page__error p {
+  color: #dc3545;
+  font-size: 16px;
+}
+
+.ec-page__empty svg {
+  color: var(--ec-secondary);
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.ec-page__empty h3 {
+  font-size: 20px;
+  color: var(--ec-primary);
+  margin: 0 0 8px;
+  font-weight: 400;
+}
+
+.ec-page__empty p {
+  font-size: 15px;
+  color: var(--ec-text-muted);
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   GOVERNANCE SECTION
+   ============================================ */
+.ec-page__governance {
+  padding: 60px 0 80px;
+  background: #faf8f9;
+}
+
+.ec-page__governance-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 50px;
+}
+
+.ec-page__governance-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ec-page__governance-eyebrow-line {
+  width: 30px;
+  height: 2px;
+  background: var(--ec-secondary);
+  border-radius: 2px;
+}
+
+.ec-page__governance-eyebrow-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ec-primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ec-page__governance-title {
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--ec-primary);
+  margin: 0;
+}
+
+.ec-page__governance-title-accent {
+  color: var(--ec-primary);
+  font-weight: 600;
+}
+
+.ec-page__governance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.ec-page__governance-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ec-page__governance-card {
+  background: #ffffff;
+  padding: 28px 28px 30px;
+  border-radius: 12px;
+  border: 1px solid var(--ec-border);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.ec-page__governance-grid.visible .ec-page__governance-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ec-page__governance-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ec-shadow-hover);
+  border-color: var(--ec-secondary);
+}
+
+.ec-page__governance-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(154, 211, 203, 0.08);
+  color: var(--ec-secondary);
+  margin-bottom: 14px;
+}
+
+.ec-page__governance-card-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ec-primary);
+  margin: 0 0 8px;
+}
+
+.ec-page__governance-card-desc {
+  font-size: 14px;
+  color: var(--ec-text-muted);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.ec-page__cta {
+  position: relative;
+  padding: 70px 0;
+  overflow: hidden;
+}
+
+.ec-page__cta-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.ec-page__cta-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ec-page__cta-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+ background: linear-gradient(
+  135deg,
+  rgba(45, 45, 45, 0.461) 0%,
+  rgba(55, 75, 73, 0.473) 35%,
+  rgba(51, 48, 53, 0.187) 70%,
+  rgba(26, 2, 54, 0.153) 100%
+);
+  z-index: 1;
+}
+
+.ec-page__cta-wrapper {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.ec-page__cta-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ec-page__cta-title {
+  font-size: 34px;
+  font-weight: 400;
+  margin: 0 0 16px;
+}
+
+.ec-page__cta-text {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin: 0 0 28px;
+  font-weight: 300;
+}
+
+.ec-page__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 36px;
+  background: var(--ec-secondary);
+  color: var(--ec-primary);
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 30px rgba(154, 211, 203, 0.25);
+}
+
+.ec-page__cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 50px rgba(154, 211, 203, 0.35);
+  gap: 14px;
+  background: var(--ec-secondary-light);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .ec-page__hero-title {
+    font-size: 40px;
+  }
+  .ec-page__grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .ec-page__governance-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ec-page__hero {
+    min-height: 50vh;
+  }
+  .ec-page__hero-title {
+    font-size: 32px;
+  }
+  .ec-page__hero-description {
+    font-size: 16px;
+  }
+  .ec-page__committee-title {
+    font-size: 28px;
+  }
+  .ec-page__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .ec-page__card-image {
+    height: 180px;
+  }
+  .ec-page__governance-title {
+    font-size: 28px;
+  }
+  .ec-page__governance-grid {
+    grid-template-columns: 1fr;
+  }
+  .ec-page__cta-title {
+    font-size: 28px;
+  }
+  .ec-page__cta-text {
+    font-size: 15px;
+  }
+  .ec-page__cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .ec-page__container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ec-page__hero-title {
+    font-size: 26px;
+  }
+  .ec-page__hero-eyebrow-text {
+    font-size: 11px;
+  }
+  .ec-page__committee-title {
+    font-size: 24px;
+  }
+  .ec-page__grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .ec-page__card-image {
+    height: 200px;
+  }
+  .ec-page__governance-title {
+    font-size: 24px;
+  }
+  .ec-page__cta-title {
+    font-size: 24px;
+  }
+  .ec-page__committee {
+    padding: 40px 0;
+  }
+  .ec-page__governance {
+    padding: 40px 0 60px;
+  }
+  .ec-page__cta {
+    padding: 50px 0;
+  }
+  .ec-page__card-content {
+    padding: 16px 18px 18px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .ec-page__grid,
+  .ec-page__governance-grid,
+  .ec-page__cta-wrapper,
+  .ec-page__card,
+  .ec-page__governance-card {
+    transition-duration: 0.01ms !important;
+  }
+  .ec-page__card--hovered {
+    transform: none !important;
+  }
+  .ec-page__spinner {
+    animation: none !important;
+  }
+  .ec-page__card-image img {
+    transition: none !important;
+  }
+}
+
+.ec-page__social-link:focus-visible,
+.ec-page__cta-btn:focus-visible,
+.ec-page__card-email:focus-visible {
+  outline: 2px solid var(--ec-secondary);
+  outline-offset: 3px;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .ec-page__hero-bg,
+  .ec-page__cta-bg {
+    display: none !important;
+  }
+  .ec-page__hero-overlay,
+  .ec-page__hero-gradient,
+  .ec-page__cta-overlay {
+    background: white !important;
+  }
+  .ec-page__hero {
+    min-height: auto !important;
+    padding: 40px 0;
+  }
+  .ec-page__hero-title {
+    color: #1A0236 !important;
+  }
+  .ec-page__hero-title-accent {
+    color: #1A0236 !important;
+  }
+  .ec-page__hero-description {
+    color: #555 !important;
+  }
+  .ec-page__grid,
+  .ec-page__governance-grid,
+  .ec-page__cta-wrapper {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ec-page__card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  .ec-page__card-image {
+    height: 150px !important;
+  }
+  .ec-page__card-overlay {
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+  .ec-page__card-badge {
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+  }
+  .ec-page__card-social {
+    display: none !important;
+  }
+  .ec-page__card-name {
+    color: #1A0236 !important;
+  }
+  .ec-page__card-designation {
+    color: #1A0236 !important;
+  }
+  .ec-page__card-bio {
+    color: #555 !important;
+  }
+  .ec-page__committee-title,
+  .ec-page__governance-title,
+  .ec-page__cta-title {
+    color: #1A0236 !important;
+  }
+  .ec-page__governance-card {
+    border: 1px solid #ddd !important;
+  }
+  .ec-page__governance-card-title {
+    color: #1A0236 !important;
+  }
+  .ec-page__governance-card-desc {
+    color: #555 !important;
+  }
+  .ec-page__governance-icon {
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+  }
+  .ec-page__cta-btn {
+    background: #1A0236 !important;
+    color: white !important;
+  }
+  .ec-page__breadcrumb {
+    display: none !important;
+  }
+  .ec-page__card-placeholder-text {
+    color: #1A0236 !important;
+  }
+}
