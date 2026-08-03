@@ -42,7 +42,7 @@ const Home = () => {
 
       <NewsSection />
 
-      <NewsletterSection />
+      {/* <NewsletterSection /> */}
 
       <ContactCTA />
 

@@ -193,6 +193,9 @@
 
 // src/components/home/WhyJoinSection/WhyJoinSection.jsx
 
+
+
+
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -208,7 +211,9 @@ import {
 } from "lucide-react";
 
 import "./WhyJoinSection.css";
-
+import w1 from "../../../assets/w1.png";
+import w2 from "../../../assets/w4.jpeg";
+import w3 from "../../../assets/w3.png";
 const benefits = [
   {
     id: 1,
@@ -221,7 +226,7 @@ const benefits = [
       "Community events",
       "Professional networking",
     ],
-    image: "https://images.pexels.com/photos/14469571/pexels-photo-14469571.jpeg",
+    image: w3,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.15) 0%, rgba(60, 10, 30, 0.55) 100%)",
     featured: true,
   },
@@ -236,7 +241,7 @@ const benefits = [
       "Event calendar",
       "Educational materials",
     ],
-    image: "https://images.pexels.com/photos/34717625/pexels-photo-34717625.jpeg",
+    image: w2,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.15) 0%, rgba(60, 10, 30, 0.55) 100%)",
     featured: false,
   },
@@ -251,7 +256,7 @@ const benefits = [
       "Social media reach",
       "Newsletter features",
     ],
-    image: "https://images.pexels.com/photos/30481577/pexels-photo-30481577.jpeg",
+    image: w1,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.15) 0%, rgba(60, 10, 30, 0.55) 100%)",
     featured: false,
   },

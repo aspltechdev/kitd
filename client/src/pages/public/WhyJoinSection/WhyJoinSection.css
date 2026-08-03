@@ -2,6 +2,7 @@
 
 /* ============================================
    WHY JOIN SECTION - PRODUCTION STYLES
+   Primary: #1A0236 | Secondary: #9AD3CB | Accent: #C8A24A
    ============================================ */
 
 .why-join-section {
@@ -12,7 +13,7 @@
 }
 
 /* --------------------------------------------
-   DECORATIVE ELEMENTS
+   DECORATIVE ELEMENTS - Updated with new colors
    -------------------------------------------- */
 .why-decorative {
   position: absolute;
@@ -26,7 +27,7 @@
   height: 600px;
   top: -200px;
   right: -200px;
-  background: #8B1E3F;
+  background: #1A0236;
   animation: float 25s ease-in-out infinite;
 }
 
@@ -35,7 +36,7 @@
   height: 400px;
   bottom: -100px;
   left: -100px;
-  background: #C41E3A;
+  background: #9AD3CB;
   animation: float 20s ease-in-out infinite reverse;
 }
 
@@ -45,7 +46,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #8B1E3F;
+  background: #C8A24A;
   animation: float 30s ease-in-out infinite;
 }
 
@@ -67,7 +68,7 @@
 }
 
 /* --------------------------------------------
-   HEADER
+   HEADER - Updated with new colors
    -------------------------------------------- */
 .why-header {
   text-align: center;
@@ -86,14 +87,14 @@
 .why-eyebrow-line {
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #8B1E3F);
+  background: linear-gradient(90deg, transparent, #9AD3CB);
   border-radius: 2px;
 }
 
 .why-eyebrow-text {
   font-size: 13px;
   font-weight: 600;
-  color: #8B1E3F;
+  color: #1A0236;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -107,7 +108,7 @@
 }
 
 .why-title-accent {
-  color: #8B1E3F;
+  color: #1A0236;
   position: relative;
 }
 
@@ -118,13 +119,13 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: rgba(139, 30, 63, 0.15);
+  background: rgba(26, 2, 54, 0.15);
   border-radius: 2px;
 }
 
 .why-subtitle {
   font-size: 18px;
-  color: #666;
+  color: #6A5A7D;
   line-height: 1.8;
   margin: 0;
 }
@@ -140,14 +141,14 @@
 }
 
 /* --------------------------------------------
-   CARD - Image Background with Overlay Content
+   CARD - Updated with new colors
    -------------------------------------------- */
 .why-card {
   position: relative;
   border-radius: 24px;
   overflow: hidden;
   min-height: 460px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(26, 2, 54, 0.06);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
   transform: translateY(40px);
@@ -161,11 +162,11 @@
 
 .why-card--hovered {
   transform: translateY(-10px);
-  box-shadow: 0 24px 80px rgba(139, 30, 63, 0.2);
+  box-shadow: 0 24px 80px rgba(26, 2, 54, 0.2);
 }
 
 .why-card--featured {
-  border: 1px solid rgba(139, 30, 63, 0.1);
+  border: 1px solid rgba(154, 211, 203, 0.3);
 }
 
 .why-card__featured-badge {
@@ -310,9 +311,9 @@
 }
 
 .why-card__highlight-icon {
-  color: #ffffff;
+  color: #9AD3CB;
   flex-shrink: 0;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .why-card__learn-more {
@@ -326,7 +327,7 @@
   gap: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: #9AD3CB;
   text-decoration: none;
   transition: all 0.3s ease;
   opacity: 0.85;
@@ -335,10 +336,11 @@
 .why-card__learn-link:hover {
   gap: 14px;
   opacity: 1;
+  color: #ffffff;
 }
 
 /* --------------------------------------------
-   MEMBERSHIP PREVIEW
+   MEMBERSHIP PREVIEW - Updated with new colors
    -------------------------------------------- */
 .why-membership-preview {
   background: linear-gradient(135deg, #f8f5f6 0%, #f0e8eb 100%);
@@ -357,7 +359,7 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: rgba(139, 30, 63, 0.03);
+  background: rgba(26, 2, 54, 0.03);
   pointer-events: none;
 }
 
@@ -369,7 +371,7 @@
 }
 
 .why-preview-icon {
-  color: #8B1E3F;
+  color: #9AD3CB;
   margin-bottom: 8px;
 }
 
@@ -382,7 +384,7 @@
 
 .why-preview-subtitle {
   font-size: 15px;
-  color: #888;
+  color: #6A5A7D;
   margin: 0;
 }
 
@@ -395,7 +397,7 @@
 }
 
 /* --------------------------------------------
-   PRICING CARDS
+   PRICING CARDS - Updated with new colors
    -------------------------------------------- */
 .why-pricing-card {
   background: #ffffff;
@@ -407,7 +409,7 @@
   position: relative;
   opacity: 0;
   transform: translateY(30px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 15px rgba(26, 2, 54, 0.02);
 }
 
 .why-join-section.visible .why-pricing-card {
@@ -417,19 +419,19 @@
 
 .why-pricing-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 16px 60px rgba(26, 2, 54, 0.06);
 }
 
 .why-pricing-card--featured {
-  border-color: #8B1E3F;
+  border-color: #1A0236;
   background: #ffffff;
   transform: scale(1.02);
-  box-shadow: 0 8px 40px rgba(139, 30, 63, 0.08);
+  box-shadow: 0 8px 40px rgba(26, 2, 54, 0.08);
 }
 
 .why-pricing-card--featured:hover {
   transform: scale(1.02) translateY(-6px);
-  box-shadow: 0 16px 60px rgba(139, 30, 63, 0.12);
+  box-shadow: 0 16px 60px rgba(26, 2, 54, 0.12);
 }
 
 .why-pricing__popular {
@@ -437,7 +439,7 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  background: linear-gradient(135deg, #1A0236, #3A2457);
   color: #fff;
   padding: 4px 18px;
   border-radius: 50px;
@@ -448,7 +450,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  box-shadow: 0 4px 15px rgba(139, 30, 63, 0.3);
+  box-shadow: 0 4px 15px rgba(26, 2, 54, 0.3);
 }
 
 .why-pricing-icon-wrapper {
@@ -475,7 +477,7 @@
 .why-pricing-type {
   font-size: 15px;
   font-weight: 600;
-  color: #8B1E3F;
+  color: #1A0236;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -493,13 +495,13 @@
 
 .why-pricing-period {
   font-size: 16px;
-  color: #999;
+  color: #6A5A7D;
   font-weight: 400;
 }
 
 .why-pricing-description {
   font-size: 14px;
-  color: #666;
+  color: #6A5A7D;
   margin: 0 0 20px;
   line-height: 1.5;
 }
@@ -520,25 +522,25 @@
 
 .why-pricing-cta:hover {
   gap: 14px;
-  background: #8B1E3F;
+  background: #1A0236;
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 30, 63, 0.25);
+  box-shadow: 0 8px 25px rgba(26, 2, 54, 0.25);
 }
 
 .why-pricing-cta--featured {
-  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  background: linear-gradient(135deg, #1A0236, #3A2457);
   color: #fff;
 }
 
 .why-pricing-cta--featured:hover {
-  background: linear-gradient(135deg, #6d1832, #a81930);
+  background: linear-gradient(135deg, #120126, #2A1A47);
   color: #fff;
-  box-shadow: 0 8px 30px rgba(139, 30, 63, 0.35);
+  box-shadow: 0 8px 30px rgba(26, 2, 54, 0.35);
 }
 
 /* --------------------------------------------
-   CTA
+   CTA - Updated with new colors
    -------------------------------------------- */
 .why-cta-wrapper {
   text-align: center;
@@ -549,14 +551,14 @@
   align-items: center;
   gap: 12px;
   padding: 18px 48px;
-  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  background: linear-gradient(135deg, #1A0236, #3A2457);
   color: #fff;
   border-radius: 60px;
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 35px rgba(139, 30, 63, 0.25);
+  box-shadow: 0 8px 35px rgba(26, 2, 54, 0.25);
   position: relative;
   overflow: hidden;
 }
@@ -578,7 +580,7 @@
 
 .why-cta:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 50px rgba(139, 30, 63, 0.35);
+  box-shadow: 0 14px 50px rgba(26, 2, 54, 0.35);
   gap: 16px;
 }
 
@@ -803,11 +805,11 @@
   }
 }
 
-/* Focus styles */
+/* Focus styles - Updated with secondary color */
 .why-card__learn-link:focus-visible,
 .why-pricing-cta:focus-visible,
 .why-cta:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid #9AD3CB;
   outline-offset: 3px;
 }
 
@@ -823,5 +825,270 @@
 
   .why-cta {
     border: 2px solid ButtonText;
+  }
+}
+
+/* --------------------------------------------
+   DARK MODE SUPPORT (Optional)
+   -------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .why-join-section {
+    background: linear-gradient(180deg, #0D0D0D 0%, #1A1A1A 100%);
+  }
+
+  .why-title {
+    color: #FFFFFF;
+  }
+
+  .why-subtitle {
+    color: #A0A0A0;
+  }
+
+  .why-membership-preview {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2A1A2A 100%);
+  }
+
+  .why-membership-preview::before {
+    background: rgba(154, 211, 203, 0.05);
+  }
+
+  .why-preview-title {
+    color: #FFFFFF;
+  }
+
+  .why-preview-subtitle {
+    color: #A0A0A0;
+  }
+
+  .why-pricing-card {
+    background: #1A1A1A;
+    border-color: #2A2A2A;
+  }
+
+  .why-pricing-card--featured {
+    border-color: #9AD3CB;
+    background: #1A1A1A;
+  }
+
+  .why-pricing-price {
+    color: #FFFFFF;
+  }
+
+  .why-pricing-period {
+    color: #A0A0A0;
+  }
+
+  .why-pricing-description {
+    color: #A0A0A0;
+  }
+
+  .why-pricing-type {
+    color: #9AD3CB;
+  }
+
+  .why-pricing-cta {
+    background: #2A2A2A;
+    color: #FFFFFF;
+  }
+
+  .why-pricing-cta:hover {
+    background: #9AD3CB;
+    color: #1A0236;
+  }
+
+  .why-pricing-cta--featured {
+    background: linear-gradient(135deg, #9AD3CB, #6DBFB2);
+    color: #1A0236;
+  }
+
+  .why-pricing-cta--featured:hover {
+    background: linear-gradient(135deg, #6DBFB2, #4A9F92);
+    color: #1A0236;
+  }
+
+  .why-decorative--1 {
+    background: #9AD3CB;
+    opacity: 0.05;
+  }
+
+  .why-decorative--2 {
+    background: #1A0236;
+    opacity: 0.05;
+  }
+
+  .why-decorative--3 {
+    background: #C8A24A;
+    opacity: 0.04;
+  }
+
+  .why-eyebrow-text {
+    color: #9AD3CB;
+  }
+
+  .why-eyebrow-line {
+    background: linear-gradient(90deg, transparent, #9AD3CB);
+  }
+
+  .why-title-accent {
+    color: #9AD3CB;
+  }
+
+  .why-title-accent::after {
+    background: rgba(154, 211, 203, 0.2);
+  }
+
+  .why-cta {
+    background: linear-gradient(135deg, #9AD3CB, #6DBFB2);
+    color: #1A0236;
+  }
+
+  .why-cta:hover {
+    box-shadow: 0 14px 50px rgba(154, 211, 203, 0.35);
+  }
+
+  .why-preview-icon {
+    color: #9AD3CB;
+  }
+
+  .why-pricing__popular {
+    background: linear-gradient(135deg, #9AD3CB, #6DBFB2);
+    color: #1A0236;
+  }
+
+  .why-card__highlight-icon {
+    color: #9AD3CB;
+  }
+
+  .why-card__learn-link {
+    color: #9AD3CB;
+  }
+
+  .why-card__learn-link:hover {
+    color: #CDEBE6;
+  }
+}
+
+/* --------------------------------------------
+   PRINT STYLES
+   -------------------------------------------- */
+@media print {
+  .why-join-section {
+    padding: 40px 0;
+    background: white !important;
+  }
+
+  .why-decorative {
+    display: none !important;
+  }
+
+  .why-membership-preview {
+    background: #f5f5f5 !important;
+  }
+
+  .why-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    min-height: auto !important;
+  }
+
+  .why-card__overlay {
+    background: rgba(255, 255, 255, 0.9) !important;
+    opacity: 1 !important;
+  }
+
+  .why-card__title {
+    color: #1A0236 !important;
+  }
+
+  .why-card__description {
+    color: #555 !important;
+  }
+
+  .why-card__highlight-item {
+    color: #555 !important;
+  }
+
+  .why-card__learn-link {
+    color: #1A0236 !important;
+  }
+
+  .why-card__icon {
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+  }
+
+  .why-card__number {
+    color: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .why-pricing-card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+  }
+
+  .why-pricing-card--featured {
+    border-color: #1A0236 !important;
+  }
+
+  .why-pricing-price {
+    color: #1A0236 !important;
+  }
+
+  .why-pricing-period {
+    color: #777 !important;
+  }
+
+  .why-pricing-description {
+    color: #555 !important;
+  }
+
+  .why-pricing-cta {
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .why-pricing-cta--featured {
+    background: #1A0236 !important;
+    color: white !important;
+  }
+
+  .why-cta {
+    background: #1A0236 !important;
+    color: white !important;
+    box-shadow: none !important;
+  }
+
+  .why-cta::before {
+    display: none !important;
+  }
+
+  .why-preview-title {
+    color: #1A0236 !important;
+  }
+
+  .why-preview-subtitle {
+    color: #555 !important;
+  }
+
+  .why-eyebrow-text {
+    color: #1A0236 !important;
+  }
+
+  .why-title {
+    color: #1A0236 !important;
+  }
+
+  .why-title-accent {
+    color: #1A0236 !important;
+  }
+
+  .why-subtitle {
+    color: #555 !important;
+  }
+
+  .why-pricing__popular {
+    background: #1A0236 !important;
+    color: white !important;
   }
 }

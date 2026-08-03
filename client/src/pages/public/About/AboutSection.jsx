@@ -154,7 +154,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Users, MapPin, Building2, Award } from "lucide-react";
 import "./AboutSection.css";
-
+import aboutimg from "../../../assets/aboutimage.png"
 const AboutSection = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -186,7 +186,7 @@ const AboutSection = () => {
             <div className="about-image-wrapper">
               <div className="about-image-frame">
                 <img
-                  src="https://images.pexels.com/photos/31521700/pexels-photo-31521700.jpeg"
+                  src={aboutimg}
                   alt="KITD - Klassischer Indischer Tanz Deutschland e.V. Community"
                   className="about-image"
                   loading="lazy"

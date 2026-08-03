@@ -2,6 +2,7 @@
 
 /* ============================================
    EVENTS SECTION - PRODUCTION STYLES
+   Primary: #1A0236 | Secondary: #9AD3CB | Accent: #C8A24A
    ============================================ */
 
 .kitd-events {
@@ -12,7 +13,7 @@
 }
 
 /* --------------------------------------------
-   DECORATIVE ELEMENTS
+   DECORATIVE ELEMENTS - Updated with new colors
    -------------------------------------------- */
 .kitd-events__deco {
   position: absolute;
@@ -26,7 +27,7 @@
   height: 500px;
   top: -150px;
   right: -150px;
-  background: #8B1E3F;
+  background: #1A0236;
   animation: kitdEventsFloat 22s ease-in-out infinite;
 }
 
@@ -35,7 +36,7 @@
   height: 350px;
   bottom: -100px;
   left: -100px;
-  background: #C41E3A;
+  background: #9AD3CB;
   animation: kitdEventsFloat 18s ease-in-out infinite reverse;
 }
 
@@ -44,7 +45,7 @@
   height: 150px;
   top: 40%;
   left: 10%;
-  background: #8B1E3F;
+  background: #C8A24A;
   animation: kitdEventsFloat 28s ease-in-out infinite;
 }
 
@@ -66,7 +67,7 @@
 }
 
 /* --------------------------------------------
-   HEADER
+   HEADER - Updated with new colors
    -------------------------------------------- */
 .kitd-events__header {
   text-align: center;
@@ -85,14 +86,14 @@
 .kitd-events__eyebrow-line {
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #8B1E3F);
+  background: linear-gradient(90deg, transparent, #9AD3CB);
   border-radius: 2px;
 }
 
 .kitd-events__eyebrow-text {
   font-size: 13px;
   font-weight: 600;
-  color: #8B1E3F;
+  color: #1A0236;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -106,7 +107,7 @@
 }
 
 .kitd-events__title-accent {
-  color: #8B1E3F;
+  color: #1A0236;
   position: relative;
 }
 
@@ -117,13 +118,13 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: rgba(139, 30, 63, 0.15);
+  background: rgba(26, 2, 54, 0.15);
   border-radius: 2px;
 }
 
 .kitd-events__subtitle {
   font-size: 18px;
-  color: #666;
+  color: #6A5A7D;
   line-height: 1.8;
   margin: 0;
 }
@@ -139,14 +140,14 @@
 }
 
 /* --------------------------------------------
-   EVENT CARD
+   EVENT CARD - Updated with new colors
    -------------------------------------------- */
 .kitd-events__card {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
   min-height: 460px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(26, 2, 54, 0.06);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
   transform: translateY(40px);
@@ -160,7 +161,7 @@
 
 .kitd-events__card--hovered {
   transform: translateY(-10px);
-  box-shadow: 0 24px 80px rgba(139, 30, 63, 0.2);
+  box-shadow: 0 24px 80px rgba(26, 2, 54, 0.2);
 }
 
 /* Background Image */
@@ -179,19 +180,26 @@
   transform: scale(1.08);
 }
 
-/* Overlay */
+/* Overlay - Updated with new gradient */
 .kitd-events__card-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.9;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 2, 54, 0.1) 0%,
+    rgba(26, 2, 54, 0.5) 30%,
+    rgba(26, 2, 54, 0.85) 70%,
+    rgba(26, 2, 54, 0.95) 100%
+  );
+  opacity: 0.85;
   transition: opacity 0.5s ease;
 }
 
 .kitd-events__card--hovered .kitd-events__card-overlay {
-  opacity: 0.95;
+  opacity: 0.92;
 }
 
 /* Content Wrapper */
@@ -213,19 +221,19 @@
   align-items: flex-start;
 }
 
-/* Date Badge */
+/* Date Badge - Updated with secondary color */
 .kitd-events__date-badge {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(154, 211, 203, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 12px;
   padding: 8px 14px;
   min-width: 52px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(154, 211, 203, 0.2);
 }
 
 .kitd-events__date-day {
@@ -238,12 +246,12 @@
 .kitd-events__date-month {
   font-size: 11px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: #9AD3CB;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* Category Badge */
+/* Category Badge - Updated with new colors */
 .kitd-events__cat-badge {
   display: inline-flex;
   align-items: center;
@@ -280,7 +288,7 @@
   background: rgba(251, 146, 60, 0.3);
 }
 .kitd-events__cat--default {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(154, 211, 203, 0.2);
 }
 
 /* Content Body */
@@ -339,7 +347,7 @@
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #ffffff;
+  color: #9AD3CB;
   text-decoration: none;
   transition: all 0.3s ease;
   padding: 8px 0;
@@ -351,6 +359,7 @@
 .kitd-events__card-link:hover {
   gap: 14px;
   opacity: 1;
+  color: #ffffff;
 }
 
 .kitd-events__card-link svg {
@@ -452,8 +461,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #f8f5f6;
-  color: #8B1E3F;
+  background: rgba(26, 2, 54, 0.06);
+  color: #1A0236;
   margin-bottom: 16px;
 }
 
@@ -466,7 +475,7 @@
 
 .kitd-events__empty-text {
   font-size: 15px;
-  color: #666;
+  color: #6A5A7D;
   margin: 0 0 24px;
   max-width: 400px;
   margin-left: auto;
@@ -478,7 +487,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 28px;
-  background: #8B1E3F;
+  background: #1A0236;
   color: #fff;
   border-radius: 50px;
   font-size: 14px;
@@ -488,13 +497,13 @@
 }
 
 .kitd-events__empty-cta:hover {
-  background: #6d1832;
+  background: #3A2457;
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(139, 30, 63, 0.3);
+  box-shadow: 0 8px 25px rgba(26, 2, 54, 0.3);
 }
 
 /* --------------------------------------------
-   CTA
+   CTA - Updated with new colors
    -------------------------------------------- */
 .kitd-events__cta-wrapper {
   text-align: center;
@@ -506,8 +515,8 @@
   gap: 12px;
   padding: 16px 44px;
   background: transparent;
-  color: #8B1E3F;
-  border: 2px solid #8B1E3F;
+  color: #1A0236;
+  border: 2px solid #1A0236;
   border-radius: 60px;
   font-size: 16px;
   font-weight: 600;
@@ -524,7 +533,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  background: linear-gradient(135deg, #1A0236, #3A2457);
   transition: left 0.5s ease;
   z-index: -1;
 }
@@ -536,9 +545,9 @@
 .kitd-events__cta:hover {
   color: #fff;
   transform: translateY(-4px);
-  box-shadow: 0 14px 50px rgba(139, 30, 63, 0.25);
+  box-shadow: 0 14px 50px rgba(26, 2, 54, 0.25);
   gap: 16px;
-  border-color: #8B1E3F;
+  border-color: #1A0236;
 }
 
 .kitd-events__cta-icon {
@@ -744,7 +753,7 @@
 .kitd-events__card-link:focus-visible,
 .kitd-events__cta:focus-visible,
 .kitd-events__empty-cta:focus-visible {
-  outline: 2px solid #8B1E3F;
+  outline: 2px solid #9AD3CB;
   outline-offset: 3px;
 }
 
@@ -755,5 +764,241 @@
 
   .kitd-events__cta {
     border: 2px solid ButtonText;
+  }
+}
+
+/* --------------------------------------------
+   DARK MODE SUPPORT (Optional)
+   -------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .kitd-events {
+    background: linear-gradient(180deg, #0D0D0D 0%, #1A1A1A 100%);
+  }
+
+  .kitd-events__deco--1 {
+    background: #9AD3CB;
+    opacity: 0.05;
+  }
+
+  .kitd-events__deco--2 {
+    background: #1A0236;
+    opacity: 0.05;
+  }
+
+  .kitd-events__deco--3 {
+    background: #C8A24A;
+    opacity: 0.04;
+  }
+
+  .kitd-events__title {
+    color: #FFFFFF;
+  }
+
+  .kitd-events__title-accent {
+    color: #9AD3CB;
+  }
+
+  .kitd-events__title-accent::after {
+    background: rgba(154, 211, 203, 0.2);
+  }
+
+  .kitd-events__subtitle {
+    color: #A0A0A0;
+  }
+
+  .kitd-events__eyebrow-text {
+    color: #9AD3CB;
+  }
+
+  .kitd-events__eyebrow-line {
+    background: linear-gradient(90deg, transparent, #9AD3CB);
+  }
+
+  .kitd-events__card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .kitd-events__card--hovered {
+    box-shadow: 0 24px 80px rgba(154, 211, 203, 0.15);
+  }
+
+  .kitd-events__card-link {
+    color: #9AD3CB;
+  }
+
+  .kitd-events__card-link:hover {
+    color: #CDEBE6;
+  }
+
+  .kitd-events__cta {
+    color: #9AD3CB;
+    border-color: #9AD3CB;
+  }
+
+  .kitd-events__cta::before {
+    background: linear-gradient(135deg, #9AD3CB, #6DBFB2);
+  }
+
+  .kitd-events__cta:hover {
+    color: #1A0236;
+    box-shadow: 0 14px 50px rgba(154, 211, 203, 0.25);
+    border-color: #9AD3CB;
+  }
+
+  .kitd-events__empty {
+    background: #1A1A1A;
+    border-color: #2A2A2A;
+  }
+
+  .kitd-events__empty-icon {
+    background: rgba(154, 211, 203, 0.1);
+    color: #9AD3CB;
+  }
+
+  .kitd-events__empty-title {
+    color: #FFFFFF;
+  }
+
+  .kitd-events__empty-text {
+    color: #A0A0A0;
+  }
+
+  .kitd-events__empty-cta {
+    background: #9AD3CB;
+    color: #1A0236;
+  }
+
+  .kitd-events__empty-cta:hover {
+    background: #6DBFB2;
+  }
+
+  .kitd-events__date-badge {
+    background: rgba(154, 211, 203, 0.15);
+    border-color: rgba(154, 211, 203, 0.15);
+  }
+
+  .kitd-events__date-month {
+    color: #9AD3CB;
+  }
+
+  .kitd-events__skeleton {
+    background: #1A1A1A;
+  }
+
+  .kitd-events__skeleton-image {
+    background: #2A2A2A;
+  }
+
+  .kitd-events__skeleton-title,
+  .kitd-events__skeleton-meta,
+  .kitd-events__skeleton-text,
+  .kitd-events__skeleton-link {
+    background: #2A2A2A;
+  }
+}
+
+/* --------------------------------------------
+   PRINT STYLES
+   -------------------------------------------- */
+@media print {
+  .kitd-events {
+    padding: 40px 0;
+    background: white !important;
+  }
+
+  .kitd-events__deco {
+    display: none !important;
+  }
+
+  .kitd-events__card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    min-height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  .kitd-events__card-overlay {
+    background: rgba(255, 255, 255, 0.9) !important;
+    opacity: 1 !important;
+  }
+
+  .kitd-events__card-bg {
+    display: none !important;
+  }
+
+  .kitd-events__card-wrapper {
+    min-height: auto !important;
+    padding: 20px !important;
+  }
+
+  .kitd-events__card-title {
+    color: #1A0236 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-events__card-desc {
+    color: #555 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-events__card-link {
+    color: #1A0236 !important;
+    border-top-color: #ddd !important;
+  }
+
+  .kitd-events__card-meta {
+    color: #555 !important;
+  }
+
+  .kitd-events__meta-item {
+    color: #555 !important;
+  }
+
+  .kitd-events__date-badge {
+    background: #f5f5f5 !important;
+    border-color: #ddd !important;
+  }
+
+  .kitd-events__date-day {
+    color: #1A0236 !important;
+  }
+
+  .kitd-events__date-month {
+    color: #555 !important;
+  }
+
+  .kitd-events__cat-badge {
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+  }
+
+  .kitd-events__cta {
+    color: #1A0236 !important;
+    border-color: #1A0236 !important;
+    background: transparent !important;
+  }
+
+  .kitd-events__cta::before {
+    display: none !important;
+  }
+
+  .kitd-events__title {
+    color: #1A0236 !important;
+  }
+
+  .kitd-events__title-accent {
+    color: #1A0236 !important;
+  }
+
+  .kitd-events__subtitle {
+    color: #555 !important;
+  }
+
+  .kitd-events__eyebrow-text {
+    color: #1A0236 !important;
+  }
+
+  .kitd-events__eyebrow-line {
+    background: #1A0236 !important;
   }
 }

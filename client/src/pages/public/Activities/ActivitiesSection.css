@@ -2,6 +2,7 @@
 
 /* ============================================
    ACTIVITIES SECTION - PRODUCTION STYLES
+   Primary: #1A0236 | Secondary: #9AD3CB | Accent: #C8A24A
    ============================================ */
 
 .kitd-activities {
@@ -12,7 +13,7 @@
 }
 
 /* --------------------------------------------
-   DECORATIVE ELEMENTS
+   DECORATIVE ELEMENTS - Updated with new colors
    -------------------------------------------- */
 .kitd-activities__deco {
   position: absolute;
@@ -26,7 +27,7 @@
   height: 500px;
   top: -150px;
   left: -150px;
-  background: #8B1E3F;
+  background: #1A0236;
   animation: kitdActivitiesFloat 22s ease-in-out infinite;
 }
 
@@ -35,7 +36,7 @@
   height: 350px;
   bottom: -100px;
   right: -100px;
-  background: #C41E3A;
+  background: #9AD3CB;
   animation: kitdActivitiesFloat 18s ease-in-out infinite reverse;
 }
 
@@ -44,7 +45,7 @@
   height: 150px;
   top: 40%;
   right: 10%;
-  background: #8B1E3F;
+  background: #C8A24A;
   animation: kitdActivitiesFloat 28s ease-in-out infinite;
 }
 
@@ -66,7 +67,7 @@
 }
 
 /* --------------------------------------------
-   HEADER
+   HEADER - Updated with new colors
    -------------------------------------------- */
 .kitd-activities__header {
   text-align: center;
@@ -85,14 +86,14 @@
 .kitd-activities__eyebrow-line {
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #8B1E3F);
+  background: linear-gradient(90deg, transparent, #9AD3CB);
   border-radius: 2px;
 }
 
 .kitd-activities__eyebrow-text {
   font-size: 13px;
   font-weight: 600;
-  color: #8B1E3F;
+  color: #1A0236;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -106,7 +107,7 @@
 }
 
 .kitd-activities__title-accent {
-  color: #8B1E3F;
+  color: #1A0236;
   position: relative;
 }
 
@@ -117,13 +118,13 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: rgba(139, 30, 63, 0.15);
+  background: rgba(26, 2, 54, 0.15);
   border-radius: 2px;
 }
 
 .kitd-activities__subtitle {
   font-size: 18px;
-  color: #666;
+  color: #6A5A7D;
   line-height: 1.8;
   margin: 0;
 }
@@ -139,14 +140,14 @@
 }
 
 /* --------------------------------------------
-   ACTIVITY CARD
+   ACTIVITY CARD - Updated with new colors
    -------------------------------------------- */
 .kitd-activities__card {
   position: relative;
   border-radius: 24px;
   overflow: hidden;
   min-height: 420px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(26, 2, 54, 0.06);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
   transform: translateY(40px);
@@ -160,11 +161,11 @@
 
 .kitd-activities__card--hovered {
   transform: translateY(-10px);
-  box-shadow: 0 24px 80px rgba(139, 30, 63, 0.2);
+  box-shadow: 0 24px 80px rgba(26, 2, 54, 0.2);
 }
 
 .kitd-activities__card--featured {
-  border: 1px solid rgba(139, 30, 63, 0.1);
+  border: 1px solid rgba(154, 211, 203, 0.3);
 }
 
 /* Featured Badge */
@@ -287,7 +288,7 @@
   gap: 10px;
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: #9AD3CB;
   text-decoration: none;
   transition: all 0.3s ease;
   padding: 10px 0;
@@ -299,10 +300,11 @@
 .kitd-activities__card-link:hover {
   gap: 16px;
   opacity: 1;
+  color: #ffffff;
 }
 
 .kitd-activities__card-link span {
-  color: #ffffff;
+  color: inherit;
 }
 
 .kitd-activities__card-link svg {
@@ -314,7 +316,7 @@
 }
 
 /* --------------------------------------------
-   CTA
+   CTA - Updated with new colors
    -------------------------------------------- */
 .kitd-activities__cta-wrapper {
   text-align: center;
@@ -326,8 +328,8 @@
   gap: 12px;
   padding: 16px 44px;
   background: transparent;
-  color: #8B1E3F;
-  border: 2px solid #8B1E3F;
+  color: #1A0236;
+  border: 2px solid #1A0236;
   border-radius: 60px;
   font-size: 16px;
   font-weight: 600;
@@ -344,7 +346,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  background: linear-gradient(135deg, #1A0236, #3A2457);
   transition: left 0.5s ease;
   z-index: -1;
 }
@@ -356,9 +358,9 @@
 .kitd-activities__cta:hover {
   color: #fff;
   transform: translateY(-4px);
-  box-shadow: 0 14px 50px rgba(139, 30, 63, 0.25);
+  box-shadow: 0 14px 50px rgba(26, 2, 54, 0.25);
   gap: 16px;
-  border-color: #8B1E3F;
+  border-color: #1A0236;
 }
 
 .kitd-activities__cta-icon {
@@ -512,7 +514,7 @@
 
 .kitd-activities__card-link:focus-visible,
 .kitd-activities__cta:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid #9AD3CB;
   outline-offset: 3px;
 }
 
@@ -523,5 +525,180 @@
 
   .kitd-activities__cta {
     border: 2px solid ButtonText;
+  }
+}
+
+/* --------------------------------------------
+   DARK MODE SUPPORT (Optional)
+   -------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .kitd-activities {
+    background: linear-gradient(180deg, #0D0D0D 0%, #1A1A1A 100%);
+  }
+
+  .kitd-activities__deco--1 {
+    background: #9AD3CB;
+    opacity: 0.05;
+  }
+
+  .kitd-activities__deco--2 {
+    background: #1A0236;
+    opacity: 0.05;
+  }
+
+  .kitd-activities__deco--3 {
+    background: #C8A24A;
+    opacity: 0.04;
+  }
+
+  .kitd-activities__title {
+    color: #FFFFFF;
+  }
+
+  .kitd-activities__title-accent {
+    color: #9AD3CB;
+  }
+
+  .kitd-activities__title-accent::after {
+    background: rgba(154, 211, 203, 0.2);
+  }
+
+  .kitd-activities__subtitle {
+    color: #A0A0A0;
+  }
+
+  .kitd-activities__eyebrow-text {
+    color: #9AD3CB;
+  }
+
+  .kitd-activities__eyebrow-line {
+    background: linear-gradient(90deg, transparent, #9AD3CB);
+  }
+
+  .kitd-activities__card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .kitd-activities__card--hovered {
+    box-shadow: 0 24px 80px rgba(154, 211, 203, 0.15);
+  }
+
+  .kitd-activities__card--featured {
+    border-color: rgba(154, 211, 203, 0.2);
+  }
+
+  .kitd-activities__card-link {
+    color: #9AD3CB;
+  }
+
+  .kitd-activities__card-link:hover {
+    color: #CDEBE6;
+  }
+
+  .kitd-activities__cta {
+    color: #9AD3CB;
+    border-color: #9AD3CB;
+  }
+
+  .kitd-activities__cta::before {
+    background: linear-gradient(135deg, #9AD3CB, #6DBFB2);
+  }
+
+  .kitd-activities__cta:hover {
+    color: #1A0236;
+    box-shadow: 0 14px 50px rgba(154, 211, 203, 0.25);
+    border-color: #9AD3CB;
+  }
+}
+
+/* --------------------------------------------
+   PRINT STYLES
+   -------------------------------------------- */
+@media print {
+  .kitd-activities {
+    padding: 40px 0;
+    background: white !important;
+  }
+
+  .kitd-activities__deco {
+    display: none !important;
+  }
+
+  .kitd-activities__card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    min-height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  .kitd-activities__card-overlay {
+    background: rgba(255, 255, 255, 0.9) !important;
+    opacity: 1 !important;
+  }
+
+  .kitd-activities__card-bg {
+    display: none !important;
+  }
+
+  .kitd-activities__card-wrapper {
+    min-height: auto !important;
+    padding: 24px !important;
+  }
+
+  .kitd-activities__card-title {
+    color: #1A0236 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-activities__card-desc {
+    color: #555 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-activities__card-number {
+    color: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .kitd-activities__card-link {
+    color: #1A0236 !important;
+    border-top-color: #ddd !important;
+  }
+
+  .kitd-activities__card-link span {
+    color: #1A0236 !important;
+  }
+
+  .kitd-activities__card-badge {
+    display: none !important;
+  }
+
+  .kitd-activities__cta {
+    color: #1A0236 !important;
+    border-color: #1A0236 !important;
+    background: transparent !important;
+  }
+
+  .kitd-activities__cta::before {
+    display: none !important;
+  }
+
+  .kitd-activities__title {
+    color: #1A0236 !important;
+  }
+
+  .kitd-activities__title-accent {
+    color: #1A0236 !important;
+  }
+
+  .kitd-activities__subtitle {
+    color: #555 !important;
+  }
+
+  .kitd-activities__eyebrow-text {
+    color: #1A0236 !important;
+  }
+
+  .kitd-activities__eyebrow-line {
+    background: #1A0236 !important;
   }
 }

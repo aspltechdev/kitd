@@ -2,6 +2,7 @@
 
 /* ============================================
    ARTISTS SECTION - MARQUEE STYLES
+   Primary: #1A0236 | Secondary: #9AD3CB | Accent: #C8A24A
    ============================================ */
 
 .kitd-artists {
@@ -12,7 +13,7 @@
 }
 
 /* --------------------------------------------
-   DECORATIVE ELEMENTS
+   DECORATIVE ELEMENTS - Updated with new colors
    -------------------------------------------- */
 .kitd-artists__deco {
   position: absolute;
@@ -26,7 +27,7 @@
   height: 500px;
   top: -150px;
   right: -150px;
-  background: #8B1E3F;
+  background: #1A0236;
   animation: kitdArtistsFloat 22s ease-in-out infinite;
 }
 
@@ -35,7 +36,7 @@
   height: 350px;
   bottom: -100px;
   left: -100px;
-  background: #C41E3A;
+  background: #9AD3CB;
   animation: kitdArtistsFloat 18s ease-in-out infinite reverse;
 }
 
@@ -44,7 +45,7 @@
   height: 150px;
   top: 40%;
   left: 10%;
-  background: #8B1E3F;
+  background: #C8A24A;
   animation: kitdArtistsFloat 28s ease-in-out infinite;
 }
 
@@ -66,7 +67,7 @@
 }
 
 /* --------------------------------------------
-   HEADER
+   HEADER - Updated with new colors
    -------------------------------------------- */
 .kitd-artists__header {
   text-align: center;
@@ -85,14 +86,14 @@
 .kitd-artists__eyebrow-line {
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #8B1E3F);
+  background: linear-gradient(90deg, transparent, #9AD3CB);
   border-radius: 2px;
 }
 
 .kitd-artists__eyebrow-text {
   font-size: 13px;
   font-weight: 600;
-  color: #8B1E3F;
+  color: #1A0236;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -106,7 +107,7 @@
 }
 
 .kitd-artists__title-accent {
-  color: #8B1E3F;
+  color: #1A0236;
   position: relative;
 }
 
@@ -117,13 +118,13 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: rgba(139, 30, 63, 0.15);
+  background: rgba(26, 2, 54, 0.15);
   border-radius: 2px;
 }
 
 .kitd-artists__subtitle {
   font-size: 18px;
-  color: #666;
+  color: #6A5A7D;
   line-height: 1.8;
   margin: 0;
 }
@@ -164,7 +165,7 @@
 }
 
 /* --------------------------------------------
-   MARQUEE CARD
+   MARQUEE CARD - Updated with new colors
    -------------------------------------------- */
 .kitd-artists__marquee-card {
   position: relative;
@@ -173,14 +174,14 @@
   flex-shrink: 0;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(26, 2, 54, 0.06);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .kitd-artists__marquee-card--hovered {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(139, 30, 63, 0.2);
+  box-shadow: 0 20px 60px rgba(26, 2, 54, 0.2);
 }
 
 .kitd-artists__marquee-bg {
@@ -198,18 +199,26 @@
   transform: scale(1.08);
 }
 
+/* Overlay - Updated with new gradient */
 .kitd-artists__marquee-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.88;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 2, 54, 0.1) 0%,
+    rgba(26, 2, 54, 0.4) 30%,
+    rgba(26, 2, 54, 0.8) 60%,
+    rgba(26, 2, 54, 0.95) 100%
+  );
+  opacity: 0.85;
   transition: opacity 0.4s ease;
 }
 
 .kitd-artists__marquee-card--hovered .kitd-artists__marquee-overlay {
-  opacity: 0.95;
+  opacity: 0.93;
 }
 
 /* Content */
@@ -233,14 +242,14 @@
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(154, 211, 203, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 50px;
   font-size: 10px;
   font-weight: 600;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(154, 211, 203, 0.15);
 }
 
 .kitd-artists__marquee-top {
@@ -251,14 +260,14 @@
 .kitd-artists__marquee-dance {
   display: inline-block;
   padding: 3px 12px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(154, 211, 203, 0.15);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 50px;
   font-size: 11px;
   font-weight: 600;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #9AD3CB;
+  border: 1px solid rgba(154, 211, 203, 0.1);
   letter-spacing: 0.5px;
 }
 
@@ -305,7 +314,7 @@
   gap: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #ffffff;
+  color: #9AD3CB;
   text-decoration: none;
   transition: all 0.3s ease;
   padding: 6px 0;
@@ -317,6 +326,7 @@
 .kitd-artists__marquee-link:hover {
   gap: 10px;
   opacity: 1;
+  color: #ffffff;
 }
 
 .kitd-artists__marquee-link svg {
@@ -412,7 +422,7 @@
 }
 
 /* --------------------------------------------
-   EMPTY STATE
+   EMPTY STATE - Updated with new colors
    -------------------------------------------- */
 .kitd-artists__empty {
   text-align: center;
@@ -429,8 +439,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #f8f5f6;
-  color: #8B1E3F;
+  background: rgba(26, 2, 54, 0.06);
+  color: #1A0236;
   margin-bottom: 16px;
 }
 
@@ -443,7 +453,7 @@
 
 .kitd-artists__empty-text {
   font-size: 15px;
-  color: #666;
+  color: #6A5A7D;
   margin: 0 0 24px;
   max-width: 400px;
   margin-left: auto;
@@ -451,7 +461,7 @@
 }
 
 /* --------------------------------------------
-   CTA
+   CTA - Updated with new colors
    -------------------------------------------- */
 .kitd-artists__cta-wrapper {
   text-align: center;
@@ -464,8 +474,8 @@
   gap: 12px;
   padding: 16px 44px;
   background: transparent;
-  color: #8B1E3F;
-  border: 2px solid #8B1E3F;
+  color: #1A0236;
+  border: 2px solid #1A0236;
   border-radius: 60px;
   font-size: 16px;
   font-weight: 600;
@@ -482,7 +492,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #8B1E3F, #C41E3A);
+  background: linear-gradient(135deg, #1A0236, #3A2457);
   transition: left 0.5s ease;
   z-index: -1;
 }
@@ -494,9 +504,9 @@
 .kitd-artists__cta:hover {
   color: #fff;
   transform: translateY(-4px);
-  box-shadow: 0 14px 50px rgba(139, 30, 63, 0.25);
+  box-shadow: 0 14px 50px rgba(26, 2, 54, 0.25);
   gap: 16px;
-  border-color: #8B1E3F;
+  border-color: #1A0236;
 }
 
 .kitd-artists__cta-icon {
@@ -691,7 +701,7 @@
 
 .kitd-artists__marquee-link:focus-visible,
 .kitd-artists__cta:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid #9AD3CB;
   outline-offset: 3px;
 }
 
@@ -702,5 +712,235 @@
 
   .kitd-artists__cta {
     border: 2px solid ButtonText;
+  }
+}
+
+/* --------------------------------------------
+   DARK MODE SUPPORT (Optional)
+   -------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .kitd-artists {
+    background: linear-gradient(180deg, #0D0D0D 0%, #1A1A1A 100%);
+  }
+
+  .kitd-artists__deco--1 {
+    background: #9AD3CB;
+    opacity: 0.05;
+  }
+
+  .kitd-artists__deco--2 {
+    background: #1A0236;
+    opacity: 0.05;
+  }
+
+  .kitd-artists__deco--3 {
+    background: #C8A24A;
+    opacity: 0.04;
+  }
+
+  .kitd-artists__title {
+    color: #FFFFFF;
+  }
+
+  .kitd-artists__title-accent {
+    color: #9AD3CB;
+  }
+
+  .kitd-artists__title-accent::after {
+    background: rgba(154, 211, 203, 0.2);
+  }
+
+  .kitd-artists__subtitle {
+    color: #A0A0A0;
+  }
+
+  .kitd-artists__eyebrow-text {
+    color: #9AD3CB;
+  }
+
+  .kitd-artists__eyebrow-line {
+    background: linear-gradient(90deg, transparent, #9AD3CB);
+  }
+
+  .kitd-artists__marquee-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .kitd-artists__marquee-card--hovered {
+    box-shadow: 0 20px 60px rgba(154, 211, 203, 0.15);
+  }
+
+  .kitd-artists__marquee-link {
+    color: #9AD3CB;
+  }
+
+  .kitd-artists__marquee-link:hover {
+    color: #CDEBE6;
+  }
+
+  .kitd-artists__cta {
+    color: #9AD3CB;
+    border-color: #9AD3CB;
+  }
+
+  .kitd-artists__cta::before {
+    background: linear-gradient(135deg, #9AD3CB, #6DBFB2);
+  }
+
+  .kitd-artists__cta:hover {
+    color: #1A0236;
+    box-shadow: 0 14px 50px rgba(154, 211, 203, 0.25);
+    border-color: #9AD3CB;
+  }
+
+  .kitd-artists__marquee-dance {
+    color: #9AD3CB;
+    background: rgba(154, 211, 203, 0.1);
+  }
+
+  .kitd-artists__marquee-badge {
+    background: rgba(154, 211, 203, 0.15);
+    border-color: rgba(154, 211, 203, 0.1);
+  }
+
+  .kitd-artists__empty {
+    background: #1A1A1A;
+    border-color: #2A2A2A;
+  }
+
+  .kitd-artists__empty-icon {
+    background: rgba(154, 211, 203, 0.1);
+    color: #9AD3CB;
+  }
+
+  .kitd-artists__empty-title {
+    color: #FFFFFF;
+  }
+
+  .kitd-artists__empty-text {
+    color: #A0A0A0;
+  }
+
+  .kitd-artists__loading-card {
+    background: #1A1A1A;
+  }
+
+  .kitd-artists__loading-image {
+    background: #2A2A2A;
+  }
+
+  .kitd-artists__loading-badge,
+  .kitd-artists__loading-name,
+  .kitd-artists__loading-role,
+  .kitd-artists__loading-location,
+  .kitd-artists__loading-link {
+    background: #2A2A2A;
+  }
+}
+
+/* --------------------------------------------
+   PRINT STYLES
+   -------------------------------------------- */
+@media print {
+  .kitd-artists {
+    padding: 40px 0;
+    background: white !important;
+  }
+
+  .kitd-artists__deco {
+    display: none !important;
+  }
+
+  .kitd-artists__marquee-wrapper {
+    overflow: visible !important;
+  }
+
+  .kitd-artists__marquee-track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .kitd-artists__marquee-card {
+    width: 200px !important;
+    min-height: auto !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  .kitd-artists__marquee-overlay {
+    background: rgba(255, 255, 255, 0.9) !important;
+    opacity: 1 !important;
+  }
+
+  .kitd-artists__marquee-bg {
+    display: none !important;
+  }
+
+  .kitd-artists__marquee-content {
+    min-height: auto !important;
+    padding: 16px !important;
+  }
+
+  .kitd-artists__marquee-name {
+    color: #1A0236 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-artists__marquee-role {
+    color: #555 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-artists__marquee-location {
+    color: #555 !important;
+    text-shadow: none !important;
+  }
+
+  .kitd-artists__marquee-link {
+    color: #1A0236 !important;
+    border-top-color: #ddd !important;
+  }
+
+  .kitd-artists__marquee-dance {
+    color: #1A0236 !important;
+    background: #f5f5f5 !important;
+    border-color: #ddd !important;
+  }
+
+  .kitd-artists__marquee-badge {
+    display: none !important;
+  }
+
+  .kitd-artists__cta {
+    color: #1A0236 !important;
+    border-color: #1A0236 !important;
+    background: transparent !important;
+  }
+
+  .kitd-artists__cta::before {
+    display: none !important;
+  }
+
+  .kitd-artists__title {
+    color: #1A0236 !important;
+  }
+
+  .kitd-artists__title-accent {
+    color: #1A0236 !important;
+  }
+
+  .kitd-artists__subtitle {
+    color: #555 !important;
+  }
+
+  .kitd-artists__eyebrow-text {
+    color: #1A0236 !important;
+  }
+
+  .kitd-artists__eyebrow-line {
+    background: #1A0236 !important;
   }
 }

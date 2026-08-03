@@ -3,7 +3,7 @@
 /* ============================================
    MISSION & VISION SECTION - BROCHURE ALIGNED
    Classical Indian Dance Germany e.V.
-   Primary: #8B1E3F | Accent: #C9A96E
+   Primary: #1A0236 | Secondary: #9AD3CB | Accent: #C8A24A
    ============================================ */
 
 /* ============================================
@@ -21,8 +21,8 @@
   position: absolute;
   inset: 0;
   background-image: 
-    radial-gradient(circle at 10% 90%, rgba(201, 169, 110, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 90% 10%, rgba(139, 30, 63, 0.02) 0%, transparent 50%);
+    radial-gradient(circle at 10% 90%, rgba(200, 162, 74, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 90% 10%, rgba(26, 2, 54, 0.02) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -60,7 +60,7 @@
 .mission-eyebrow-line {
   width: 32px;
   height: 1px;
-  background: #C9A96E;
+  background: #9AD3CB;
   opacity: 0.7;
 }
 
@@ -69,7 +69,7 @@
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
-  color: #8B1E3F;
+  color: #1A0236;
 }
 
 .mission-title {
@@ -90,13 +90,13 @@
 }
 
 .mission-title-accent {
-  color: #8B1E3F;
+  color: #1A0236;
 }
 
 .mission-subtitle {
   font-size: 16px;
   line-height: 1.7;
-  color: #555555;
+  color: #6A5A7D;
   margin: 0;
   font-weight: 300;
   opacity: 0;
@@ -154,19 +154,19 @@
 }
 
 .mission-card:hover {
-  border-color: rgba(139, 30, 63, 0.15);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  border-color: rgba(154, 211, 203, 0.3);
+  box-shadow: 0 20px 40px rgba(26, 2, 54, 0.06);
   transform: translateY(-4px);
 }
 
-/* Card Accent Line */
+/* Card Accent Line - Updated with new gradient */
 .mission-card-accent {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #8B1E3F, #C9A96E);
+  background: linear-gradient(90deg, #1A0236, #9AD3CB);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -187,18 +187,18 @@
 .mission-card-icon {
   width: 44px;
   height: 44px;
-  background: rgba(139, 30, 63, 0.06);
+  background: rgba(26, 2, 54, 0.06);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8B1E3F;
+  color: #1A0236;
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
 
 .mission-card:hover .mission-card-icon {
-  background: #8B1E3F;
+  background: #1A0236;
   color: #FFFFFF;
 }
 
@@ -207,14 +207,14 @@
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #C9A96E;
+  color: #9AD3CB;
 }
 
 /* Card Content */
 .mission-card-title {
   font-size: 18px;
   font-weight: 500;
-  color: #1A1A1A;
+  color: #1A0236;
   margin: 0 0 16px;
   letter-spacing: -0.2px;
   line-height: 1.4;
@@ -223,13 +223,13 @@
 .mission-card-text {
   font-size: 14px;
   line-height: 1.7;
-  color: #666666;
+  color: #6A5A7D;
   margin: 0 0 24px;
   font-weight: 300;
   flex: 1;
 }
 
-/* Card List */
+/* Card List - Updated with new colors */
 .mission-card-list {
   list-style: none;
   padding: 0;
@@ -243,8 +243,8 @@
 .mission-card-list li {
   font-size: 11px;
   font-weight: 500;
-  color: #8B1E3F;
-  background: rgba(139, 30, 63, 0.05);
+  color: #1A0236;
+  background: rgba(26, 2, 54, 0.05);
   padding: 6px 14px;
   border-radius: 3px;
   letter-spacing: 0.3px;
@@ -252,11 +252,12 @@
 }
 
 .mission-card:hover .mission-card-list li {
-  background: rgba(139, 30, 63, 0.08);
+  background: rgba(154, 211, 203, 0.15);
+  color: #1A0236;
 }
 
 /* ============================================
-   CTA
+   CTA - Updated with new colors
    ============================================ */
 .mission-cta-wrapper {
   text-align: center;
@@ -277,7 +278,7 @@
   padding: 14px 0;
   font-size: 14px;
   font-weight: 500;
-  color: #8B1E3F;
+  color: #1A0236;
   text-decoration: none;
   letter-spacing: 0.5px;
   border-bottom: 1px solid transparent;
@@ -285,8 +286,9 @@
 }
 
 .mission-cta:hover {
-  border-bottom-color: #8B1E3F;
+  border-bottom-color: #9AD3CB;
   gap: 18px;
+  color: #1A0236;
 }
 
 .mission-cta-icon {
@@ -411,6 +413,167 @@
 }
 
 .mission-cta:focus-visible {
-  outline: 2px solid #8B1E3F;
+  outline: 2px solid #9AD3CB;
   outline-offset: 4px;
+}
+
+/* ============================================
+   DARK MODE SUPPORT (Optional)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .mission-section {
+    background: #0D0D0D;
+  }
+
+  .mission-section::before {
+    background-image: 
+      radial-gradient(circle at 10% 90%, rgba(200, 162, 74, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 90% 10%, rgba(154, 211, 203, 0.03) 0%, transparent 50%);
+  }
+
+  .mission-title {
+    color: #FFFFFF;
+  }
+
+  .mission-title-accent {
+    color: #9AD3CB;
+  }
+
+  .mission-subtitle {
+    color: #A0A0A0;
+  }
+
+  .mission-card {
+    background: #1A1A1A;
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .mission-card:hover {
+    border-color: rgba(154, 211, 203, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .mission-card-title {
+    color: #FFFFFF;
+  }
+
+  .mission-card-text {
+    color: #A0A0A0;
+  }
+
+  .mission-card-icon {
+    background: rgba(154, 211, 203, 0.1);
+    color: #9AD3CB;
+  }
+
+  .mission-card:hover .mission-card-icon {
+    background: #9AD3CB;
+    color: #1A0236;
+  }
+
+  .mission-card-tag {
+    color: #9AD3CB;
+  }
+
+  .mission-card-list li {
+    color: #9AD3CB;
+    background: rgba(154, 211, 203, 0.08);
+  }
+
+  .mission-card:hover .mission-card-list li {
+    background: rgba(154, 211, 203, 0.15);
+    color: #9AD3CB;
+  }
+
+  .mission-cta {
+    color: #9AD3CB;
+  }
+
+  .mission-cta:hover {
+    border-bottom-color: #9AD3CB;
+    color: #9AD3CB;
+  }
+
+  .mission-eyebrow-text {
+    color: #9AD3CB;
+  }
+
+  .mission-eyebrow-line {
+    background: #9AD3CB;
+  }
+
+  .mission-card-accent {
+    background: linear-gradient(90deg, #9AD3CB, #6DBFB2);
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .mission-section {
+    padding: 40px 0;
+    background: white !important;
+  }
+
+  .mission-section::before {
+    display: none !important;
+  }
+
+  .mission-card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  .mission-card-accent {
+    display: none !important;
+  }
+
+  .mission-card-icon {
+    background: #f5f5f5 !important;
+    color: #1A0236 !important;
+  }
+
+  .mission-card-title {
+    color: #1A0236 !important;
+  }
+
+  .mission-card-text {
+    color: #555 !important;
+  }
+
+  .mission-card-list li {
+    color: #1A0236 !important;
+    background: #f5f5f5 !important;
+  }
+
+  .mission-title {
+    color: #1A0236 !important;
+  }
+
+  .mission-title-accent {
+    color: #1A0236 !important;
+  }
+
+  .mission-subtitle {
+    color: #555 !important;
+  }
+
+  .mission-eyebrow-text {
+    color: #1A0236 !important;
+  }
+
+  .mission-eyebrow-line {
+    background: #1A0236 !important;
+  }
+
+  .mission-cta {
+    color: #1A0236 !important;
+    border-bottom: 1px solid #1A0236 !important;
+  }
+
+  .mission-cta-icon {
+    color: #1A0236 !important;
+  }
 }

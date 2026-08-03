@@ -284,6 +284,12 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import "./ActivitiesSection.css";
 
+import a1 from "../../../assets/a1.png";
+import a2 from "../../../assets/a2.png";
+import a3 from "../../../assets/a3.png";
+import a4 from "../../../assets/a4.png";
+
+
 // Fallback activities based on brochure content
 const FALLBACK_ACTIVITIES = [
   {
@@ -292,7 +298,7 @@ const FALLBACK_ACTIVITIES = [
     description:
       "Showcasing the richness and diversity of Indian Classical Dance through public performances, festivals, and cultural celebrations across Germany.",
     slug: "performances",
-    image: "https://images.pexels.com/photos/35685774/pexels-photo-35685774.jpeg",
+    image: a1,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.3) 0%, rgba(50, 15, 25, 0.28) 100%)",
     featured: true,
   },
@@ -302,7 +308,7 @@ const FALLBACK_ACTIVITIES = [
     description:
       "Organising educational workshops, lecture demonstrations, and masterclasses led by experienced artists to encourage continuous learning and skill development.",
     slug: "workshops",
-    image: "https://images.pexels.com/photos/33638423/pexels-photo-33638423.jpeg",
+    image: a2,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.3) 0%, rgba(50, 15, 25, 0.28) 100%)",
     featured: false,
   },
@@ -312,7 +318,7 @@ const FALLBACK_ACTIVITIES = [
     description:
       "Building meaningful connections between artists, institutions, and cultural organisations to strengthen the Indian Classical Dance community throughout Germany.",
     slug: "collaboration",
-    image: "https://images.pexels.com/photos/30481579/pexels-photo-30481579.jpeg",
+    image: a3,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.3) 0%, rgba(50, 15, 25, 0.28) 100%)",
     featured: false,
   },
@@ -322,7 +328,7 @@ const FALLBACK_ACTIVITIES = [
     description:
       "Promoting intercultural dialogue by introducing Indian Classical Dance traditions to wider audiences through collaborative initiatives and public engagement.",
     slug: "cultural-exchange",
-    image: "https://images.pexels.com/photos/31521701/pexels-photo-31521701.jpeg",
+    image: a4,
     gradient: "linear-gradient(135deg, rgba(139, 30, 63, 0.3) 0%, rgba(50, 15, 25, 0.28) 100%)",
     featured: false,
   },
