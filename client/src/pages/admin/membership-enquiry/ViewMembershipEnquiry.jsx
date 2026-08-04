@@ -2640,20 +2640,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -2705,6 +2691,7 @@ const ViewMembershipEnquiry = () => {
       setLoading(true);
       const res = await getMembershipEnquiryById(id);
       
+      // Extract data from response
       const data =
         res.data?.data?.membershipEnquiry ||
         res.data?.data ||
@@ -2981,6 +2968,12 @@ const ViewMembershipEnquiry = () => {
           </button>
         </div>
 
+        {/* Email Status Indicator */}
+        <div className="vme-actions__email-status">
+          <Mail size={14} />
+          <span>All action buttons above send automated emails to the applicant.</span>
+        </div>
+
         {/* Remarks Input */}
         {showRemarksInput && (
           <div className="vme-remarks">
@@ -3159,50 +3152,17 @@ const ViewMembershipEnquiry = () => {
             Personal Information
           </h3>
           <div className="vme-section__grid">
-            <div className="vme-info">
-              <p className="vme-info__label"><User size={14} /> Gender</p>
-              <p className="vme-info__value">{enquiry.gender || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label"><Calendar size={14} /> Date of Birth</p>
-              <p className="vme-info__value">{enquiry.dateOfBirth ? new Date(enquiry.dateOfBirth).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label"><Briefcase size={14} /> Occupation</p>
-              <p className="vme-info__value">{enquiry.occupation || "-"}</p>
-            </div>
-            <div className="vme-info vme-info--highlight">
-              <p className="vme-info__label">Membership Type</p>
-              <p className="vme-info__value">{enquiry.membershipType || "-"}</p>
-            </div>
-            <div className="vme-info vme-info--highlight">
-              <p className="vme-info__label"><Music size={14} /> Dance Style</p>
-              <p className="vme-info__value">{enquiry.danceStyle || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label">Experience</p>
-              <p className="vme-info__value">{enquiry.experience || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label">Address</p>
-              <p className="vme-info__value">{enquiry.address || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label">City</p>
-              <p className="vme-info__value">{enquiry.city || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label">State</p>
-              <p className="vme-info__value">{enquiry.state || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label">Country</p>
-              <p className="vme-info__value">{enquiry.country || "-"}</p>
-            </div>
-            <div className="vme-info">
-              <p className="vme-info__label">Postal Code</p>
-              <p className="vme-info__value">{enquiry.postalCode || "-"}</p>
-            </div>
+            <InfoCard label="Gender" value={enquiry.gender} icon={<User size={14} />} />
+            <InfoCard label="Date of Birth" value={enquiry.dateOfBirth ? new Date(enquiry.dateOfBirth).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "-"} icon={<Calendar size={14} />} />
+            <InfoCard label="Occupation" value={enquiry.occupation} icon={<Briefcase size={14} />} />
+            <InfoCard label="Membership Type" value={enquiry.membershipType} highlight />
+            <InfoCard label="Dance Style" value={enquiry.danceStyle} highlight />
+            <InfoCard label="Experience" value={enquiry.experience} />
+            <InfoCard label="Address" value={enquiry.address} />
+            <InfoCard label="City" value={enquiry.city} />
+            <InfoCard label="State" value={enquiry.state} />
+            <InfoCard label="Country" value={enquiry.country} />
+            <InfoCard label="Postal Code" value={enquiry.postalCode} />
           </div>
         </div>
 
@@ -3212,36 +3172,19 @@ const ViewMembershipEnquiry = () => {
             <h3 className="vme-section__title">Social Links & Online Presence</h3>
             <div className="vme-section__social">
               {enquiry.socialLinks.instagram && (
-                <div className="vme-social vme-social--pink">
-                  <span className="vme-social__label">Instagram:</span>
-                  <span className="vme-social__value">{enquiry.socialLinks.instagram}</span>
-                </div>
+                <SocialBadge label="Instagram" value={enquiry.socialLinks.instagram} color="pink" />
               )}
               {enquiry.socialLinks.youtube && (
-                <div className="vme-social vme-social--red">
-                  <span className="vme-social__label">YouTube:</span>
-                  <span className="vme-social__value">{enquiry.socialLinks.youtube}</span>
-                </div>
+                <SocialBadge label="YouTube" value={enquiry.socialLinks.youtube} color="red" />
               )}
               {enquiry.socialLinks.facebook && (
-                <div className="vme-social vme-social--blue">
-                  <span className="vme-social__label">Facebook:</span>
-                  <span className="vme-social__value">{enquiry.socialLinks.facebook}</span>
-                </div>
+                <SocialBadge label="Facebook" value={enquiry.socialLinks.facebook} color="blue" />
               )}
               {enquiry.socialLinks.twitter && (
-                <div className="vme-social vme-social--sky">
-                  <span className="vme-social__label">Twitter/X:</span>
-                  <span className="vme-social__value">{enquiry.socialLinks.twitter}</span>
-                </div>
+                <SocialBadge label="Twitter/X" value={enquiry.socialLinks.twitter} color="sky" />
               )}
               {enquiry.socialLinks.website && (
-                <div className="vme-social vme-social--gray">
-                  <span className="vme-social__label">Website:</span>
-                  <a href={enquiry.socialLinks.website} target="_blank" rel="noopener noreferrer" className="vme-social__link">
-                    {enquiry.socialLinks.website} <ExternalLink size={12} />
-                  </a>
-                </div>
+                <SocialBadge label="Website" value={enquiry.socialLinks.website} color="gray" isLink />
               )}
             </div>
           </div>
@@ -3277,6 +3220,43 @@ const ViewMembershipEnquiry = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// ============ SUB-COMPONENTS ============
+
+const InfoCard = ({ label, value, icon, highlight }) => (
+  <div className={`vme-info ${highlight ? "vme-info--highlight" : ""}`}>
+    <p className="vme-info__label">
+      {icon}
+      {label}
+    </p>
+    <p className="vme-info__value">
+      {value || "-"}
+    </p>
+  </div>
+);
+
+const SocialBadge = ({ label, value, color, isLink }) => {
+  const colorMap = {
+    pink: "vme-social--pink",
+    red: "vme-social--red",
+    blue: "vme-social--blue",
+    sky: "vme-social--sky",
+    gray: "vme-social--gray",
+  };
+
+  return (
+    <div className={`vme-social ${colorMap[color] || "vme-social--gray"}`}>
+      <span className="vme-social__label">{label}:</span>
+      {isLink ? (
+        <a href={value} target="_blank" rel="noopener noreferrer" className="vme-social__link">
+          {value} <ExternalLink size={12} />
+        </a>
+      ) : (
+        <span className="vme-social__value">{value}</span>
+      )}
     </div>
   );
 };

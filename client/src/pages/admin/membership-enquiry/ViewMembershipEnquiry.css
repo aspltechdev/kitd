@@ -2,9 +2,16 @@
 
 /* ============================================
    VIEW MEMBERSHIP ENQUIRY - UNIQUE CLASSNAMES
+   Prefix: vme-
    ============================================ */
 
-/* ============ LOADING ============ */
+/* ============ SPINNER ANIMATION ============ */
+@keyframes vme-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============ LOADING STATE ============ */
 .vme-loading {
   padding: 1.5rem;
   display: flex;
@@ -23,16 +30,12 @@
   color: #2563eb;
 }
 
-@keyframes vme-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .vme-loading__text {
   color: #6b7280;
+  font-size: 1rem;
 }
 
-/* ============ NOT FOUND ============ */
+/* ============ NOT FOUND STATE ============ */
 .vme-notfound {
   padding: 1.5rem;
 }
@@ -62,6 +65,7 @@
 .vme-notfound__desc {
   color: #92400e;
   margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
 .vme-notfound__btn {
@@ -115,6 +119,7 @@
   border: none;
   cursor: pointer;
   transition: color 0.2s;
+  font-size: 0.95rem;
 }
 
 .vme-header__back:hover {
@@ -233,6 +238,22 @@
   letter-spacing: 0.05em;
   color: #6b7280;
   margin-bottom: 1rem;
+}
+
+.vme-actions__email-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #f0fdf4;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  color: #166534;
+}
+
+.vme-actions__email-status svg {
+  color: #22c55e;
 }
 
 .vme-actions__grid {
@@ -993,5 +1014,72 @@
   .vme-profile__status {
     font-size: 0.625rem;
     padding: 0.125rem 0.5rem;
+  }
+}
+
+/* ============ PRINT STYLES ============ */
+@media print {
+  .vme-actions {
+    display: none !important;
+  }
+  
+  .vme-workflow {
+    display: none !important;
+  }
+  
+  .vme-manual {
+    display: none !important;
+  }
+  
+  .vme-header__delete {
+    display: none !important;
+  }
+  
+  .vme-header__back {
+    display: none !important;
+  }
+  
+  .vme-details {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+  }
+  
+  .vme-profile__avatar {
+    border: 1px solid #ddd !important;
+  }
+  
+  .vme-sepa {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+  }
+  
+  .vme-info {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+  }
+  
+  .vme-social {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+  }
+  
+  .vme-section__bio {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+  }
+  
+  .vme-section__message {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+  }
+  
+  .vme-section__remarks {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+  }
+  
+  .vme-profile__badge {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
   }
 }
