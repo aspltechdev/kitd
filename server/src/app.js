@@ -162,7 +162,8 @@ app.use(
   "/api/volunteer-registrations",
   volunteerRegistrationRoutes
 );
-
+// In app.js
+app.use("/documents", express.static(path.join(process.cwd(), "src/uploads/documents")));
 /* -------------------------- Error Handling -------------------------- */
 
 app.use(notFound);

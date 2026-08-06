@@ -1029,10 +1029,19 @@ const MembershipEnquiries = () => {
     setShowDeleteModal(true);
   };
 
-  // Filter by status
+
   const filteredEnquiries = filterStatus === "all" 
     ? enquiries 
     : enquiries.filter(e => e.status === filterStatus);
+
+// const filteredEnquiries = enquiries.filter(e => {
+//   // First filter by status dropdown
+//   if (filterStatus !== "all") {
+//     return e.status === filterStatus;
+//   }
+//   // When "All Status" is selected, hide APPROVED and REJECTED
+//   return e.status !== "APPROVED" && e.status !== "REJECTED";
+// });
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;

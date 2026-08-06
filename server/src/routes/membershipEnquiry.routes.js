@@ -140,4 +140,11 @@ router.patch(
 // Delete enquiry
 router.delete("/:id", membershipEnquiryController.remove);
 
+
+// routes/membershipEnquiry.routes.js
+
+// Profile Visibility
+router.patch("/:id/send-profile-visibility", membershipEnquiryController.sendProfileVisibility);
+router.get("/profile-token/:token", membershipEnquiryController.validateProfileToken);
+router.post("/profile-visibility/:token", upload("profile-photos").single("photo"), membershipEnquiryController.submitProfileVisibility);
 export default router;

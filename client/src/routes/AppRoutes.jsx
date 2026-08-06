@@ -69,6 +69,7 @@ import EventDetail from "../pages/Events/EventDetail";
 import ArtistDetail from "../pages/Artists/ArtistDetail";
 import NewsDetail from "../pages/News/NewsDetails";
 import TestimonialsPage from "../pages/Testimonials/TestimonialPage";
+import ProfileVisibility from "../pages/ProfileVisibility/ProfileVisibility";
 // import MemberRegistration from "../pages/member-registration/MemberRegistration";
 
 const AppRoutes = () => {
@@ -527,6 +528,8 @@ const AppRoutes = () => {
 
 
             <Route path="/sepa-consent/:token" element={<SEPAConsent />} />
+
+            <Route path="/profile-visibility/:token" element={<ProfileVisibility />} />
 
 
 

@@ -453,3 +453,75 @@ export const remove = async (id) => {
     },
   });
 };
+
+
+// membershipEnquiry.service.js
+
+// export const sendProfileVisibility = async (id, token, expiry) => {
+//   return prisma.membershipEnquiry.update({
+//     where: { id: Number(id) },
+//     data: {
+//       status: "PROFILE_VISIBILITY_SENT",
+//       profileToken: token,
+//       profileTokenExpiry: expiry,
+//       profileVisibilitySent: true,
+//       profileVisibilitySentAt: new Date(),
+//     },
+//   });
+// };
+
+// ✅ Send Profile Visibility Email
+export const sendProfileVisibility = async (id, token, expiry) => {
+  return prisma.membershipEnquiry.update({
+    where: { id: Number(id) },
+    data: {
+      status: "PROFILE_VISIBILITY_SENT",
+      profileToken: token,
+      profileTokenExpiry: expiry,
+      profileVisibilitySent: true,
+      profileVisibilitySentAt: new Date(),
+    },
+  });
+};
+
+// ✅ Profile Completed (member submits visibility choice)
+export const profileCompleted = async (id, data) => {
+  return prisma.membershipEnquiry.update({
+    where: { id: Number(id) },
+    data: {
+      status: "PROFILE_COMPLETED",
+      profileCompleted: true,
+      profileCompletedAt: new Date(),
+      isPublic: data.isPublic === true || data.isPublic === "true",
+    },
+  });
+};
+
+// ✅ Find by profile token
+export const getByProfileToken = async (token) => {
+  return prisma.membershipEnquiry.findFirst({
+    where: { profileToken: token },
+  });
+};
+
+
+// export const profileCompleted = async (id, data) => {
+//   return prisma.membershipEnquiry.update({
+//     where: { id: Number(id) },
+//     data: {
+//       status: "PROFILE_COMPLETED",
+//       profileCompleted: true,
+//       profileCompletedAt: new Date(),
+//       photo: data.photo || undefined,
+//       biography: data.biography || undefined,
+//       stageName: data.stageName || undefined,
+//       isPublic: data.isPublic === true || data.isPublic === "true",
+//     },
+//   });
+// };
+
+// export const getByProfileToken = async (token) => {
+//   return prisma.membershipEnquiry.findFirst({
+//     where: { profileToken: token },
+//   });
+// };

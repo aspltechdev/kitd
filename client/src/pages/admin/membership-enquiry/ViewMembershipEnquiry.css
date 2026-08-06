@@ -1083,3 +1083,50 @@
     background: #f5f5f5 !important;
   }
 }
+
+/* ViewMembershipEnquiry.css */
+
+/* Purple action button */
+.vme-actions__btn--purple {
+  background: #8b5cf6;
+  color: #fff;
+}
+.vme-actions__btn--purple:hover:not(:disabled) {
+  background: #7c3aed;
+}
+.vme-actions__btn--purple.vme-actions__btn--disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  border: 1px solid #e5e7eb;
+}
+
+/* Profile status badges */
+.vme-status--profile-sent {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+.vme-status--profile-done {
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 1px solid #c4b5fd;
+}
+
+/* Profile badge */
+.vme-profile__badge--purple {
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+}
+.vme-profile__badge--purple .vme-profile__badge-text {
+  color: #7c3aed;
+}
+.vme-profile__badge--purple .vme-profile__badge-code {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+/* Profile section */
+.vme-sepa--profile {
+  background: linear-gradient(135deg, #f5f3ff, #faf5ff);
+  border-color: #ddd6fe;
+}
