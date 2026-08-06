@@ -2271,11 +2271,11 @@ const ContactPage = () => {
       title: "Email",
       details: ["info@kitd.de"],
     },
-    {
-      icon: <Phone size={20} strokeWidth={1.5} />,
-      title: "Phone",
-      details: ["+49 XXX XXX XXXX"],
-    },
+    // {
+    //   icon: <Phone size={20} strokeWidth={1.5} />,
+    //   title: "Phone",
+    //   details: ["+49 XXX XXX XXXX"],
+    // },
     {
       icon: <Clock size={20} strokeWidth={1.5} />,
       title: "Office Hours",

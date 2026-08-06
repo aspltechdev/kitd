@@ -879,3 +879,10 @@ position: absolute;
     color: #1A0236 !important;
   }
 }
+.cp-contact__info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* was repeat(4, 1fr) */
+  gap: 24px;
+  max-width: 900px;   /* new — caps the row so it doesn't stretch full width */
+  margin: 0 auto;      /* new — centers it within .cp-contact__container */
+}

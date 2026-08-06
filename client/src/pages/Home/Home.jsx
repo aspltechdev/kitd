@@ -18,6 +18,7 @@ import NewsSection from "../public/News/News";
 import NewsletterSection from "../public/NewsletterSection/NewsletterSection";
 import ContactCTA from "../public/Contact/Contact";
 import WhyJoinSection from "../public/WhyJoinSection/WhyJoinSection";
+import SocialWall from '../../components/Socialwall';
 
 const Home = () => {
   return (
@@ -39,6 +40,7 @@ const Home = () => {
       <MembershipCTA />
 
       <GallerySection />
+        <SocialWall />
 
       <NewsSection />
 

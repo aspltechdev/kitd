@@ -1059,3 +1059,7 @@
     color: var(--text-secondary);
   }
 }
+.desktop-cta {
+    position: relative;
+    right: 50px;
+}

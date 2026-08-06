@@ -787,12 +787,12 @@ const Footer = () => {
                 </span>
                 <span className="kitd-footer__contact-text">Germany</span>
               </li>
-              <li className="kitd-footer__contact-item">
+              {/* <li className="kitd-footer__contact-item">
                 <span className="kitd-footer__contact-icon">
                   <FaPhone size={13} />
                 </span>
                 <a href="tel:+49XXXXXXXXXX" className="kitd-footer__contact-link">+49 XXX XXX XXXX</a>
-              </li>
+              </li> */}
               <li className="kitd-footer__contact-item">
                 <span className="kitd-footer__contact-icon">
                   <FaEnvelope size={13} />
