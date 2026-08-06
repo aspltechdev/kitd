@@ -248,12 +248,40 @@ model MembershipEnquiry {
   accountHolder        String?
   bankName             String?
 
+  // ✅ Profile Visibility Fields
+  profileToken         String?   @unique
+  profileTokenExpiry   DateTime?
+  profileVisibilitySent Boolean  @default(false)
+  profileVisibilitySentAt DateTime?
+  profileCompleted     Boolean   @default(false)
+  profileCompletedAt   DateTime?
+  isPublic             Boolean   @default(false)
+
   memberId       String?   @unique
   remarks        String?
   status         String    @default("NEW")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 model Membership {
   id              Int      @id @default(autoincrement())

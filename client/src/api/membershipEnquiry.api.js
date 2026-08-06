@@ -136,3 +136,10 @@ export const approveMembershipMember = (id) =>
 // Request Changes (Any stage - Sends "Changes Required" email)
 export const requestMembershipChanges = (id, data) =>
   api.patch(`/membership-enquiries/${id}/request-changes`, data);
+
+
+
+// api/membershipEnquiry.api.js
+
+export const sendProfileVisibilityForm = (id) =>
+  api.patch(`/membership-enquiries/${id}/send-profile-visibility`);

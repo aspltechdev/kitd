@@ -1444,6 +1444,14 @@ import memberApprovedEmail from "../templates/memberApprovedEmail.js";
 import * as membershipService from "../services/membership.service.js"; 
 import * as artistService from "../services/artist.service.js";
 import * as teamService from "../services/team.service.js";
+
+import profileVisibilityEmail from "../templates/profileVisibilityEmail.js";
+
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // ============================================
 // GET ALL
 // ============================================
@@ -1719,9 +1727,8 @@ export const startReview = async (req, res) => {
   }
 };
 
-// ============================================
-// STEP 2: SEND SEPA CONSENT → SEPA_CONSENT_SENT
-// ============================================
+
+
 // export const sendSepaConsent = async (req, res) => {
 //   try {
 //     const token = uuidv4();
@@ -1734,6 +1741,7 @@ export const startReview = async (req, res) => {
 //       expiry
 //     );
 
+//     // ✅ Use CLIENT_URL from environment variables
 //     const sepaLink = `${process.env.CLIENT_URL}/sepa-consent/${token}`;
 
 //     await sendEmail({
@@ -1755,7 +1763,11 @@ export const startReview = async (req, res) => {
 //   }
 // };
 
-// ✅ STEP 2: SEND SEPA CONSENT → SEPA_CONSENT_SENT
+// ============================================
+// STEP 3: SUBMIT SEPA CONSENT (Public - Member)
+// ============================================
+
+
 export const sendSepaConsent = async (req, res) => {
   try {
     const token = uuidv4();
@@ -1768,18 +1780,30 @@ export const sendSepaConsent = async (req, res) => {
       expiry
     );
 
-    // ✅ Use CLIENT_URL from environment variables
     const sepaLink = `${process.env.CLIENT_URL}/sepa-consent/${token}`;
 
+    // ✅ Path to SEPA mandate PDF
+    // const sepaMandatePath = path.join(__dirname, "..", "uploads", "documents", "sepa-mandate-form.pdf");
+    // Use process.cwd() for reliable path
+const sepaMandatePath = path.join(process.cwd(), "src", "uploads", "documents", "sepa-mandate-form.pdf");
+
+    // Send email with SEPA mandate attachment
     await sendEmail({
       to: enquiry.email,
       subject: "Complete Your SEPA Direct Debit Mandate - KITD Germany",
       html: sepaConsentEmail(enquiry.fullName, sepaLink),
+      attachments: [
+        {
+          filename: "SEPA-Mandate-Form-KITD.pdf",
+          path: sepaMandatePath,
+          contentType: "application/pdf",
+        },
+      ],
     });
 
     res.status(200).json({
       success: true,
-      message: "SEPA consent form sent to member.",
+      message: "SEPA consent form and mandate sent to member.",
       data: enquiry,
     });
   } catch (error) {
@@ -1790,9 +1814,6 @@ export const sendSepaConsent = async (req, res) => {
   }
 };
 
-// ============================================
-// STEP 3: SUBMIT SEPA CONSENT (Public - Member)
-// ============================================
 export const submitSepaConsent = async (req, res) => {
   try {
     const { token } = req.params;
@@ -1868,396 +1889,7 @@ export const submitSepaConsent = async (req, res) => {
   }
 };
 
-// ============================================
-// STEP 4: APPROVE MEMBER → APPROVED
-// ============================================
-// export const approveMember = async (req, res) => {
-//   try {
-//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
 
-//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
-
-//     const memberExpiry = new Date();
-//     memberExpiry.setFullYear(memberExpiry.getFullYear() + 1);
-
-//     await sendEmail({
-//       to: member.email,
-//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
-//       html: memberApprovedEmail(
-//         member.fullName,
-//         memberId,
-//         memberExpiry.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-//       ),
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Member approved successfully! 🎉",
-//       data: member,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
-// membershipEnquiry.controller.js
-
-// import * as membershipService from "../services/membership.service.js";
-
-// ✅ Step 4: Final Approve Member → Creates Membership record
-// export const approveMember = async (req, res) => {
-//   try {
-//     // Generate Member ID
-//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
-
-//     // Approve the enquiry
-//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
-
-//     // Calculate membership dates
-//     const joinedDate = new Date();
-//     const expiryDate = new Date();
-//     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-
-//     // Create Membership record
-//     const membershipData = {
-//       memberId: memberId,
-//       fullName: member.fullName,
-//       email: member.email,
-//       mobile: member.mobile,
-//       gender: member.gender || "",
-//       membershipType: member.membershipType || "active",
-//       city: member.city || null,
-//       state: member.state || null,
-//       country: member.country || "Germany",
-//       joinedDate: joinedDate,
-//       expiryDate: expiryDate,
-//       isActive: true,
-//     };
-
-//     const membership = await membershipService.create(membershipData);
-//     console.log("✅ Membership created:", membership.memberId);
-
-//     // Send approval email
-//     await sendEmail({
-//       to: member.email,
-//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
-//       html: memberApprovedEmail(
-//         member.fullName,
-//         memberId,
-//         expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-//       ),
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Member approved and added to Members list!",
-//       data: {
-//         enquiry: member,
-//         membership: membership,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Approval Error:", error);
-    
-//     // Handle duplicate member ID or email
-//     if (error.code === 'P2002') {
-//       return res.status(400).json({
-//         success: false,
-//         message: "A member with this email or ID already exists.",
-//       });
-//     }
-
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
-
-// export const approveMember = async (req, res) => {
-//   try {
-//     // Generate Member ID
-//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
-
-//     // Approve the enquiry
-//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
-
-//     // Calculate membership dates
-//     const joinedDate = new Date();
-//     const expiryDate = new Date();
-//     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-
-//     // ✅ Create Membership record automatically
-//     const membershipData = {
-//       memberId: memberId,
-//       fullName: member.fullName,
-//       email: member.email,
-//       mobile: member.mobile,
-//       gender: member.gender || "",
-//       membershipType: member.membershipType || "active",
-//       city: member.city || null,
-//       state: member.state || null,
-//       country: member.country || "Germany",
-//       joinedDate: joinedDate,
-//       expiryDate: expiryDate,
-//       isActive: true,
-//     };
-
-//     const membership = await membershipService.create(membershipData);
-//     console.log("✅ Membership created:", membership.memberId);
-
-//     // Send approval email
-//     await sendEmail({
-//       to: member.email,
-//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
-//       html: memberApprovedEmail(
-//         member.fullName,
-//         memberId,
-//         expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-//       ),
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Member approved and added to Members list!",
-//       data: {
-//         enquiry: member,
-//         membership: membership,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Approval Error:", error);
-    
-//     // Handle duplicate member ID or email
-//     if (error.code === 'P2002') {
-//       return res.status(400).json({
-//         success: false,
-//         message: "A member with this email or Member ID already exists.",
-//       });
-//     }
-
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
-
-// export const approveMember = async (req, res) => {
-//   try {
-//     // Generate Member ID
-//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
-
-//     // Approve the enquiry
-//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
-
-//     // Calculate membership dates
-//     const joinedDate = new Date();
-//     const expiryDate = new Date();
-//     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-
-//     // Determine annual fee based on membership type
-//     const feeMap = {
-//       active: 50,
-//       supporting: 75,
-//       youth: 25,
-//     };
-//     const annualFee = feeMap[member.membershipType] || 50;
-
-//     // Payment day (day of month when annual fee is collected)
-//     const paymentDay = new Date().getDate();
-
-//     // ✅ Create Membership record with ALL fields from enquiry
-//     const membershipData = {
-//       // Personal Info
-//       memberId: memberId,
-//       fullName: member.fullName,
-//       stageName: member.stageName || null,
-//       email: member.email,
-//       mobile: member.mobile,
-//       gender: member.gender || null,
-//       dateOfBirth: member.dateOfBirth || null,
-//       occupation: member.occupation || null,
-//       biography: member.biography || null,
-      
-//       // Dance Info
-//       membershipType: member.membershipType || null,
-//       danceStyle: member.danceStyle || null,
-//       experience: member.experience || null,
-      
-//       // Address
-//       address: member.address || null,
-//       city: member.city || null,
-//       state: member.state || null,
-//       country: member.country || "Germany",
-//       postalCode: member.postalCode || null,
-      
-//       // Social & Additional
-//       socialLinks: member.socialLinks || null,
-//       message: member.message || null,
-//       photo: member.photo || null,
-      
-//       // SEPA Payment Details
-//       iban: member.iban || null,
-//       accountHolder: member.accountHolder || null,
-//       bankName: member.bankName || null,
-//       sepaMandateFile: member.sepaConsentFile || null,
-//       sepaMandateReference: `SEPA-${memberId}`,
-//       paymentStatus: "ACTIVE",
-      
-//       // Membership Details
-//       joinedDate: joinedDate,
-//       expiryDate: expiryDate,
-//       annualFee: annualFee,
-//       paymentDay: paymentDay,
-      
-//       isActive: true,
-//     };
-
-//     const membership = await membershipService.create(membershipData);
-//     console.log("✅ Membership created with all fields:", membership.memberId);
-
-//     // Send approval email
-//     await sendEmail({
-//       to: member.email,
-//       subject: "🎉 Congratulations! Your KITD Membership is Approved!",
-//       html: memberApprovedEmail(
-//         member.fullName,
-//         memberId,
-//         expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-//       ),
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Member approved and added to Members list with all details!",
-//       data: {
-//         enquiry: member,
-//         membership: membership,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Approval Error:", error);
-    
-//     // Handle duplicate member ID or email
-//     if (error.code === 'P2002') {
-//       return res.status(400).json({
-//         success: false,
-//         message: "A member with this email or Member ID already exists.",
-//       });
-//     }
-
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// }; // working codee with tested
-
-
-// export const approveMember = async (req, res) => {
-//   try {
-//     const memberId = `KITD-${new Date().getFullYear()}-${String(req.params.id).padStart(4, '0')}`;
-//     const member = await membershipEnquiryService.approve(req.params.id, memberId);
-
-//     const joinedDate = new Date();
-//     const expiryDate = new Date();
-//     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-
-//     const feeMap = { active: 50, supporting: 75, youth: 25 };
-//     const annualFee = feeMap[member.membershipType] || 50;
-
-//     // ✅ 1. Create Membership record
-//     const membershipData = {
-//       memberId, fullName: member.fullName, stageName: member.stageName, email: member.email,
-//       mobile: member.mobile, gender: member.gender, dateOfBirth: member.dateOfBirth,
-//       occupation: member.occupation, biography: member.biography, membershipType: member.membershipType,
-//       danceStyle: member.danceStyle, experience: member.experience, address: member.address,
-//       city: member.city, state: member.state, country: member.country, postalCode: member.postalCode,
-//       socialLinks: member.socialLinks, message: member.message, photo: member.photo,
-//       iban: member.iban, accountHolder: member.accountHolder, bankName: member.bankName,
-//       sepaMandateFile: member.sepaConsentFile, sepaMandateReference: `SEPA-${memberId}`,
-//       paymentStatus: "ACTIVE", joinedDate, expiryDate, annualFee, paymentDay: new Date().getDate(), isActive: true,
-//     };
-
-//     const membership = await membershipService.create(membershipData);
-//     console.log("✅ Membership created:", membership.memberId);
-
-//     // ✅ 2. Create Artist record (if they have a dance style)
-//     if (member.danceStyle) {
-//       try {
-//         const artistData = {
-//           name: member.fullName,
-//           biography: member.biography || `${member.fullName} is a ${member.danceStyle} dancer from ${member.city || 'Germany'}.`,
-//           danceForm: member.danceStyle,
-//           city: member.city || "",
-//           image: member.photo || "",
-//           email: member.email,
-//           mobile: member.mobile,
-//           stageName: member.stageName || null,
-//           socialLinks: member.socialLinks || null,
-//           country: member.country || "Germany",
-//           state: member.state || null,
-//           experience: member.experience || null,
-//         };
-
-//         await artistService.create(artistData);
-//         console.log("✅ Artist created:", member.fullName);
-//       } catch (artistError) {
-//         console.error("⚠️ Artist creation failed:", artistError.message);
-//         // Continue even if artist creation fails
-//       }
-//       // In approveMember controller - After creating Artist
-
-// // ✅ Add to Team as MEMBER level
-// try {
-//   await teamService.create({
-//     name: member.fullName,
-//     designation: member.membershipType || "Member",
-//     biography: member.biography || null,
-//     image: member.photo || "",
-//     email: member.email,
-//     level: "MEMBER",           // Default level
-//     sortOrder: 99,             // End of list
-//     isPublic: false,           // Hidden until admin toggles
-//     stageName: member.stageName || null,
-//     mobile: member.mobile || null,
-//     danceForm: member.danceStyle || null,
-//     city: member.city || null,
-//     country: member.country || null,
-//     socialLinks: member.socialLinks || null,
-//   });
-//   console.log("✅ Team member created:", member.fullName);
-// } catch (teamError) {
-//   console.error("⚠️ Team creation failed:", teamError.message);
-// }
-//     }
-
-//     // ✅ 3. Send approval email
-//     await sendEmail({
-//       to: member.email,
-//       subject: "🎉 Membership Approved! - KITD Germany",
-//       html: memberApprovedEmail(
-//         member.fullName, memberId,
-//         expiryDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-//       ),
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Member approved! Membership and Artist records created.",
-//       data: { enquiry: member, membership },
-//     });
-//   } catch (error) {
-//     if (error.code === 'P2002') return res.status(400).json({ success: false, message: "Member already exists." });
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// };  // workingf fine with artist creations
 
 export const approveMember = async (req, res) => {
   try {
@@ -2303,14 +1935,15 @@ export const approveMember = async (req, res) => {
           country: member.country || "Germany",
           state: member.state || null,
           experience: member.experience || null,
+          isPublic: member.isPublic || false,  // ✅ Copy visibility from enquiry
         });
-        console.log("✅ Artist created:", member.fullName);
+        console.log("✅ Artist created:", member.fullName, "| Public:", member.isPublic);
       } catch (artistError) {
         console.error("⚠️ Artist creation failed:", artistError.message);
       }
     }
 
-    // ✅ 3. Create Team member (ALWAYS - outside the if block)
+    // ✅ 3. Create Team member (ALWAYS)
     try {
       await teamService.create({
         name: member.fullName,
@@ -2318,9 +1951,9 @@ export const approveMember = async (req, res) => {
         biography: member.biography || null,
         image: member.photo || "",
         email: member.email,
-        level: "MEMBER",           // Default level
-        sortOrder: 99,             // End of list
-        isPublic: false,           // Hidden until admin toggles
+        level: "MEMBER",
+        sortOrder: 99,
+        isPublic: member.isPublic || false,  // ✅ Copy visibility from enquiry
         stageName: member.stageName || null,
         mobile: member.mobile || null,
         danceForm: member.danceStyle || null,
@@ -2328,7 +1961,7 @@ export const approveMember = async (req, res) => {
         country: member.country || null,
         socialLinks: member.socialLinks || null,
       });
-      console.log("✅ Team member created:", member.fullName);
+      console.log("✅ Team member created:", member.fullName, "| Public:", member.isPublic);
     } catch (teamError) {
       console.error("⚠️ Team creation failed:", teamError.message);
     }
@@ -2355,7 +1988,6 @@ export const approveMember = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 // ============================================
 // REQUEST CHANGES (Any Stage)
@@ -2439,5 +2071,75 @@ export const validateSepaToken = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+
+export const sendProfileVisibility = async (req, res) => {
+  try {
+    const token = uuidv4();
+    const expiry = new Date();
+    expiry.setDate(expiry.getDate() + 14);
+
+    const enquiry = await membershipEnquiryService.sendProfileVisibility(
+      req.params.id, token, expiry
+    );
+
+    const profileLink = `${process.env.CLIENT_URL}/profile-visibility/${token}`;
+
+    await sendEmail({
+      to: enquiry.email,
+      subject: "Complete Your Public Profile - KITD Germany",
+      html: profileVisibilityEmail(enquiry.fullName, profileLink),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Profile visibility email sent.",
+      data: enquiry,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+export const submitProfileVisibility = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const enquiry = await membershipEnquiryService.getByProfileToken(token);
+
+    if (!enquiry) return res.status(404).json({ success: false, message: "Invalid link." });
+    if (enquiry.profileTokenExpiry && new Date(enquiry.profileTokenExpiry) < new Date()) {
+      return res.status(400).json({ success: false, message: "Link expired." });
+    }
+
+    // Only update visibility
+    const isPublic = req.body.isPublic === "true" || req.body.isPublic === true;
+
+    const updated = await membershipEnquiryService.profileCompleted(enquiry.id, {
+      isPublic: isPublic,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Profile is now ${isPublic ? "Public" : "Private"}`,
+      data: updated,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+// ✅ VALIDATE PROFILE TOKEN
+export const validateProfileToken = async (req, res) => {
+  try {
+    const enquiry = await membershipEnquiryService.getByProfileToken(req.params.token);
+    if (!enquiry) return res.status(404).json({ success: false, message: "Invalid link." });
+    if (enquiry.profileTokenExpiry && new Date(enquiry.profileTokenExpiry) < new Date()) {
+      return res.status(400).json({ success: false, message: "Link expired." });
+    }
+    res.status(200).json({ success: true, data: enquiry });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
