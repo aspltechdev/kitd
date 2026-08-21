@@ -409,13 +409,13 @@ const ContactCTA = () => {
   }, []);
 
   const contactCards = [
-    {
-      id: "phone",
-      icon: <Phone size={18} strokeWidth={1.5} />,
-      label: "Phone",
-      value: "+49 XXX XXX XXXX",
-      href: "tel:+49XXXXXXXXXX",
-    },
+    // {
+    //   id: "phone",
+    //   icon: <Phone size={18} strokeWidth={1.5} />,
+    //   label: "Phone",
+    //   value: "+49 XXX XXX XXXX",
+    //   href: "tel:+49XXXXXXXXXX",
+    // },
     {
       id: "email",
       icon: <Mail size={18} strokeWidth={1.5} />,

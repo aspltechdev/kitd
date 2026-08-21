@@ -375,12 +375,23 @@ const Artists = () => {
     setImageErrors((prev) => new Set([...prev, artistId]));
   };
 
+  // const getImageUrl = (artist) => {
+  //   if (!artist || !artist.photo) return null;
+  //   if (imageErrors.has(artist.id)) return null;
+  //   if (artist.photo.startsWith('http')) return artist.photo;
+  //   return `${IMAGE_BASE_URL}/uploads/artists/${artist.photo}`;
+  // };
+
   const getImageUrl = (artist) => {
-    if (!artist || !artist.photo) return null;
-    if (imageErrors.has(artist.id)) return null;
-    if (artist.photo.startsWith('http')) return artist.photo;
-    return `${IMAGE_BASE_URL}/uploads/artists/${artist.photo}`;
-  };
+  if (!artist || !artist.image) return null;
+  if (imageErrors.has(artist.id)) return null;
+
+  if (artist.image.startsWith("http")) {
+    return artist.image;
+  }
+
+  return `${IMAGE_BASE_URL}/uploads/artists/${artist.image}`;
+};
 
   const handleDeleteClick = (artist) => {
     setSelectedArtist(artist);
@@ -459,10 +470,10 @@ const Artists = () => {
                 />
               </button>
 
-              <Link to="/admin/artists/create" className="artists-page__add-btn">
+              {/* <Link to="/admin/artists/create" className="artists-page__add-btn">
                 <Plus size={18} strokeWidth={2} />
                 <span>Add Artist</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
 

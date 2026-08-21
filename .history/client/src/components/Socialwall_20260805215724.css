@@ -1,0 +1,294 @@
+/* ============================================
+   SOCIAL WALL - MEMBERSHIP DESIGN MATCH
+   Primary: Dark Teal/Slate | Secondary: Light Teal
+   ============================================ */
+
+:root {
+  --sw-bg-start: #3d4b56;
+  --sw-bg-mid: #4f5a63;
+  --sw-bg-end: #2b2b40;
+  --sw-teal: #9AD3CB;
+  --sw-teal-light: #CDEBE6;
+  --sw-purple: #1A0236;
+  --sw-purple-light: #2d1b4e;
+  --sw-white: #FFFFFF;
+  --sw-glass-bg: rgba(255, 255, 255, 0.05);
+  --sw-glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.sw-social-wall {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--sw-bg-start) 0%, var(--sw-bg-mid) 40%, var(--sw-bg-end) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0 40px 0;
+  font-family: 'Playfair Display', 'Times New Roman', serif; /* For headlines */
+}
+
+.sw-container {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--sw-white);
+}
+
+/* ============================================
+   1. THE JOIN TAG
+   ============================================ */
+.sw-tag-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.sw-tag-line {
+  display: block;
+  width: 32px;
+  height: 2px;
+  background-color: var(--sw-teal);
+}
+
+.sw-tag {
+  background: rgba(154, 211, 203, 0.15);
+  border-radius: 50px;
+  padding: 6px 20px;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sw-teal);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* ============================================
+   2. HEADLINE & DESCRIPTION
+   ============================================ */
+.sw-headline {
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.sw-headline-accent {
+  color: var(--sw-teal);
+}
+
+.sw-description {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 700px;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+}
+
+/* ============================================
+   3. FEATURE LIST
+   ============================================ */
+.sw-features-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px 32px;
+  margin-bottom: 40px;
+}
+
+.sw-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+}
+
+.sw-check-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--sw-teal);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   4. MAIN CTA BUTTON
+   ============================================ */
+.sw-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--sw-purple-light);
+  color: var(--sw-white);
+  border: none;
+  padding: 16px 36px;
+  border-radius: 50px;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(26, 2, 54, 0.3);
+  margin-bottom: 40px;
+}
+
+.sw-cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(26, 2, 54, 0.5);
+  background-color: #3b2663;
+}
+
+/* ============================================
+   5. SOCIAL BUTTONS (Instagram & Facebook)
+   ============================================ */
+.sw-social-buttons-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.sw-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--sw-white);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.sw-social-btn--instagram {
+  background: linear-gradient(135deg, #405DE6, #E1306C, #FCAF45);
+  box-shadow: 0 4px 16px rgba(225, 48, 108, 0.3);
+}
+.sw-social-btn--instagram:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(225, 48, 108, 0.4);
+}
+
+.sw-social-btn--facebook {
+  background: #1877F2;
+  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.3);
+}
+.sw-social-btn--facebook:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.4);
+}
+
+/* ============================================
+   6. INFINITE CARD MARQUEE
+   ============================================ */
+.sw-marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 10px 0;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.sw-marquee-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: swMarqueeScroll 30s linear infinite;
+}
+
+@keyframes swMarqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* -50% because we duplicated the array in JSX */
+}
+
+.sw-marquee-card {
+  min-width: 260px;
+  background: var(--sw-glass-bg);
+  border: 1px solid var(--sw-glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sw-marquee-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--sw-teal);
+}
+
+.sw-card-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sw-teal);
+  margin-bottom: 16px;
+}
+
+.sw-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--sw-white);
+  margin: 0 0 8px 0;
+}
+
+.sw-card-desc {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .sw-headline { font-size: 40px; }
+  .sw-features-list { gap: 16px; }
+}
+
+@media (max-width: 768px) {
+  .sw-headline { font-size: 32px; }
+  .sw-description { font-size: 16px; }
+  .sw-features-list { flex-direction: column; align-items: center; }
+  .sw-social-buttons-container { flex-direction: column; width: 100%; max-width: 300px; }
+  .sw-social-btn { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .sw-headline { font-size: 26px; }
+  .sw-tag { font-size: 10px; padding: 4px 14px; }
+  .sw-feature-item { font-size: 14px; }
+  .sw-cta-button { width: 100%; justify-content: center; padding: 14px 24px; }
+}

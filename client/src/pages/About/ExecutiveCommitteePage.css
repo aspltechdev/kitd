@@ -1,5 +1,3 @@
-/* src/pages/ExecutiveCommittee/ExecutiveCommitteePage.css */
-
 /* ============================================
    EXECUTIVE COMMITTEE PAGE - PRODUCTION LEVEL
    Primary: #1A0236 | Secondary: #9AD3CB
@@ -505,6 +503,107 @@
   color: var(--ec-text-muted);
   margin: 0;
   font-weight: 300;
+}
+
+/* ============================================
+   IMAGE MARQUEE - ENLARGED & MATCHING PATTERN
+   ============================================ */
+.ec-page__marquee {
+  padding: 60px 0 80px;
+  background: #faf8f9;
+  border-top: 1px solid var(--ec-border);
+}
+
+.ec-page__marquee .ec-page__committee-header {
+  margin-bottom: 40px;
+}
+
+.ec-page__marquee-track-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 12px 0;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.ec-page__marquee-track {
+  display: flex;
+  gap: 28px;
+  width: max-content;
+  animation: ec-page-marquee-scroll 40s linear infinite;
+}
+
+.ec-page__marquee-track-wrapper:hover .ec-page__marquee-track {
+  animation-play-state: paused;
+}
+
+/* ENLARGED MARQUEE CARDS – HEIGHT INCREASED */
+.ec-page__marquee-item {
+  flex: 0 0 auto;
+  width: 320px;
+  height: 260px; /* increased from 200px */
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(154, 211, 203, 0.25);
+  box-shadow: 0 6px 30px rgba(26, 2, 54, 0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.ec-page__marquee-item:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 16px 50px rgba(26, 2, 54, 0.15);
+  border-color: var(--ec-secondary);
+}
+
+.ec-page__marquee-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.ec-page__marquee-item:hover img {
+  transform: scale(1.05);
+}
+
+@keyframes ec-page-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive adjustments for marquee – heights increased */
+@media (max-width: 768px) {
+  .ec-page__marquee-item {
+    width: 240px;
+    height: 200px; /* increased from 160px */
+    border-radius: 12px;
+  }
+  .ec-page__marquee-track {
+    gap: 18px;
+  }
+  .ec-page__marquee {
+    padding: 40px 0 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ec-page__marquee-item {
+    width: 180px;
+    height: 160px; /* increased from 130px */
+    border-radius: 10px;
+  }
+  .ec-page__marquee-track {
+    gap: 12px;
+  }
+  .ec-page__marquee {
+    padding: 32px 0 48px;
+  }
 }
 
 /* ============================================

@@ -2691,7 +2691,7 @@ import {
   Briefcase,
   Building2,
   User,
-} from "lucide-react";
+} from "lucide-react";=
 import { Helmet } from "react-helmet-async";
 import { FaLinkedinIn, FaFacebookF, FaInstagram, FaGlobe } from "react-icons/fa";
 

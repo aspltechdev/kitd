@@ -342,7 +342,7 @@ import "./MembershipFAQ.css";
 
 // Import images
 import acthero from "../../assets/banner6.png";
-import contactcta from "../../assets/contactcta.png";
+import contactcta from "../../assets/cbd.png";
 
 const MembershipFAQ = () => {
   const [activeCategory, setActiveCategory] = useState("all");

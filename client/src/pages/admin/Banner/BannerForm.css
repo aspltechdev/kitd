@@ -540,3 +540,22 @@
   outline: 2px solid #8B1E3F;
   outline-offset: 2px;
 }
+.dropzone-btn {
+  display: inline-block;
+  margin-top: 12px;
+  margin-left: 10px; /* nudges the whole button right */
+  padding: 4px 10px 4px 6px;
+  background: #8B1E3F;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dropzone-btn:hover {
+  background: #6d1832;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 30, 63, 0.3);
+}

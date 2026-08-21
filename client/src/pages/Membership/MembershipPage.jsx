@@ -4364,7 +4364,7 @@ import "./MembershipPage.css";
 
 // Import images
 import acthero from "../../assets/banner7.png";
-import contactcta from "../../assets/contactcta.png";
+import contactcta from "../../assets/c.png";
 import abt1 from "../../assets/abt1.png";
 import abt2 from "../../assets/abt2.png";
 import abt3 from "../../assets/abt3.png";

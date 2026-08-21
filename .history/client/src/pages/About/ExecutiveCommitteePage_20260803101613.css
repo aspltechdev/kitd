@@ -508,6 +508,67 @@
 }
 
 /* ============================================
+   IMAGE MARQUEE
+   ============================================ */
+.ec-page__marquee {
+  padding: 48px 0;
+  background: #ffffff;
+}
+
+.ec-page__marquee-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ec-primary);
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.ec-page__marquee-track-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.ec-page__marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: ec-page-marquee-scroll 30s linear infinite;
+}
+
+.ec-page__marquee-track-wrapper:hover .ec-page__marquee-track {
+  animation-play-state: paused;
+}
+
+.ec-page__marquee-item {
+  flex: 0 0 auto;
+  width: 220px;
+  height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ec-border);
+  box-shadow: var(--ec-shadow);
+}
+
+.ec-page__marquee-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes ec-page-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============================================
    GOVERNANCE SECTION
    ============================================ */
 .ec-page__governance {

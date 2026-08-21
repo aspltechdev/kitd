@@ -474,10 +474,10 @@ const Members = () => {
                 />
               </button>
 
-              <Link to="/admin/members/create" className="members-page__add-btn">
+              {/* <Link to="/admin/members/create" className="members-page__add-btn">
                 <Plus size={18} strokeWidth={2} />
                 <span>Add Member</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
 

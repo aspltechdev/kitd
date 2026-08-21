@@ -102,60 +102,145 @@
 }
 
 /* ============================================
-   BREADCRUMB
+   HERO BANNER (image + overlay + gradient)
+   Matched to NewsPage hero: height, title size/
+   weight, tag pill, description text
    ============================================ */
-.nd-page__breadcrumb {
-  padding: 14px 0;
-  background: #faf8f9;
-  border-bottom: 1px solid var(--nd-border);
+.nd-page__hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
 }
 
-.nd-page__breadcrumb .nd-page__container {
+.nd-page__hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.nd-page__hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.nd-page__hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+  135deg,
+  rgba(45, 45, 45, 0.461) 0%,
+  rgba(55, 75, 73, 0.473) 35%,
+  rgba(51, 48, 53, 0.187) 70%,
+  rgba(26, 2, 54, 0.153) 100%
+  );
+}
+
+/* .nd-page__hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(18, 1, 38, 0.95) 0%,
+    rgba(26, 2, 54, 0.55) 45%,
+    rgba(26, 2, 54, 0.15) 75%,
+    rgba(26, 2, 54, 0) 100%
+  );
+} */
+
+.nd-page__hero-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+  color: #fff;
+  padding-top: 60px;
+}
+
+/* Tag pill — e.g. "ARTICLE" or "NEWS & UPDATES" style */
+.nd-page__hero-tag {
+  display: inline-block;
+  padding: 8px 20px;
+  margin-bottom: 24px;
+  background: rgba(154, 211, 203, 0.12);
+  border: 1px solid rgba(154, 211, 203, 0.4);
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--nd-secondary);
+}
+
+/* Breadcrumb — small, muted, over the image */
+.nd-page__breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: var(--nd-text-light);
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .nd-page__breadcrumb a {
-  color: var(--nd-primary);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  transition: color 0.3s ease;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .nd-page__breadcrumb a:hover {
-  color: var(--nd-secondary-dark);
+  color: var(--nd-secondary);
 }
 
 .nd-page__breadcrumb span {
-  color: var(--nd-text-dark);
+  color: #fff;
   font-weight: 500;
-}
-
-/* ============================================
-   HERO
-   ============================================ */
-.nd-page__hero {
-  padding: 40px 0 20px;
-  background: #ffffff;
 }
 
 .nd-page__back-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--nd-text-light);
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   font-size: 14px;
   font-weight: 400;
   transition: color 0.3s ease;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .nd-page__back-link:hover {
-  color: var(--nd-primary);
+  color: var(--nd-secondary);
+}
+
+/* Title — big serif display font */
+.nd-page__title {
+  font-family: 'Playfair Display', Georgia, serif; /* swap if your site uses a different display font */
+  font-size: 58px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 24px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  max-width: 900px;
+}
+
+/* Optional: wrap part of the title to color it teal, e.g.
+   <h1 className="nd-page__title">Keeping the <span className="nd-page__title-accent">Community</span></h1> */
+.nd-page__title-accent {
+  color: var(--nd-secondary);
 }
 
 .nd-page__meta {
@@ -169,9 +254,11 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
-  color: var(--nd-text-muted);
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 300;
+  line-height: 1.7;
+  max-width: 700px;
 }
 
 .nd-page__meta-item svg {
@@ -183,35 +270,27 @@
   color: var(--nd-secondary);
 }
 
-.nd-page__title {
-  font-size: 38px;
-  font-weight: 400;
-  color: var(--nd-primary);
-  margin: 0 0 20px;
-  line-height: 1.2;
-  letter-spacing: -0.5px;
-  max-width: 800px;
-}
-
 .nd-page__share-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 20px;
-  background: #faf8f9;
-  border: 1px solid var(--nd-border);
+  padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--nd-text-muted);
+  color: #fff;
   cursor: pointer;
+  backdrop-filter: blur(6px);
   transition: all 0.3s ease;
+  margin-top: 8px;
 }
 
 .nd-page__share-btn:hover {
-  background: var(--nd-secondary-light);
+  background: rgba(255, 255, 255, 0.2);
   border-color: var(--nd-secondary);
-  color: var(--nd-primary);
+  color: var(--nd-secondary);
 }
 
 /* ============================================
@@ -502,19 +581,25 @@
     gap: 32px;
   }
   .nd-page__title {
-    font-size: 32px;
+    font-size: 44px;
   }
 }
 
 @media (max-width: 768px) {
   .nd-page__hero {
-    padding: 24px 0 16px;
+    min-height: 560px;
+  }
+  .nd-page__hero-container {
+    padding: 0 16px 56px;
   }
   .nd-page__title {
-    font-size: 26px;
+    font-size: 34px;
   }
   .nd-page__meta {
     gap: 16px;
+  }
+  .nd-page__meta-item {
+    font-size: 15px;
   }
   .nd-page__grid {
     grid-template-columns: 1fr;
@@ -548,11 +633,22 @@
 }
 
 @media (max-width: 480px) {
+  .nd-page__hero {
+    min-height: 480px;
+  }
+  .nd-page__hero-container {
+    padding: 0 16px 40px;
+  }
+  .nd-page__hero-tag {
+    font-size: 11px;
+    padding: 6px 16px;
+    margin-bottom: 16px;
+  }
   .nd-page__title {
-    font-size: 22px;
+    font-size: 27px;
   }
   .nd-page__meta-item {
-    font-size: 12px;
+    font-size: 13px;
   }
   .nd-page__featured-image img {
     max-height: 220px;
@@ -581,7 +677,7 @@
     width: 100%;
     justify-content: center;
   }
-  .nd-page__breadcrumb .nd-page__container {
+  .nd-page__breadcrumb {
     flex-wrap: wrap;
   }
 }
@@ -638,6 +734,14 @@
   .nd-page__cta-btn--secondary {
     border: 1px solid #ddd !important;
     color: #1A0236 !important;
+  }
+  .nd-page__hero-bg,
+  .nd-page__hero-overlay,
+  .nd-page__hero-gradient {
+    display: none !important;
+  }
+  .nd-page__hero {
+    min-height: auto !important;
   }
   .nd-page__title {
     color: #1A0236 !important;

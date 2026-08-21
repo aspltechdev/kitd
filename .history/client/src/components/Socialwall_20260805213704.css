@@ -1,0 +1,15 @@
+/* Socialwall.css - Neon Purple Theme */
+
+.social-wall {
+  position: relative;
+  padding: 4rem 2rem 3rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  background: #0a0a1a;
+  overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ... (all the styles we provided earlier – they already match the class names) ... */
+
+/* Responsive and all other rules remain identical */

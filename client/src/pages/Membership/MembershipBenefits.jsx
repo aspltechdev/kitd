@@ -345,7 +345,7 @@ import "./MembershipBenefits.css";
 
 // Import images
 import acthero from "../../assets/banner9.png";
-import contactcta from "../../assets/contactcta.png";
+import contactcta from "../../assets/cb.png";
 
 const MembershipBenefits = () => {
   const benefits = [

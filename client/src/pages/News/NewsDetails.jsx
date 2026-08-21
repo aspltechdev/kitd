@@ -886,6 +886,7 @@ import "./NewsDetail.css";
 
 // Import images
 import contactcta from "../../assets/contactcta.png";
+import newsheroFallback from "../../assets/banner4.jpeg";
 
 const NewsDetail = () => {
   const { id } = useParams();
@@ -964,6 +965,7 @@ const NewsDetail = () => {
   }
 
   const imageUrl = getImageUrl(news);
+  const heroImage = imageUrl || newsheroFallback;
 
   return (
     <>
@@ -974,24 +976,27 @@ const NewsDetail = () => {
 
       <div className="nd-page">
 
-        {/* Breadcrumb */}
-        <div className="nd-page__breadcrumb">
-          <div className="nd-page__container">
-            <Link to="/">Home</Link>
-            <ChevronRight size={14} strokeWidth={1.5} />
-            <Link to="/news">News</Link>
-            <ChevronRight size={14} strokeWidth={1.5} />
-            <span>{news.title}</span>
-          </div>
-        </div>
-
         {/* Hero */}
         <section className="nd-page__hero">
-          <div className="nd-page__container">
+          <div className="nd-page__hero-bg">
+            <img src={heroImage} alt={news.title} loading="eager" />
+            <div className="nd-page__hero-overlay" />
+            <div className="nd-page__hero-gradient" />
+          </div>
+
+          <div className="nd-page__hero-container">
+            <div className="nd-page__breadcrumb">
+              <Link to="/">Home</Link>
+              <ChevronRight size={14} strokeWidth={1.5} />
+              <Link to="/news">News</Link>
+              <ChevronRight size={14} strokeWidth={1.5} />
+              <span>{news.title}</span>
+            </div>
+
             <Link to="/news" className="nd-page__back-link">
               <ArrowLeft size={18} strokeWidth={1.5} /> Back to News
             </Link>
-            
+
             <div className="nd-page__meta">
               {news.createdAt && (
                 <span className="nd-page__meta-item">

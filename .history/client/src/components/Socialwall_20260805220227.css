@@ -1,0 +1,94 @@
+/* ============================================
+   SOCIAL WALL - EXACT STYLE MATCH
+   ============================================ */
+:root {
+  --sw-primary: #1A0236;
+  --sw-secondary: #9AD3CB;
+  --sw-border: #E6E8EB;
+  --sw-shadow-hover: 0 16px 50px rgba(26, 2, 54, 0.12);
+}
+
+.sw-socialwall {
+  overflow-x: hidden;
+  background: #ffffff;
+}
+
+.sw-socialwall__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HERO (Replaced image with purple gradient to avoid import errors) */
+.sw-socialwall__hero {
+  position: relative;
+  height: 65vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.sw-socialwall__hero-bg { 
+  position: absolute; inset: 0; z-index: 0; 
+  background: linear-gradient(135deg, #120126 0%, #3A2457 50%, #1A0236 100%);
+}
+.sw-socialwall__hero-container { position: relative; z-index: 2; width: 100%; }
+.sw-socialwall__hero-content { max-width: 700px; color: #fff; padding: 40px 24px; }
+.sw-socialwall__hero-tag {
+  display: inline-block; padding: 4px 16px; background: rgba(154, 211, 203, 0.15);
+  border-radius: 50px; font-size: 11px; font-weight: 500; color: var(--sw-secondary);
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
+}
+.sw-socialwall__hero-content h1 { font-size: 48px; font-weight: 400; margin: 0 0 16px; }
+.sw-socialwall__hero-title-accent { color: var(--sw-secondary); font-weight: 600; }
+.sw-socialwall__hero-desc { font-size: 18px; color: rgba(255, 255, 255, 0.8); line-height: 1.8; font-weight: 300; }
+
+/* GRID HEADER */
+.sw-socialwall__grid { padding: 60px 0 80px; background: #ffffff; }
+.sw-socialwall__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 12px; }
+.sw-socialwall__header h2 { font-size: 30px; font-weight: 400; color: var(--sw-primary); margin: 0; }
+.sw-socialwall__count { font-size: 14px; color: #8A7A9D; padding: 6px 16px; background: #faf8f9; border-radius: 50px; font-weight: 300; }
+
+/* GRID LAYOUT */
+.sw-socialwall__grid-inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+/* EMBED CARDS */
+.sw-socialwall__card--embed {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--sw-border);
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.sw-socialwall__card--embed:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sw-shadow-hover);
+}
+.sw-socialwall__card-embed-wrapper { width: 100%; display: flex; justify-content: center; }
+.sw-socialwall__card-embed-wrapper iframe {
+  display: block;
+  width: 100%;
+  height: 550px;
+  border: 0;
+}
+
+/* EMPTY STATE */
+.sw-socialwall__empty { text-align: center; padding: 80px 20px; }
+.sw-socialwall__empty h3 { font-size: 22px; font-weight: 400; color: var(--sw-primary); margin: 0 0 8px; }
+
+/* CTA (Replaced image with purple gradient to avoid import errors) */
+.sw-socialwall__cta { position: relative; overflow: hidden; min-height: 280px; display: flex; align-items: center; }
+.sw-socialwall__cta-bg { 
+  position: absolute; inset: 0; z-index: 0; 
+  background: linear-gradient(135deg, #120126 0%, #2a1a42 100%);
+}
+.sw-socialwall__cta-wrapper { position: relative; z-index: 2; text-align: center; max-width: 600px; margin: 0 auto; color: #fff; padding: 60px 24px; }
+.sw-socialwall__cta-wrapper h2 { font-size: 30px; font-weight: 400; margin: 0 0 12px; }
+.sw-socialwall__cta-wrapper p { font-size: 16px; color: rgba(255,255,255,0.8); font-weight: 300; margin: 0 0 28px; }
+.sw-socialwall__cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.sw-socialwall__cta-btn--primary { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 500; text-decoration: none; background: var(--sw-secondary); color: var(--sw-primary); transition: 0.3s ease; }
+.sw-socialwall__cta-btn--primary:hover { transform: translateY(-3px); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) { .sw-socialwall__grid-inner { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .sw-socialwall__grid-inner { grid-template-columns: repeat(2, 1fr); } .sw-socialwall__card-embed-wrapper iframe { height: 500px; } }
+@media (max-width: 480px) { .sw-socialwall__grid-inner { grid-template-columns: 1fr; } .sw-socialwall__card-embed-wrapper iframe { height: 450px; } }
