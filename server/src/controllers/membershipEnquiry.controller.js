@@ -1779,13 +1779,15 @@ export const sendSepaConsent = async (req, res) => {
       token,
       expiry
     );
+const baseUrl = (process.env.CLIENT_URL || "https://kitd-verein.de").replace(/\/+$/, "");
 
-    const sepaLink = `${process.env.CLIENT_URL}/sepa-consent/${token}`;
+    // const sepaLink = `${process.env.CLIENT_URL}/sepa-consent/${token}`;
+    const sepaLink = `${baseUrl}/sepa-consent/${token}`;
 
     // ✅ Path to SEPA mandate PDF
     // const sepaMandatePath = path.join(__dirname, "..", "uploads", "documents", "sepa-mandate-form.pdf");
     // Use process.cwd() for reliable path
-const sepaMandatePath = path.join(process.cwd(), "src", "uploads", "documents", "sepa-mandate-form.pdf");
+const sepaMandatePath = path.join(process.cwd(), "src", "uploads", "documents", "sepa-mandate-form.pdf","sepa-mandate-form.docx");
 
     // Send email with SEPA mandate attachment
     await sendEmail({
