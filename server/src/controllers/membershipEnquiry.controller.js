@@ -1787,35 +1787,73 @@ const baseUrl = (process.env.CLIENT_URL || "https://kitd-verein.de").replace(/\/
     // ✅ Path to SEPA mandate PDF
     // const sepaMandatePath = path.join(__dirname, "..", "uploads", "documents", "sepa-mandate-form.pdf");
     // Use process.cwd() for reliable path
-const sepaMandatePath = path.join(process.cwd(), "src", "uploads", "documents", "sepa-mandate-form.pdf","sepa-mandate-form.docx");
+// const sepaMandatePath = path.join(process.cwd(), "src", "uploads", "documents", "sepa-mandate-form.pdf","sepa-mandate-form.docx");
 
-    // Send email with SEPA mandate attachment
-    await sendEmail({
-      to: enquiry.email,
-      subject: "Complete Your SEPA Direct Debit Mandate - KITD Germany",
-      html: sepaConsentEmail(enquiry.fullName, sepaLink),
-      attachments: [
-        {
-          filename: "SEPA-Mandate-Form-KITD.pdf",
-          path: sepaMandatePath,
-          contentType: "application/pdf",
-        },
-      ],
-    });
+//     // Send email with SEPA mandate attachment
+//     await sendEmail({
+//       to: enquiry.email,
+//       subject: "Complete Your SEPA Direct Debit Mandate - KITD Germany",
+//       html: sepaConsentEmail(enquiry.fullName, sepaLink),
+//       attachments: [
+//         {
+//           filename: "SEPA-Mandate-Form-KITD.pdf",
+//           path: sepaMandatePath,
+//           contentType: "application/pdf",
+//         },
+//       ],
+//     });
 
-    res.status(200).json({
-      success: true,
-      message: "SEPA consent form and mandate sent to member.",
-      data: enquiry,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+//     res.status(200).json({
+//       success: true,
+//       message: "SEPA consent form and mandate sent to member.",
+//       data: enquiry,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
+const sepaMandatePath = path.join(
+  process.cwd(),
+  "src",
+  "uploads",
+  "documents",
+  "sepa-mandate-form.docx"
+);
+
+// Send email with SEPA mandate DOCX attachment
+await sendEmail({
+  to: enquiry.email,
+  subject: "Complete Your SEPA Direct Debit Mandate - KITD Germany",
+  html: sepaConsentEmail(enquiry.fullName, sepaLink),
+  attachments: [
+    {
+      filename: "SEPA-Mandate-Form-KITD.docx",
+      path: sepaMandatePath,
+      contentType:
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    },
+  ],
+});
+
+res.status(200).json({
+  success: true,
+  message: "SEPA consent form and DOCX mandate sent to member.",
+  data: enquiry,
+});
+} catch (error) {
+  console.error("SEPA Email Error:", error);
+
+  res.status(500).json({
+    success: false,
+    message: error.message,
+  });
+}
 };
-
 export const submitSepaConsent = async (req, res) => {
   try {
     const { token } = req.params;
